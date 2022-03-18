@@ -3,11 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/presentation/base/root_widget.dart';
 import 'package:teamvisual/presentation/viewmodel/assist_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
 import '../../../di/locator.dart';
 
 class TabModules extends RootWidget<AssistViewModel> {
   TabModules() : super(getIt());
 
+  //final MainViewModel mainViewModel = getIt.get();
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
     return ScreenUtilInit(

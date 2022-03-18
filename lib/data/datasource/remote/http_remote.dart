@@ -12,6 +12,8 @@ import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/val_version_entity.dart';
 
+import '../../../domain/model/assist_list_entity.dart';
+
 class HttpRemote extends Remote {
 
   final Client _client;
@@ -52,10 +54,10 @@ class HttpRemote extends Remote {
   }
 
   @override
-  Future<GenericResponse?> sendAssist(List<AssistEntity> assists) async {
+  Future<GenericResponse?> sendAssist(AssistListEntity assists) async {
     final response = await sendRequest(
-        endPoint: "/asistencia2",
-        body: jsonEncode(assists),
+        endPoint: "/asistencia",
+        body: assists.toRequest(),
         client: _client);
 
     final Map<String, dynamic> json = jsonDecode(response.body);

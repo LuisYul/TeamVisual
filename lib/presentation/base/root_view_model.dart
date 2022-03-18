@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:teamvisual/di/locator.dart';
-
 import '../utils/navigation_service.dart';
 
 abstract class RootViewModel extends BaseViewModel{
@@ -42,6 +41,10 @@ abstract class RootViewModel extends BaseViewModel{
 
   void notify() {
     notifyListeners();
+  }
+
+  void pt(String msg) {
+    debugPrint(msg);
   }
 
   @override

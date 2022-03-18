@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,69 +25,67 @@ class LoginScreen extends RootWidget<LoginViewModel> {
       builder: () => SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          body: withProgress(
-            body: Column(
-              children: <Widget>[
-                Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/background_red.jpeg',
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white12,
-                      boxShadow: [
-                        BoxShadow(color: Colors.white24, spreadRadius: 3),
-                      ],
-                    ),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: EdgeInsets.all(20.sp),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            _logoTeamVisual(),
-                            SizedBox(height: 30.sp),
-                            _inputField1(),
-                            SizedBox(height: 15.sp),
-                            _inputField2(),
-                            SizedBox(height: 15.sp),
-                            SizedBox(
+          body: Column(
+            children: <Widget>[
+              Column(
+                children: [
+                  Image.asset(
+                    'assets/images/background_red.jpeg',
+                    fit: BoxFit.fitHeight,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white12,
+                    boxShadow: [
+                      BoxShadow(color: Colors.white24, spreadRadius: 3),
+                    ],
+                  ),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.sp),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _logoTeamVisual(),
+                          SizedBox(height: 30.sp),
+                          _inputField1(),
+                          SizedBox(height: 15.sp),
+                          _inputField2(),
+                          SizedBox(height: 15.sp),
+                          SizedBox(
+                            width: double.infinity,
+                            child: _loginButton(context)
+                          ),
+                          SizedBox(height: 15.sp),
+                          SizedBox(
                               width: double.infinity,
-                              child: _loginButton(context)
-                            ),
-                            SizedBox(height: 15.sp),
-                            SizedBox(
-                                width: double.infinity,
-                                child: _clearDataButton(context)
-                            ),
-                            SizedBox(height: 25.sp),
-                            Center(
-                              child: Text(
-                                "Versión ${AppConstants.versionApp}",
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 16.sp,
-                                    color: Colors.black54,
-                                    letterSpacing: 0.2,
-                                    fontWeight: FontWeight.w500
-                                ),
+                              child: _clearDataButton(context)
+                          ),
+                          SizedBox(height: 25.sp),
+                          Center(
+                            child: Text(
+                              "Versión ${AppConstants.versionApp}",
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 16.sp,
+                                  color: Colors.black54,
+                                  letterSpacing: 0.2,
+                                  fontWeight: FontWeight.w500
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -158,10 +154,6 @@ class LoginScreen extends RootWidget<LoginViewModel> {
         viewModel.submitLogin(
             _userController.text,
             _passwordController.text);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => MainScreen()),
-        // );
       },
     );
   }

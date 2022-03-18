@@ -7,11 +7,13 @@ import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/val_version_entity.dart';
 
+import '../../../domain/model/assist_list_entity.dart';
+
 abstract class Remote {
 
   Future<UserResponse?> signIn(SignInEntity signInEntity);
   Future<ValVersionResponse?> valVersion(ValVersionEntity valVersionEntity);
   Future<SyncResponse?> sync(SyncEntity syncEntity);
-  Future<GenericResponse?> sendAssist(List<AssistEntity> assists);
+  Future<GenericResponse?> sendAssist(AssistListEntity assists);
 
 }

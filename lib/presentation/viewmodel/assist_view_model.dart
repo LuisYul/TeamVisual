@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:teamvisual/domain/model/assist_entity.dart';
+import 'package:teamvisual/domain/model/assist_list_entity.dart';
 import 'package:teamvisual/domain/model/assist_type_entity.dart';
 import 'package:teamvisual/domain/usecase/get_assist_types_use_case.dart';
 import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
@@ -23,8 +24,6 @@ class AssistViewModel extends RootViewModel {
       this._sendAssistsUseCase,
   );
 
-
-
   List<AssistTypeEntity> _assistTypes = [];
   List<AssistTypeEntity> get assistTypes => _assistTypes;
 
@@ -37,9 +36,11 @@ class AssistViewModel extends RootViewModel {
   XFile? _imageFile;
   XFile? get imageFile => _imageFile;
 
+  bool _screenDisabled = false;
+  bool get screenDisabled => _screenDisabled;
+
   @override
   initialize() {
-
     _getAssistTypes();
   }
 
@@ -52,6 +53,12 @@ class AssistViewModel extends RootViewModel {
         break;
       }
     }
+
+    if(_assistTypeId == 5) {
+      _screenDisabled = true;
+      notify();
+    }
+
   }
 
   void _getAssistTypes() async {
@@ -68,10 +75,8 @@ class AssistViewModel extends RootViewModel {
       });
       _assistNames = names;
       notify();
-    } else {
-      /// get current assist type
-      hideProgress();
     }
+    hideProgress();
   }
 
   void submitSave(String obs) {
@@ -79,10 +84,10 @@ class AssistViewModel extends RootViewModel {
       setErrorMsg(AppConstants.forceTakePhoto);
       return;
     }
-
+    showProgress();
     var now = DateTime.now();
     var formatterDate = DateFormat('dd/MM/yyyy');
-    var formatterTime = DateFormat('kk:mm:ss');
+    var formatterTime = DateFormat('HH:mm:ss');
     String actualDate = formatterDate.format(now);
     String actualTime = formatterTime.format(now);
 
@@ -109,20 +114,20 @@ class AssistViewModel extends RootViewModel {
     Uint8List? bytes =  await _imageFile?.readAsBytes();
     String base64Image = base64Encode(bytes!);
     assistEntity.photo = base64Image;
-    final List<AssistEntity> assists = [];
-    assists.add(assistEntity);
-    debugPrint("photo send ${assists.first.photo}");
+    final assists = AssistListEntity(assists: [assistEntity]);
     final result = await runBusyFuture(_sendAssistsUseCase.call(assists),
         busyObject: "error_send_assists").catchError((error) {
-          debugPrint("catching error send assist ${error.toString()}");
-    }
-    );
+         setError(AppConstants.infoNotSent);
+    });
+    pt("result send photo $result");
     if(result) {
-      debugPrint("result send assist ok");
+      setError(AppConstants.infoSent);
     } else {
-      debugPrint("result send assist failed");
+      setError(AppConstants.infoNotSent);
     }
-    debugPrint("result save assist $result");
+
+    hideProgress();
+
   }
 
   void _saveAssist(AssistEntity assistEntity) async {
@@ -133,6 +138,7 @@ class AssistViewModel extends RootViewModel {
 
   void setImageFile(XFile imageFile) {
     _imageFile = imageFile;
+    debugPrint("set image path "+_imageFile!.path);
     notify();
   }
 }

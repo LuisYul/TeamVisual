@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,12 +14,9 @@ import '../../widgets/secondary_button.dart';
 class TabAssist extends RootWidget<AssistViewModel> {
   TabAssist() : super(getIt());
 
-  XFile? imageFile;
+  final TextEditingController _obsController = TextEditingController();
 
-  final TextEditingController _obsController = TextEditingController(text: '/data/user/0/com.'
-      'visualimpact.teamvisual/app_flutter/3a06eb13-bbff-4034-9a11-ebe54799c8ae61445465471952171');
-
-  //String path = "/data/user/0/com.visualimpact.teamvisual/app_flutter/3a06eb13-bbff-4034-9a11-ebe54799c8ae61445465471952171.jpg";
+  final String path = "/data/user/0/com.visualimpact.teamvisual/cache/417095e1-1152-460f-9c19-beabb18a3e798130362856397493148.jpg";
 
   @override
   void init() async {
@@ -32,48 +27,24 @@ class TabAssist extends RootWidget<AssistViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-    debugPrint("assist length ${viewModel.assistNames.length}");
-    debugPrint("assist names ${viewModel.assistNames}");
     return ScreenUtilInit(
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => Padding(
-        padding: EdgeInsets.all(10.sp),
+        padding: EdgeInsets.all(10.h),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Center(
-                child: ToggleSwitch(
-                  minWidth: ScreenUtil().screenWidth,
-                  initialLabelIndex: viewModel.assistTypeId - 1,
-                  totalSwitches: viewModel.assistNames.length,
-                  labels: viewModel.assistNames,
-                  onToggle: (index) {
-                    debugPrint('switched to: $index');
-                  },
-                ),
-              ),
-              Card(
-                color: Colors.white12,
-                child:(viewModel.imageFile == null)
-                    ? null
-                    : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.file(
-                        //  File(path),
-                          File(viewModel.imageFile.path),
-                          height: 300,
-                        ),
-                      ),
-              ),
-              SizedBox(height: 10.sp,),
+              _toggleAssistTypes(),
+              _photoContainer(),
+              SizedBox(height: 10.h,),
               SizedBox(
                 width: double.infinity,
                 child: _takePhotoButton(context)
               ),
-              SizedBox(height: 10.sp,),
+              SizedBox(height: 10.h,),
               _textFieldObs(),
-              SizedBox(height: 10.sp,),
+              SizedBox(height: 10.h,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -81,7 +52,7 @@ class TabAssist extends RootWidget<AssistViewModel> {
                     child: _sendButton(context),
                     flex: 1,
                   ),
-                  SizedBox(width: 5.sp,),
+                  SizedBox(width: 5.w,),
                   Expanded(
                     child: _clearButton(),
                     flex: 1,
@@ -90,6 +61,39 @@ class TabAssist extends RootWidget<AssistViewModel> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _toggleAssistTypes() {
+    return Center(
+      child: ToggleSwitch(
+        minWidth: ScreenUtil().screenWidth,
+        initialLabelIndex: viewModel.screenDisabled
+            ? null
+            : viewModel.assistTypeId - 1,
+        totalSwitches: viewModel.assistNames.length,
+        labels: viewModel.assistNames,
+        changeOnTap: false,
+        onToggle: (index) {
+          debugPrint('switched to: $index');
+        },
+      ),
+    );
+  }
+
+  Widget _photoContainer() {
+    return Card(
+      color: Colors.white12,
+      child:(viewModel.imageFile == null)
+          ? null
+          : Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.file(
+          //  File(path),
+          File(viewModel.imageFile.path),
+          height: 320.h,
         ),
       ),
     );
@@ -137,9 +141,8 @@ class TabAssist extends RootWidget<AssistViewModel> {
     return PrimaryButton(
       title: "Tomar foto",
       icon: CupertinoIcons.camera,
-      onClick: () {
-        _openCamera(context);
-      },
+      onClick: () => _openCamera(context),
+      disabled: viewModel.screenDisabled,
     );
   }
 
@@ -148,6 +151,7 @@ class TabAssist extends RootWidget<AssistViewModel> {
       title: "Enviar",
       icon: CupertinoIcons.arrow_up_circle_fill,
       onClick: () => viewModel.submitSave(_obsController.text),
+      disabled: viewModel.screenDisabled,
     );
   }
 
@@ -158,18 +162,15 @@ class TabAssist extends RootWidget<AssistViewModel> {
       onClick: () {
 
       },
+      disabled: viewModel.screenDisabled,
     );
   }
 
   void _openCamera(BuildContext context)  async{
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera ,
+      imageQuality: 25,
     );
     viewModel.setImageFile(pickedFile);
-    // final appDir = await syspaths.getApplicationDocumentsDirectory();
-    // final fileName = path.basename(pickedFile!.path);
-    // File savedImage = await File(pickedFile.path).copy('${appDir.path}/$fileName');
-    // print("copy in ${appDir.path}/$fileName");
-
   }
 }

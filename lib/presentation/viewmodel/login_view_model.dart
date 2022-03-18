@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
@@ -25,7 +24,6 @@ class LoginViewModel extends RootViewModel {
   @override
   initialize() {
 
-    debugPrint("init login vm");
   }
 
   void _valVersion(SignInEntity signInEntity) async {

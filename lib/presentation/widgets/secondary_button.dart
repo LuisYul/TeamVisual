@@ -8,11 +8,13 @@ class SecondaryButton extends StatelessWidget {
     required this.title,
     required this.onClick,
     this.icon,
+    this.disabled,
   }) : super(key: key);
 
   final String title;
   final VoidCallback onClick;
   final IconData? icon;
+  final bool? disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -20,31 +22,30 @@ class SecondaryButton extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => SizedBox(
-        height: 48.h,
+        height: 45.h,
         child: OutlinedButton.icon(
             label: icon != null
-                ? Icon(icon, color: Colors.red,)
+                ? Icon(icon, color: true == disabled ? Colors.grey :Colors.red)
                 : const Icon(null),
             icon: Text(
               title,
               style: GoogleFonts.montserrat(
                   fontSize: 18.sp,
-                  color: Colors.red,
+                  color: true == disabled ? Colors.grey :Colors.red,
                   letterSpacing: 0.2,
                   fontWeight: FontWeight.w500
               ),
             ),
             style: OutlinedButton.styleFrom(
-              primary: Colors.red,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              side: const BorderSide(
+              side: BorderSide(
                   width: 1.0,
-                  color: Colors.red,
+                  color: true == disabled ? Colors.grey :Colors.red,
               ),
             ),
-            onPressed: () => onClick()
+            onPressed: true == disabled ? null : () => onClick()
           ),
       ),
     );

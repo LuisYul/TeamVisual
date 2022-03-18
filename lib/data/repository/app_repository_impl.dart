@@ -15,6 +15,7 @@ import 'package:teamvisual/domain/repository/app_repository.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 import 'package:teamvisual/presentation/utils/string_extension.dart';
 import '../../domain/model/assist_entity.dart';
+import '../../domain/model/assist_list_entity.dart';
 
 class AppRepositoryImpl extends AppRepository {
 
@@ -77,7 +78,7 @@ class AppRepositoryImpl extends AppRepository {
   }
 
   @override
-  Future<bool> sendAssists(List<AssistEntity> assists) async {
+  Future<bool> sendAssists(AssistListEntity assists) async {
     final response = await _remote.sendAssist(assists);
     return Future.value(response?.status?.equalsIgnoreCase("true"));
   }

@@ -23,6 +23,9 @@ class AppConstants {
       "en otro momento.";
   static const forceTakePhoto = "Es necesario tomar una foto para "
       "registrar la asistencia.";
+  static const infoNotSent = "No se pudo enviar la información, "
+      "se guardó en pendientes.";
+  static const infoSent = "No se pudo enviar la información correctamente.";
 
 
 }

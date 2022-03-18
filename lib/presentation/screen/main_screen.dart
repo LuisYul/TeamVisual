@@ -38,7 +38,7 @@ class MainScreen extends RootWidget<MainViewModel> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(
-                  "John Doe",
+                  viewModel.userName,
                   style: GoogleFonts.montserrat(
                       fontSize: 16,
                       color: Colors.white,
@@ -47,7 +47,7 @@ class MainScreen extends RootWidget<MainViewModel> {
                   ),
                 ),
                 accountEmail: Text(
-                  "GTM",
+                  viewModel.userType,
                   style: GoogleFonts.montserrat(
                       fontSize: 14,
                       color: Colors.white,

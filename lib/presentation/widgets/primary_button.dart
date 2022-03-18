@@ -8,11 +8,13 @@ class PrimaryButton extends StatelessWidget {
     required this.title,
     required this.onClick,
     this.icon,
+    this.disabled,
   }) : super(key: key);
 
   final String title;
   final VoidCallback onClick;
   final IconData? icon;
+  final bool? disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => SizedBox(
-        height: 48.h,
+        height: 45.h,
         child: TextButton.icon(
             label: icon != null
                 ? Icon(icon, color: Colors.white,)
@@ -40,8 +42,9 @@ class PrimaryButton extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
+              onSurface: Colors.black
             ),
-            onPressed: () => onClick()
+            onPressed: true == disabled ? null : () => onClick()
           ),
       ),
     );

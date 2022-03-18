@@ -31,7 +31,7 @@ abstract class RootWidget<T extends RootViewModel>
             }
           });
 
-          return buildViewModelWidget(ctx, viewModel);
+          return withProgress(body: buildViewModelWidget(ctx, viewModel));
         },
         disposeViewModel: false,
         onModelReady: (model) => model.initialize(),
@@ -41,36 +41,39 @@ abstract class RootWidget<T extends RootViewModel>
   void init() async {}
 
   Widget withProgress({required Widget body}) {
-    return Stack(
-      children: [
-        body,
-        _viewModel.loading
-            ?  AbsorbPointer(
-              child: Scaffold(
-                body: Stack(
-                  children: <Widget>[
-                    const Center(
-                      child: SizedBox(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 7.0,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Stack(
+        children: [
+          body,
+          _viewModel.loading
+              ?  AbsorbPointer(
+                child: Scaffold(
+                  body: Stack(
+                    children: <Widget>[
+                      const Center(
+                        child: SizedBox(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 7.0,
+                          ),
+                          height: 100.0,
+                          width: 100.0,
                         ),
-                        height: 100.0,
-                        width: 100.0,
                       ),
-                    ),
-                    Align(alignment: Alignment.center,
-                      child: Image.asset(
-                        'assets/images/img_logo.png',
-                        fit: BoxFit.fitHeight,
-                        height: 40,
-                      ),
-                    )
-                  ]
-                ),
+                      Align(alignment: Alignment.center,
+                        child: Image.asset(
+                          'assets/images/img_logo.png',
+                          fit: BoxFit.fitHeight,
+                          height: 40,
+                        ),
+                      )
+                    ]
+                  ),
+                )
               )
-            )
-            : Container(),
-      ],
+              : Container(),
+        ],
+      ),
     );
   }
 
