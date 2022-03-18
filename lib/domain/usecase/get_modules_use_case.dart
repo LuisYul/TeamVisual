@@ -6,7 +6,7 @@ class GetModulesUseCase implements BaseUseCase<List<ModuleEntity>, dynamic> {
 
   final AppRepository _repository;
 
-  GetModulesUseCase(this._repository);
+  const GetModulesUseCase(this._repository);
 
   @override
   Future<List<ModuleEntity>> call(params) async{

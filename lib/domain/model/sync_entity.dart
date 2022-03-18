@@ -12,7 +12,7 @@ class SyncEntity {
     required this.params,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toRequest() => {
     'tables': jsonEncode(tables),
     'params': jsonEncode(params),
   };
@@ -35,8 +35,8 @@ class TableEntity {
 
   static List<TableEntity> get tablesSync =>
       [
-        const TableEntity(name: AppConstants.tableAssistanceType, show: "true"),
-        const TableEntity(name: AppConstants.tableModules, show: "true"),
+        const TableEntity(name: AppConstants.tableAssistType, show: "true"),
+        const TableEntity(name: AppConstants.tableModule, show: "true"),
       ];
 }
 

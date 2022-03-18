@@ -5,8 +5,9 @@ class UserEntity {
   final String docNumber;
   final String idUserType;
   final String userType;
-  final String error;
-  final String loginStatus;
+  final String idAssistType;
+  final String? error;
+  final String? loginStatus;
 
   const UserEntity({
     required this.idUser,
@@ -14,8 +15,29 @@ class UserEntity {
     required this.docNumber,
     required this.idUserType,
     required this.userType,
-    required this.error,
-    required this.loginStatus,
+    required this.idAssistType,
+    this.error,
+    this.loginStatus,
   });
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) {
+    return UserEntity(
+        idUser: json['idUser'],
+        name: json['name'],
+        docNumber: json['docNumber'],
+        idUserType: json['idUserType'],
+        userType: json['userType'],
+        idAssistType: json['idAssistType'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'idUser': idUser,
+    'name': name,
+    'docNumber': docNumber,
+    'idUserType': idUserType,
+    'userType': userType,
+    'idAssistType': idAssistType,
+  };
 
 }

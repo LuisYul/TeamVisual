@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:teamvisual/data/datasource/remote/remote.dart';
 import 'package:teamvisual/data/datasource/remote/send_request.dart';
+import 'package:teamvisual/data/model/generic_response.dart';
 import 'package:teamvisual/data/model/sync_response.dart';
 import 'package:teamvisual/data/model/user_response.dart';
 import 'package:http/http.dart';
 import 'package:teamvisual/data/model/val_version_response.dart';
+import 'package:teamvisual/domain/model/assist_entity.dart';
 import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/val_version_entity.dart';
@@ -20,12 +22,10 @@ class HttpRemote extends Remote {
   Future<UserResponse> signIn(SignInEntity signInEntity) async {
     final response = await sendRequest(
         endPoint: "/login",
-        body: signInEntity.toJson(),
+        body: signInEntity.toRequest(),
         client: _client);
 
     final Map<String, dynamic> json = jsonDecode(response.body);
-    // return (res['entries'] as List).map((e) =>
-    //   //     UserResponse.fromMap(e)).toList();
     return UserResponse.fromMap(json);
   }
 
@@ -33,7 +33,7 @@ class HttpRemote extends Remote {
   Future<ValVersionResponse?> valVersion(ValVersionEntity valVersionEntity) async {
     final response = await sendRequest(
         endPoint: "/valVersion",
-        body: valVersionEntity.toJson(),
+        body: valVersionEntity.toRequest(),
         client: _client);
 
     final Map<String, dynamic> json = jsonDecode(response.body);
@@ -44,10 +44,21 @@ class HttpRemote extends Remote {
   Future<SyncResponse?> sync(SyncEntity syncEntity) async {
     final response = await sendRequest(
         endPoint: "/sincronizar",
-        body: syncEntity.toJson(),
+        body: syncEntity.toRequest(),
         client: _client);
 
     final Map<String, dynamic> json = jsonDecode(response.body);
     return SyncResponse.fromMap(json);
+  }
+
+  @override
+  Future<GenericResponse?> sendAssist(List<AssistEntity> assists) async {
+    final response = await sendRequest(
+        endPoint: "/asistencia2",
+        body: jsonEncode(assists),
+        client: _client);
+
+    final Map<String, dynamic> json = jsonDecode(response.body);
+    return GenericResponse.fromMap(json);
   }
 }

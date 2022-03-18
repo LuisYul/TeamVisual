@@ -20,8 +20,7 @@ class PrimaryButton extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => SizedBox(
-        height: 50.h,
-        //width: double.infinity,
+        height: 48.h,
         child: TextButton.icon(
             label: icon != null
                 ? Icon(icon, color: Colors.white,)

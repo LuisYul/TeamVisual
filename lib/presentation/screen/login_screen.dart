@@ -21,7 +21,7 @@ class LoginScreen extends RootWidget<LoginViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-    log("login vm loading ${viewModel.loading}");
+    debugPrint("login vm loading ${viewModel.loading}");
     return ScreenUtilInit(
       minTextAdapt: true,
       builder: () => SafeArea(

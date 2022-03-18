@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 
@@ -8,10 +9,10 @@ Future<Response> sendRequest({
   required Object body,
   required Client client,
   }) async {
+    debugPrint('REQUEST: '+body.toString());
     final url = AppConstants.baseUrl + endPoint;
     final Uri uri = Uri.parse(url);
-    log(url);
-    log(body.toString());
+    debugPrint(url);
     final response = await client.post(
       uri,
       headers: {
@@ -21,6 +22,7 @@ Future<Response> sendRequest({
       body: body,
     );
 
-    log(response.body);
+    debugPrint('RESPONSE: '+response.body);
+    debugPrint(' ================================ '* 4);
     return response;
   }

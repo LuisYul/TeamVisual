@@ -1,15 +1,15 @@
 import 'package:teamvisual/domain/repository/app_repository.dart';
 import 'package:teamvisual/domain/usecase/base_use_case.dart';
 
-class SyncUseCase implements BaseUseCase<bool, dynamic> {
+class SaveAssistUseCase implements BaseUseCase<int, dynamic> {
 
   final AppRepository _repository;
 
-  const SyncUseCase(this._repository);
+  const SaveAssistUseCase(this._repository);
 
   @override
-  Future<bool> call(params) async{
-    return await _repository.sync(params);
+  Future<int> call(params) {
+    return _repository.saveAssist(params);
   }
 
 }

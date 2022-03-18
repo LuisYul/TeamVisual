@@ -1,17 +1,17 @@
-class AssistanceTypeResponse {
+class AssistTypeResponse {
 
   List<Data?> data;
   int? size;
   String? title;
 
-  AssistanceTypeResponse({
+  AssistTypeResponse({
     required this.data,
     required this.size,
     required this.title,
   });
 
-  factory AssistanceTypeResponse.fromMap(Map<String, dynamic> json) {
-    return AssistanceTypeResponse(
+  factory AssistTypeResponse.fromMap(Map<String, dynamic> json) {
+    return AssistTypeResponse(
       data: List<Data>.from(json['data'].map((model)=> Data.fromMap(model))),
       size: json['size'],
       title: json['title'],
@@ -39,7 +39,7 @@ class Data {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toRequest() => {
     'id': id,
     'name': name,
     'order': order,

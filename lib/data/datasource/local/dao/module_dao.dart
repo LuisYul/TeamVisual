@@ -6,10 +6,10 @@ import 'package:teamvisual/presentation/utils/app_constants.dart';
 @dao
 abstract class ModuleDao implements BaseDao<ModuleEntity> {
 
-  @Query('SELECT * FROM ${AppConstants.tableModules}')
+  @Query('SELECT * FROM ${AppConstants.tableModule}')
   Future<List<ModuleEntity>> getAll();
 
-  @Query('DELETE FROM ${AppConstants.tableModules}')
+  @Query('DELETE FROM ${AppConstants.tableModule}')
   Future<void> deleteAll();
 
 }

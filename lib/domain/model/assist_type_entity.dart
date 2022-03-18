@@ -1,21 +1,25 @@
 import 'package:floor/floor.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 
-@Entity(tableName: AppConstants.tableAssistanceType)
-class AssistanceTypeEntity {
+@Entity(tableName: AppConstants.tableAssistType)
+class AssistTypeEntity {
+
   @primaryKey
   final int id;
   final String name;
   final int order;
+  @ignore
+  bool? current;
 
-  const AssistanceTypeEntity({
+  AssistTypeEntity({
     required this.id,
     required this.name,
     required this.order,
+    this.current,
   });
 
-  factory AssistanceTypeEntity.fromMap(Map<String, dynamic> json) {
-    return AssistanceTypeEntity(
+  factory AssistTypeEntity.fromMap(Map<String, dynamic> json) {
+    return AssistTypeEntity(
       id: json['id'],
       name: json['name'],
       order: json['order'],

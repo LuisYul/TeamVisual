@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:teamvisual/domain/usecase/get_assistance_types_use_case.dart';
+import 'package:flutter/foundation.dart';
+import 'package:teamvisual/domain/usecase/get_assist_types_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
 
 class MainViewModel extends RootViewModel {
 
   final GetModulesUseCase _getModulesUseCase;
-  final GetAssistanceTypesUseCase _getAssistanceTypesUseCase;
+  final GetAssistTypesUseCase _getAssistTypesUseCase;
 
   MainViewModel(
       this._getModulesUseCase,
-      this._getAssistanceTypesUseCase,
+      this._getAssistTypesUseCase,
   );
 
   int _currentTabIndex = 0;
@@ -25,7 +25,7 @@ class MainViewModel extends RootViewModel {
 
   @override
   initialize() {
-    log("init main view model");
+    debugPrint("init main view model");
     _getModules();
   }
 
@@ -34,17 +34,17 @@ class MainViewModel extends RootViewModel {
     final result = await runBusyFuture(_getModulesUseCase.call(1),
         busyObject: "error_get_modules");
     if(result.isNotEmpty) {
-      log(result.length.toString());
+      debugPrint(result.length.toString());
     }
     hideProgress();
   }
 
-  void _getAssistanceTypes() async {
+  void _getAssistTypes() async {
     showProgress();
     final result = await runBusyFuture(_getModulesUseCase.call(1),
         busyObject: "error_get_modules");
     if(result.isNotEmpty) {
-      log(jsonEncode(result));
+      debugPrint(jsonEncode(result));
     }
     hideProgress();
   }

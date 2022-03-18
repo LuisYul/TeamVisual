@@ -6,32 +6,34 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:teamvisual/presentation/base/root_widget.dart';
-import 'package:teamvisual/presentation/viewmodel/assistance_view_model.dart';
+import 'package:teamvisual/presentation/viewmodel/assist_view_model.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'dart:io';
 import '../../../di/locator.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/secondary_button.dart';
 
-class TabAssistance extends RootWidget<AssistanceViewModel> {
-  TabAssistance() : super(getIt());
+class TabAssist extends RootWidget<AssistViewModel> {
+  TabAssist() : super(getIt());
 
   XFile? imageFile;
 
-  String path = "/data/user/0/com.visualimpact.teamvisual/cache/"
-      "3a06eb13-bbff-4034-9a11-ebe54799c8ae61445465471952171.jpg";
+  final TextEditingController _obsController = TextEditingController(text: '/data/user/0/com.'
+      'visualimpact.teamvisual/app_flutter/3a06eb13-bbff-4034-9a11-ebe54799c8ae61445465471952171');
+
+  //String path = "/data/user/0/com.visualimpact.teamvisual/app_flutter/3a06eb13-bbff-4034-9a11-ebe54799c8ae61445465471952171.jpg";
 
   @override
   void init() async {
-    _getToggleTextStyle();
 
-    var img = File(path);
-    var decodedImage = await decodeImageFromList(img.readAsBytesSync());
+    // var img = File(path);
+    // var decodedImage = await decodeImageFromList(img.readAsBytesSync());
   }
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-
+    debugPrint("assist length ${viewModel.assistNames.length}");
+    debugPrint("assist names ${viewModel.assistNames}");
     return ScreenUtilInit(
       minTextAdapt: true,
       splitScreenMode: true,
@@ -43,12 +45,11 @@ class TabAssistance extends RootWidget<AssistanceViewModel> {
               Center(
                 child: ToggleSwitch(
                   minWidth: ScreenUtil().screenWidth,
-                  initialLabelIndex: 0,
-                  totalSwitches: 4,
-                  customTextStyles: viewModel.listStyles,
-                  labels: ['Entrada', 'Ref. Sal', 'Ref. Ent', 'Salida'],
+                  initialLabelIndex: viewModel.assistTypeId - 1,
+                  totalSwitches: viewModel.assistNames.length,
+                  labels: viewModel.assistNames,
                   onToggle: (index) {
-                    log('switched to: $index');
+                    debugPrint('switched to: $index');
                   },
                 ),
               ),
@@ -59,7 +60,7 @@ class TabAssistance extends RootWidget<AssistanceViewModel> {
                     : Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Image.file(
-                          //File(path),
+                        //  File(path),
                           File(viewModel.imageFile.path),
                           height: 300,
                         ),
@@ -96,6 +97,7 @@ class TabAssistance extends RootWidget<AssistanceViewModel> {
 
   Widget _textFieldObs() {
     return TextField(
+      controller: _obsController,
       style: GoogleFonts.montserrat(
           fontSize: 15.sp,
           color: Colors.black,
@@ -145,9 +147,7 @@ class TabAssistance extends RootWidget<AssistanceViewModel> {
     return PrimaryButton(
       title: "Enviar",
       icon: CupertinoIcons.arrow_up_circle_fill,
-      onClick: () {
-
-      },
+      onClick: () => viewModel.submitSave(_obsController.text),
     );
   }
 
@@ -172,19 +172,4 @@ class TabAssistance extends RootWidget<AssistanceViewModel> {
     // print("copy in ${appDir.path}/$fileName");
 
   }
-
-  void _getToggleTextStyle() {
-    List<TextStyle> tempList = [];
-    var textStyle = GoogleFonts.montserrat(
-        fontSize: 14,
-        color: Colors.white,
-        letterSpacing: 0.1,
-        fontWeight: FontWeight.w400);
-
-    for(var i = 0; i < 4; i++){
-      tempList.add(textStyle);
-    }
-    viewModel.setListStyles(tempList);
-  }
-
 }

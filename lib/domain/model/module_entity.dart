@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 
-@Entity(tableName: AppConstants.tableModules)
+@Entity(tableName: AppConstants.tableModule)
 class ModuleEntity {
   @primaryKey
   final int id;

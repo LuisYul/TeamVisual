@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/di/locator.dart';
 import 'package:teamvisual/presentation/base/root_widget.dart';
-import 'package:teamvisual/presentation/screen/main/tab_assistance.dart';
+import 'package:teamvisual/presentation/screen/main/tab_assist.dart';
 import 'package:teamvisual/presentation/screen/main/tab_modules.dart';
 import 'package:teamvisual/presentation/screen/other_page.dart';
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
@@ -14,7 +14,7 @@ class MainScreen extends RootWidget<MainViewModel> {
   final Map<int, Widget> _viewCache = <int, Widget>{};
 
   final _tabModules = TabModules();
-  final _tabAssistance = TabAssistance();
+  final _tabAssist = TabAssist();
   final _listScreen = OtherPage("hi");
 
   @override
@@ -115,7 +115,7 @@ class MainScreen extends RootWidget<MainViewModel> {
           _viewCache[index] = _tabModules;
           break;
         case 1:
-          _viewCache[index] = _tabAssistance;
+          _viewCache[index] = _tabAssist;
           break;
         case 2:
           _viewCache[index] = _listScreen;

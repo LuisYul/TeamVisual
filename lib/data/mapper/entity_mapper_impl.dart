@@ -1,10 +1,9 @@
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
 import 'package:teamvisual/data/mapper/entity_mapper.dart';
 import 'package:teamvisual/data/model/sync_response.dart';
 import 'package:teamvisual/data/model/user_response.dart';
 import 'package:teamvisual/data/model/val_version_response.dart';
-import 'package:teamvisual/domain/model/assistance_type_entity.dart';
+import 'package:teamvisual/domain/model/assist_type_entity.dart';
 import 'package:teamvisual/domain/model/module_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
 import 'package:teamvisual/presentation/utils/string_extension.dart';
@@ -19,6 +18,7 @@ class EntityMapperImpl extends EntityMapper{
       docNumber: userResponse?.docNumber ?? "",
       idUserType: userResponse?.idUserType ?? "",
       userType: userResponse?.userType ?? "",
+      idAssistType: userResponse?.idAssistType ?? "",
       error: userResponse?.error ?? "",
       loginStatus: userResponse?.loginStatus ?? "",
     );
@@ -31,19 +31,19 @@ class EntityMapperImpl extends EntityMapper{
   }
 
   @override
-  List<AssistanceTypeEntity> toAssistanceTypeEntity(SyncResponse? syncResponse) {
-    final List<AssistanceTypeEntity> list = [];
+  List<AssistTypeEntity> toAssistTypeEntity(SyncResponse? syncResponse) {
+    final List<AssistTypeEntity> list = [];
 
     try {
-      (syncResponse?.assistanceTypes?.data.forEach((e) =>
-          list.add(AssistanceTypeEntity(
+      (syncResponse?.assistTypes?.data.forEach((e) =>
+          list.add(AssistTypeEntity(
               id: e?.id ?? 0,
               name: e?.name ?? "",
               order: e?.order ?? 0
           ))
       ));
     } catch (e) {
-      log(e.toString());
+      debugPrint(e.toString());
     }
     return list;
   }
@@ -63,7 +63,7 @@ class EntityMapperImpl extends EntityMapper{
       ));
 
     } catch (e) {
-      log(e.toString());
+      debugPrint(e.toString());
     }
     return list;
   }

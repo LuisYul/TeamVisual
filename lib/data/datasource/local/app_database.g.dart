@@ -61,9 +61,11 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  AssistanceTypeDao? _assistanceTypeDaoInstance;
+  AssistTypeDao? _assistTypeDaoInstance;
 
   ModuleDao? _moduleDaoInstance;
+
+  AssistDao? _assistDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
@@ -87,6 +89,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `tipo_asistencia` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `modulos` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `required` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `asistencia` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` TEXT, `userName` TEXT, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `lat` TEXT NOT NULL, `lng` TEXT NOT NULL, `photoPath` TEXT, `idAssistType` TEXT NOT NULL, `obs` TEXT NOT NULL, `idUserType` TEXT, `userType` TEXT, `numDoc` TEXT, `demo` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -95,42 +99,46 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  AssistanceTypeDao get assistanceTypeDao {
-    return _assistanceTypeDaoInstance ??=
-        _$AssistanceTypeDao(database, changeListener);
+  AssistTypeDao get assistTypeDao {
+    return _assistTypeDaoInstance ??= _$AssistTypeDao(database, changeListener);
   }
 
   @override
   ModuleDao get moduleDao {
     return _moduleDaoInstance ??= _$ModuleDao(database, changeListener);
   }
+
+  @override
+  AssistDao get assistDao {
+    return _assistDaoInstance ??= _$AssistDao(database, changeListener);
+  }
 }
 
-class _$AssistanceTypeDao extends AssistanceTypeDao {
-  _$AssistanceTypeDao(this.database, this.changeListener)
+class _$AssistTypeDao extends AssistTypeDao {
+  _$AssistTypeDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
-        _assistanceTypeEntityInsertionAdapter = InsertionAdapter(
+        _assistTypeEntityInsertionAdapter = InsertionAdapter(
             database,
             'tipo_asistencia',
-            (AssistanceTypeEntity item) => <String, Object?>{
+            (AssistTypeEntity item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
                   'order': item.order
                 }),
-        _assistanceTypeEntityUpdateAdapter = UpdateAdapter(
+        _assistTypeEntityUpdateAdapter = UpdateAdapter(
             database,
             'tipo_asistencia',
             ['id'],
-            (AssistanceTypeEntity item) => <String, Object?>{
+            (AssistTypeEntity item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
                   'order': item.order
                 }),
-        _assistanceTypeEntityDeletionAdapter = DeletionAdapter(
+        _assistTypeEntityDeletionAdapter = DeletionAdapter(
             database,
             'tipo_asistencia',
             ['id'],
-            (AssistanceTypeEntity item) => <String, Object?>{
+            (AssistTypeEntity item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
                   'order': item.order
@@ -142,18 +150,16 @@ class _$AssistanceTypeDao extends AssistanceTypeDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<AssistanceTypeEntity>
-      _assistanceTypeEntityInsertionAdapter;
+  final InsertionAdapter<AssistTypeEntity> _assistTypeEntityInsertionAdapter;
 
-  final UpdateAdapter<AssistanceTypeEntity> _assistanceTypeEntityUpdateAdapter;
+  final UpdateAdapter<AssistTypeEntity> _assistTypeEntityUpdateAdapter;
 
-  final DeletionAdapter<AssistanceTypeEntity>
-      _assistanceTypeEntityDeletionAdapter;
+  final DeletionAdapter<AssistTypeEntity> _assistTypeEntityDeletionAdapter;
 
   @override
-  Future<List<AssistanceTypeEntity>> getAll() async {
+  Future<List<AssistTypeEntity>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM tipo_asistencia',
-        mapper: (Map<String, Object?> row) => AssistanceTypeEntity(
+        mapper: (Map<String, Object?> row) => AssistTypeEntity(
             id: row['id'] as int,
             name: row['name'] as String,
             order: row['order'] as int));
@@ -165,27 +171,26 @@ class _$AssistanceTypeDao extends AssistanceTypeDao {
   }
 
   @override
-  Future<int> insertEntity(AssistanceTypeEntity entity) {
-    return _assistanceTypeEntityInsertionAdapter.insertAndReturnId(
+  Future<int> insertEntity(AssistTypeEntity entity) {
+    return _assistTypeEntityInsertionAdapter.insertAndReturnId(
         entity, OnConflictStrategy.replace);
   }
 
   @override
-  Future<List<int>> insertList(List<AssistanceTypeEntity> entities) {
-    return _assistanceTypeEntityInsertionAdapter.insertListAndReturnIds(
+  Future<List<int>> insertList(List<AssistTypeEntity> entities) {
+    return _assistTypeEntityInsertionAdapter.insertListAndReturnIds(
         entities, OnConflictStrategy.replace);
   }
 
   @override
-  Future<int> updateEntity(AssistanceTypeEntity entity) {
-    return _assistanceTypeEntityUpdateAdapter.updateAndReturnChangedRows(
+  Future<int> updateEntity(AssistTypeEntity entity) {
+    return _assistTypeEntityUpdateAdapter.updateAndReturnChangedRows(
         entity, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteEntity(AssistanceTypeEntity entity) {
-    return _assistanceTypeEntityDeletionAdapter
-        .deleteAndReturnChangedRows(entity);
+  Future<int> deleteEntity(AssistTypeEntity entity) {
+    return _assistTypeEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
 }
 
@@ -270,5 +275,128 @@ class _$ModuleDao extends ModuleDao {
   @override
   Future<int> deleteEntity(ModuleEntity entity) {
     return _moduleEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
+  }
+}
+
+class _$AssistDao extends AssistDao {
+  _$AssistDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _assistEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'asistencia',
+            (AssistEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userId': item.userId,
+                  'userName': item.userName,
+                  'date': item.date,
+                  'hour': item.hour,
+                  'lat': item.lat,
+                  'lng': item.lng,
+                  'photoPath': item.photoPath,
+                  'idAssistType': item.idAssistType,
+                  'obs': item.obs,
+                  'idUserType': item.idUserType,
+                  'userType': item.userType,
+                  'numDoc': item.numDoc,
+                  'demo': item.demo
+                }),
+        _assistEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'asistencia',
+            ['id'],
+            (AssistEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userId': item.userId,
+                  'userName': item.userName,
+                  'date': item.date,
+                  'hour': item.hour,
+                  'lat': item.lat,
+                  'lng': item.lng,
+                  'photoPath': item.photoPath,
+                  'idAssistType': item.idAssistType,
+                  'obs': item.obs,
+                  'idUserType': item.idUserType,
+                  'userType': item.userType,
+                  'numDoc': item.numDoc,
+                  'demo': item.demo
+                }),
+        _assistEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'asistencia',
+            ['id'],
+            (AssistEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userId': item.userId,
+                  'userName': item.userName,
+                  'date': item.date,
+                  'hour': item.hour,
+                  'lat': item.lat,
+                  'lng': item.lng,
+                  'photoPath': item.photoPath,
+                  'idAssistType': item.idAssistType,
+                  'obs': item.obs,
+                  'idUserType': item.idUserType,
+                  'userType': item.userType,
+                  'numDoc': item.numDoc,
+                  'demo': item.demo
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<AssistEntity> _assistEntityInsertionAdapter;
+
+  final UpdateAdapter<AssistEntity> _assistEntityUpdateAdapter;
+
+  final DeletionAdapter<AssistEntity> _assistEntityDeletionAdapter;
+
+  @override
+  Future<List<AssistEntity>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM asistencia',
+        mapper: (Map<String, Object?> row) => AssistEntity(
+            userId: row['userId'] as String?,
+            userName: row['userName'] as String?,
+            date: row['date'] as String,
+            hour: row['hour'] as String,
+            lat: row['lat'] as String,
+            lng: row['lng'] as String,
+            photoPath: row['photoPath'] as String?,
+            idAssistType: row['idAssistType'] as String,
+            obs: row['obs'] as String,
+            idUserType: row['idUserType'] as String?,
+            userType: row['userType'] as String?,
+            numDoc: row['numDoc'] as String?,
+            demo: row['demo'] as String?));
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM asistencia');
+  }
+
+  @override
+  Future<int> insertEntity(AssistEntity entity) {
+    return _assistEntityInsertionAdapter.insertAndReturnId(
+        entity, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<List<int>> insertList(List<AssistEntity> entities) {
+    return _assistEntityInsertionAdapter.insertListAndReturnIds(
+        entities, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateEntity(AssistEntity entity) {
+    return _assistEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteEntity(AssistEntity entity) {
+    return _assistEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
 }

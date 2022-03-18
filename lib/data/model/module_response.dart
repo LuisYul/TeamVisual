@@ -42,7 +42,7 @@ class Data {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toRequest() => {
     'id': id,
     'name': name,
     'required': required,

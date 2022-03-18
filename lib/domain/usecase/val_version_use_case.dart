@@ -5,7 +5,7 @@ class ValVersionUseCase implements BaseUseCase<bool, dynamic> {
 
   final AppRepository _repository;
 
-  ValVersionUseCase(this._repository);
+  const ValVersionUseCase(this._repository);
 
   @override
   Future<bool> call(params) async {

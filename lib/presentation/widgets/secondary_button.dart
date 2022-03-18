@@ -20,7 +20,7 @@ class SecondaryButton extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: () => SizedBox(
-        height: 50.h,
+        height: 48.h,
         child: OutlinedButton.icon(
             label: icon != null
                 ? Icon(icon, color: Colors.red,)

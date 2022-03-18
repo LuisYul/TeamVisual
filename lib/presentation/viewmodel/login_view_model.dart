@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
 import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
@@ -26,7 +25,7 @@ class LoginViewModel extends RootViewModel {
   @override
   initialize() {
 
-    log("init login vm");
+    debugPrint("init login vm");
   }
 
   void _valVersion(SignInEntity signInEntity) async {
@@ -45,13 +44,12 @@ class LoginViewModel extends RootViewModel {
   void _signIn(SignInEntity signInEntity) async {
     final result = await runBusyFuture(_signInUseCase.call(signInEntity),
         busyObject: "error_sign_in");
-    if(result != null) {
-      if(result.loginStatus.equalsIgnoreCase("true")) {
-        _sync(result);
-      } else {
-        setErrorMsg(result.error);
-        hideProgress();
-      }
+    final status = result.loginStatus ?? "";
+    if(status.equalsIgnoreCase("true")) {
+      _sync(result);
+    } else {
+      setErrorMsg(result.error ?? AppConstants.genericError);
+      hideProgress();
     }
   }
 
@@ -79,10 +77,6 @@ class LoginViewModel extends RootViewModel {
     _valVersion(signInEntity);
   }
 
-  @override
-  void onFutureError(error, Object? key) {
-    super.onFutureError(error, key);
-  }
 
   @override
   void dispose() {

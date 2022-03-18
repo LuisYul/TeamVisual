@@ -1,5 +1,5 @@
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:teamvisual/di/locator.dart';
 
@@ -7,8 +7,9 @@ import '../utils/navigation_service.dart';
 
 abstract class RootViewModel extends BaseViewModel{
 
-  final NavigationService navigationService
-    = getIt<NavigationService>();
+  final SharedPreferences prefs = getIt<SharedPreferences>();
+
+  final NavigationService navigationService = getIt<NavigationService>();
 
   bool _loading = false;
   bool get loading => _loading;
@@ -19,7 +20,7 @@ abstract class RootViewModel extends BaseViewModel{
   initialize();
 
   void showProgress() {
-    log("showing progress");
+    debugPrint("showing progress");
     _loading = true;
     notify();
   }
@@ -41,5 +42,11 @@ abstract class RootViewModel extends BaseViewModel{
 
   void notify() {
     notifyListeners();
+  }
+
+  @override
+  void onFutureError(error, Object? key) {
+    super.onFutureError(error, key);
+    debugPrint("ERROR ${error.toString()}");
   }
 }

@@ -10,7 +10,7 @@ class ValVersionEntity {
     required this.version,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toRequest() => {
     'idAplicacion': idApp,
     'version': version,
   };

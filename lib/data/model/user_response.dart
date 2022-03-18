@@ -5,6 +5,7 @@ class UserResponse {
   String? docNumber;
   String? idUserType;
   String? userType;
+  String? idAssistType;
   String? error;
   String? loginStatus;
 
@@ -14,6 +15,7 @@ class UserResponse {
     required this.docNumber,
     required this.idUserType,
     required this.userType,
+    required this.idAssistType,
     required this.error,
     required this.loginStatus,
   });
@@ -25,6 +27,7 @@ class UserResponse {
       docNumber: json['numDoc'],
       idUserType: json['idTipoUsuario'],
       userType: json['tipoUsuario'],
+      idAssistType: json['idTipoAsistencia'],
       error: json['error'],
       loginStatus: json['estadoLogin'],
     );
