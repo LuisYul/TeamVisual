@@ -3,6 +3,7 @@ import 'package:teamvisual/presentation/utils/app_constants.dart';
 
 @Entity(tableName: AppConstants.tableModule)
 class ModuleEntity {
+
   @primaryKey
   final int id;
   final String name;

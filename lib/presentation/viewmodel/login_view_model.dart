@@ -2,6 +2,7 @@ import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
 import 'package:teamvisual/domain/model/val_version_entity.dart';
+import 'package:teamvisual/domain/usecase/delete_tables_use_case.dart';
 import 'package:teamvisual/domain/usecase/sync_use_case.dart';
 import 'package:teamvisual/domain/usecase/val_version_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
@@ -14,11 +15,13 @@ class LoginViewModel extends RootViewModel {
   final SignInUseCase _signInUseCase;
   final ValVersionUseCase _valVersionUseCase;
   final SyncUseCase _syncUseCase;
+  final DeleteTablesUseCase _deleteTablesUseCase;
 
   LoginViewModel(
       this._signInUseCase,
       this._valVersionUseCase,
       this._syncUseCase,
+      this._deleteTablesUseCase,
   );
 
   @override
@@ -75,6 +78,11 @@ class LoginViewModel extends RootViewModel {
     _valVersion(signInEntity);
   }
 
+  void submitClearData() async {
+    await runBusyFuture(_deleteTablesUseCase.call(""));
+    pt("tables cleared");
+    setErrorMsg(AppConstants.dataCleared);
+  }
 
   @override
   void dispose() {

@@ -121,7 +121,7 @@ class CustomDialog extends StatelessWidget {
   Widget _firstButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        firstClick!();
+        firstClick != null ? firstClick!() : null;
         Navigator.of(context).pop();
       },
       child: Text(
@@ -139,7 +139,7 @@ class CustomDialog extends StatelessWidget {
   Widget _secondButton(BuildContext context) {
     return TextButton(
       onPressed: () {
-        secondClick!();
+        secondClick != null ? secondClick!() : null;
         Navigator.of(context).pop();
       },
       child: Text(

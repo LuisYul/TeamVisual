@@ -17,5 +17,6 @@ abstract class AppRepository {
     Future<List<AssistTypeEntity>> getAssistTypes();
     Future<int> saveAssist(AssistEntity assist);
     Future<bool> sendAssists(AssistListEntity assists);
+    Future<void> deleteTables();
 
 }

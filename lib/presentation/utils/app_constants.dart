@@ -9,6 +9,10 @@ class AppConstants {
   static const tableAssistType = "tipo_asistencia";
   static const tableModule = "modulos";
   static const tableAssist = "asistencia";
+  static const tableCourse = "lista_curso";
+  static const tableVideo = "lista_videos";
+  static const tableFile = "lista_archivos";
+  static const tableEvaluation = "lista_evaluaciones";
 
   static const prefsIdAssist = "id_asistencia";
   static const prefsUserId = "id_usuario";
@@ -26,6 +30,6 @@ class AppConstants {
   static const infoNotSent = "No se pudo enviar la información, "
       "se guardó en pendientes.";
   static const infoSent = "No se pudo enviar la información correctamente.";
-
+  static const dataCleared = "Se borraron todos los datos del sistema.";
 
 }

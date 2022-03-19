@@ -13,9 +13,15 @@ class MainScreen extends RootWidget<MainViewModel> {
 
   final Map<int, Widget> _viewCache = <int, Widget>{};
 
-  final _tabModules = TabModules();
+  late TabModules _tabModules;
   final _tabAssist = TabAssist();
   final _listScreen = OtherPage("hi");
+
+  @override
+  void init() {
+    super.init();
+    _tabModules = TabModules(viewModel: viewModel);
+  }
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {

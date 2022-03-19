@@ -37,6 +37,10 @@ class TableEntity {
       [
         const TableEntity(name: AppConstants.tableAssistType, show: "true"),
         const TableEntity(name: AppConstants.tableModule, show: "true"),
+        const TableEntity(name: AppConstants.tableCourse, show: "true"),
+        const TableEntity(name: AppConstants.tableVideo, show: "true"),
+        const TableEntity(name: AppConstants.tableFile, show: "true"),
+        const TableEntity(name: AppConstants.tableEvaluation, show: "true"),
       ];
 }
 

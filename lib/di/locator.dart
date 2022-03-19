@@ -5,6 +5,7 @@ import 'package:teamvisual/data/mapper/entity_mapper.dart';
 import 'package:teamvisual/data/mapper/entity_mapper_impl.dart';
 import 'package:teamvisual/data/repository/app_repository_impl.dart';
 import 'package:teamvisual/domain/repository/app_repository.dart';
+import 'package:teamvisual/domain/usecase/delete_tables_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_assist_types_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
 import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
@@ -61,6 +62,7 @@ Future<void> _domain() async {
   getIt.registerSingleton(GetAssistTypesUseCase(getIt.get()));
   getIt.registerSingleton(SaveAssistUseCase(getIt.get()));
   getIt.registerSingleton(SendAssistsUseCase(getIt.get()));
+  getIt.registerSingleton(DeleteTablesUseCase(getIt.get()));
 
 }
 
@@ -68,7 +70,7 @@ Future<void> _presentation() async {
 
   /// ViewModels
   getIt.registerFactory<LoginViewModel>(() => LoginViewModel(getIt.get(),
-      getIt.get(), getIt.get()));
+      getIt.get(), getIt.get(), getIt.get()));
   getIt.registerFactory<MainViewModel>(() => MainViewModel(getIt.get(),
       getIt.get()));
   getIt.registerFactory<AssistViewModel>(() => AssistViewModel(getIt.get(),

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teamvisual/data/datasource/local/app_database.dart';
 import 'package:teamvisual/data/datasource/remote/remote.dart';
@@ -81,6 +78,17 @@ class AppRepositoryImpl extends AppRepository {
   Future<bool> sendAssists(AssistListEntity assists) async {
     final response = await _remote.sendAssist(assists);
     return Future.value(response?.status?.equalsIgnoreCase("true"));
+  }
+
+  @override
+  Future<void> deleteTables() async {
+    await _database.assistDao.deleteAll();
+    await _database.assistTypeDao.deleteAll();
+    await _database.assistDao.deleteAll();
+    await _database.courseDao.deleteAll();
+    await _database.evaluationDao.deleteAll();
+    await _database.videoDao.deleteAll();
+    await _database.fileDao.deleteAll();
   }
 
 }

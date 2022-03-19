@@ -54,9 +54,9 @@ class LoginScreen extends RootWidget<LoginViewModel> {
                         children: <Widget>[
                           _logoTeamVisual(),
                           SizedBox(height: 30.sp),
-                          _inputField1(),
+                          _userField(),
                           SizedBox(height: 15.sp),
-                          _inputField2(),
+                          _passwordField(),
                           SizedBox(height: 15.sp),
                           SizedBox(
                             width: double.infinity,
@@ -68,17 +68,7 @@ class LoginScreen extends RootWidget<LoginViewModel> {
                               child: _clearDataButton(context)
                           ),
                           SizedBox(height: 25.sp),
-                          Center(
-                            child: Text(
-                              "Versión ${AppConstants.versionApp}",
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 16.sp,
-                                  color: Colors.black54,
-                                  letterSpacing: 0.2,
-                                  fontWeight: FontWeight.w500
-                              ),
-                            ),
-                          ),
+                          _versionLabel(),
                         ],
                       ),
                     ),
@@ -92,29 +82,29 @@ class LoginScreen extends RootWidget<LoginViewModel> {
     );
   }
 
-  Widget _textAppTitle() {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Team",
-              style: GoogleFonts.poppins(
-                fontSize: 30.sp,
-                color: Colors.blueGrey.shade700,
-                fontWeight: FontWeight.w300,
-              )
-          ),
-          Text("Visual",
-              style: GoogleFonts.poppins(
-                fontSize: 30.sp,
-                color: Colors.blueGrey.shade700,
-                fontWeight: FontWeight.w500,
-              )
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _textAppTitle() {
+  //   return Center(
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Text("Team",
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 30.sp,
+  //               color: Colors.blueGrey.shade700,
+  //               fontWeight: FontWeight.w300,
+  //             )
+  //         ),
+  //         Text("Visual",
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 30.sp,
+  //               color: Colors.blueGrey.shade700,
+  //               fontWeight: FontWeight.w500,
+  //             )
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _logoTeamVisual() {
     return Center(
@@ -126,7 +116,7 @@ class LoginScreen extends RootWidget<LoginViewModel> {
     );
   }
 
-  Widget _inputField1() {
+  Widget _userField() {
     return CustomTextField(
       controller: _userController,
       inputType: TextInputType.number,
@@ -136,7 +126,7 @@ class LoginScreen extends RootWidget<LoginViewModel> {
     );
   }
 
-  Widget _inputField2() {
+  Widget _passwordField() {
     return CustomTextField(
       controller: _passwordController,
       inputType: TextInputType.visiblePassword,
@@ -153,7 +143,8 @@ class LoginScreen extends RootWidget<LoginViewModel> {
       onClick: () {
         viewModel.submitLogin(
             _userController.text,
-            _passwordController.text);
+            _passwordController.text,
+        );
       },
     );
   }
@@ -165,17 +156,31 @@ class LoginScreen extends RootWidget<LoginViewModel> {
       onClick: () {
         showDialog(
           context: context,
-          builder: (BuildContext context) => const CustomDialog(
-            title: "Success",
-            description:
-            "USUARIO NO HABILITADO EN EL SISTEMA.",
-            firstButtonText: "Okay",
-            secondButtonText: "Cancelar",
+          builder: (BuildContext context) => CustomDialog(
+            title: "Atención",
+            description: "¿Desea borrar los datos del sistema?",
+            firstButtonText: "No",
+            secondButtonText: "Si",
             color: Colors.red,
             icon: CupertinoIcons.exclamationmark,
+            secondClick: () => viewModel.submitClearData(),
           ),
         );
       },
+    );
+  }
+
+  Widget _versionLabel() {
+    return Center(
+      child: Text(
+        "Versión ${AppConstants.versionApp}",
+        style: GoogleFonts.montserrat(
+            fontSize: 16.sp,
+            color: Colors.black54,
+            letterSpacing: 0.2,
+            fontWeight: FontWeight.w500
+        ),
+      ),
     );
   }
 

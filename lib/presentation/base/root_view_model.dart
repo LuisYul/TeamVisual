@@ -50,6 +50,7 @@ abstract class RootViewModel extends BaseViewModel{
   @override
   void onFutureError(error, Object? key) {
     super.onFutureError(error, key);
+    hideProgress();
     debugPrint("ERROR ${error.toString()}");
   }
 }
