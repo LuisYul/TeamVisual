@@ -100,7 +100,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `asistencia` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` TEXT, `userName` TEXT, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `lat` TEXT NOT NULL, `lng` TEXT NOT NULL, `photoPath` TEXT, `idAssistType` TEXT NOT NULL, `obs` TEXT NOT NULL, `idUserType` TEXT, `userType` TEXT, `numDoc` TEXT, `demo` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` TEXT NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` INTEGER NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_evaluaciones` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `maxNote` INTEGER NOT NULL, `minNote` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `question` TEXT NOT NULL, `note` INTEGER NOT NULL, `questionTypeId` INTEGER NOT NULL, `questionOrder` INTEGER NOT NULL, `type` TEXT NOT NULL, `alternativeId` INTEGER NOT NULL, `alternative` TEXT NOT NULL, `correct` INTEGER NOT NULL, `alternativeOrder` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -517,10 +517,10 @@ class _$CourseDao extends CourseDao {
             course: row['course'] as String,
             author: row['author'] as String,
             resume: row['resume'] as String,
-            userId: row['userId'] as String,
+            userId: row['userId'] as int,
             startDate: row['startDate'] as String,
             endDate: row['endDate'] as String,
-            note: row['note'] as String,
+            note: row['note'] as int,
             advPercent: row['advPercent'] as int,
             specAreaId: row['specAreaId'] as int,
             specArea: row['specArea'] as String,

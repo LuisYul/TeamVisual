@@ -24,25 +24,23 @@ class TabModules extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(
-                      "assets/images/background_modules.png",
-                  )
-                )
-              ),
-              height: MediaQuery.of(context).size.height/3,
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(
+                        "assets/images/background_modules.png",
+                      ))),
+              height: MediaQuery.of(context).size.height / 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children:  [
-                  const SizedBox(height: 15,),
+                children: [
+                  const SizedBox(
+                    height: 15,
+                  ),
                   _imgProfilePic(),
                   Text(
                     viewModel.userName,
                     style: GoogleFonts.montserrat(
-                        fontSize: 20.sp,
-                        color: Colors.white
-                    ),
+                        fontSize: 20.sp, color: Colors.white),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,15 +55,12 @@ class TabModules extends StatelessWidget {
                               style: GoogleFonts.montserrat(
                                   fontSize: 20.sp,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w500
-                              ),
+                                  fontWeight: FontWeight.w500),
                             ),
                             Text(
                               "Progreso",
                               style: GoogleFonts.montserrat(
-                                  fontSize: 15.sp,
-                                  color: Colors.white
-                              ),
+                                  fontSize: 15.sp, color: Colors.white),
                             ),
                           ],
                         ),
@@ -79,15 +74,12 @@ class TabModules extends StatelessWidget {
                               style: GoogleFonts.montserrat(
                                   fontSize: 20.sp,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w500
-                              ),
+                                  fontWeight: FontWeight.w500),
                             ),
                             Text(
                               "Encuestas",
                               style: GoogleFonts.montserrat(
-                                  fontSize: 15.sp,
-                                  color: Colors.white
-                              ),
+                                  fontSize: 15.sp, color: Colors.white),
                             ),
                           ],
                         ),
@@ -102,15 +94,12 @@ class TabModules extends StatelessWidget {
                                 style: GoogleFonts.montserrat(
                                     fontSize: 20.sp,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w500
-                                ),
+                                    fontWeight: FontWeight.w500),
                               ),
                               Text(
                                 "Pendientes",
                                 style: GoogleFonts.montserrat(
-                                    fontSize: 15.sp,
-                                    color: Colors.white
-                                ),
+                                    fontSize: 15.sp, color: Colors.white),
                               ),
                             ],
                           ),
@@ -118,68 +107,48 @@ class TabModules extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),
             Flexible(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(15.h),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: CardModule(
-                              imageName: 'img_test.png',
-                              title: 'Encuestas',
-                              color: const Color(0x464C8FEC),
-                              onClick: () {},
-                            ),
-                          ),
-                          SizedBox(width: 5.w,),
-                          Expanded(
-                            flex: 1,
-                            child: CardModule(
-                              imageName: 'img_camera_green.png',
-                              title: 'Asistencia',
-                              color: const Color(0x3B39EC6A),
-                              onClick: () {
-                                viewModel.setCurrentTab(1, "Asistencia");
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: CardModule(
-                              imageName: 'img_test.png',
-                              title: 'Encuestas',
-                              color: const Color(0x464C8FEC),
-                              onClick: () {},
-                            ),
-                          ),
-                          SizedBox(width: 5.w,),
-                          Expanded(
-                            flex: 1,
-                            child: CardModule(
-                              imageName: 'img_camera_green.png',
-                              title: 'Asistencia',
-                              color: const Color(0x3B39EC6A),
-                              onClick: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(15.h, 0, 15.h, 0),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 5.h,
+                  mainAxisSpacing: 5.h,
+                  children: [
+                    if(viewModel.quizModuleOn) CardModule(
+                      imageName: 'img_test.png',
+                      title: 'Encuestas',
+                      color: const Color(0x464C8FEC),
+                      onClick: () {},
+                    ),
+                    if(viewModel.assistModuleOn) CardModule(
+                      imageName: 'img_camera_green.png',
+                      title: 'Asistencia',
+                      color: const Color(0x3B39EC6A),
+                      onClick: () {
+                        viewModel.setCurrentTab(1, "Asistencia");
+                      },
+                    ),
+                    if(viewModel.thirdModuleOn) CardModule(
+                      imageName: 'img_test.png',
+                      title: 'Encuestas',
+                      color: const Color(0x464C8FEC),
+                      onClick: () {},
+                    ),
+                    if(viewModel.fourthModuleOn) CardModule(
+                      imageName: 'img_camera_green.png',
+                      title: 'Asistencia',
+                      color: const Color(0x3B39EC6A),
+                      onClick: () {},
+                    ),
+                  ],
                 ),
               ),
             )
@@ -201,5 +170,4 @@ class TabModules extends StatelessWidget {
       ),
     );
   }
-
 }

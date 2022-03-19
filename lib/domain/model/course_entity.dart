@@ -9,10 +9,10 @@ class CourseEntity {
   final String course;
   final String author;
   final String resume;
-  final String userId;
+  final int userId;
   final String startDate;
   final String endDate;
-  final String note;
+  final int note;
   final int advPercent;
   final int specAreaId;
   final String specArea;

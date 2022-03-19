@@ -5,6 +5,11 @@ class AppConstants {
   static const idApp = 2;
   static const versionApp = "0.0.1";
 
+  static const assistModuleId = 1;
+  static const quizModuleId = 2;
+  static const thirdModuleId = 3;
+  static const fourthModuleId = 4;
+
   static const teamVisualDB = "team_visual";
   static const tableAssistType = "tipo_asistencia";
   static const tableModule = "modulos";

@@ -21,10 +21,10 @@ class CourseResponse {
 }
 
 class Data {
-  final String? userId;
+  final int? userId;
   final String? startDate;
   final String? endDate;
-  final String? note;
+  final int? note;
   final int? advPercent;
   final int? specAreaId;
   final String? specArea;

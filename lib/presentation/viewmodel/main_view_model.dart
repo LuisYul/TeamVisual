@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:teamvisual/domain/model/module_entity.dart';
 import 'package:teamvisual/domain/usecase/get_assist_types_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
@@ -30,12 +31,25 @@ class MainViewModel extends RootViewModel {
   bool _reverse = false;
   bool get reverse => _reverse;
 
+  bool _assistModuleOn = false;
+  bool get assistModuleOn => _assistModuleOn;
+
+  bool _quizModuleOn = false;
+  bool get quizModuleOn => _quizModuleOn;
+
+  bool _thirdModuleOn = false;
+  bool get thirdModuleOn => _thirdModuleOn;
+
+  bool _fourthModuleOn = false;
+  bool get fourthModuleOn => _fourthModuleOn;
+
   @override
   initialize() {
     _getModules();
     _userName = prefs.getString(AppConstants.prefsUserName) ?? "";
     _userType = prefs.getString(AppConstants.prefsUserType) ?? "";
     notify();
+    pt("init main viewmodel");
   }
 
   void _getModules() async {
@@ -43,9 +57,29 @@ class MainViewModel extends RootViewModel {
     final result = await runBusyFuture(_getModulesUseCase.call(1),
         busyObject: "error_get_modules");
     if(result.isNotEmpty) {
-      debugPrint(result.length.toString());
+      _checkModulePermissions(result);
     }
     hideProgress();
+  }
+
+  void _checkModulePermissions(List<ModuleEntity> modules) {
+    bool assistModule = true;
+    bool quizModule = false;
+    bool thirdModule = false;
+    bool fourthModule = false;
+    for(final i in modules) {
+      print("module ${i.name} id ${i.id}");
+      if(i.id == AppConstants.assistModuleId) assistModule = true;
+      if(i.id == AppConstants.quizModuleId) quizModule = true;
+      if(i.id == AppConstants.thirdModuleId) thirdModule = true;
+      if(i.id == AppConstants.fourthModuleId) fourthModule = true;
+    }
+    _assistModuleOn = assistModule;
+    _quizModuleOn = quizModule;
+    _thirdModuleOn = thirdModule;
+    pt("assist $assistModule quis $quizModule third $thirdModule");
+   // _fourthModuleOn = fourthModule;
+    notify();
   }
 
   void _getAssistTypes() async {

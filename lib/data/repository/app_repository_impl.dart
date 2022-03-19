@@ -45,12 +45,24 @@ class AppRepositoryImpl extends AppRepository {
   @override
   Future<bool> sync(SyncEntity syncEntity) async {
     final response = await _remote.sync(syncEntity);
-    final assistTypeEntity = _mapper.toAssistTypeEntity(response);
-    final moduleEntity = _mapper.toModuleEntity(response);
+    final assistTypesEntity = _mapper.toAssistTypeEntity(response);
+    final modulesEntity = _mapper.toModuleEntity(response);
+    final coursesEntity = _mapper.toCourseEntity(response);
+    final videosEntity = _mapper.toVideoEntity(response);
+    final filesEntity = _mapper.toFileEntity(response);
+    final evaluationsEntity = _mapper.toEvaluationEntity(response);
     await _database.assistTypeDao.deleteAll();
     await _database.moduleDao.deleteAll();
-    await _database.assistTypeDao.insertList(assistTypeEntity);
-    await _database.moduleDao.insertList(moduleEntity);
+    await _database.courseDao.deleteAll();
+    await _database.evaluationDao.deleteAll();
+    await _database.videoDao.deleteAll();
+    await _database.fileDao.deleteAll();
+    await _database.assistTypeDao.insertList(assistTypesEntity);
+    await _database.moduleDao.insertList(modulesEntity);
+    await _database.courseDao.insertList(coursesEntity);
+    await _database.videoDao.insertList(videosEntity);
+    await _database.fileDao.insertList(filesEntity);
+    await _database.evaluationDao.insertList(evaluationsEntity);
     return Future.value(response?.status?.equalsIgnoreCase("true"));
   }
 
