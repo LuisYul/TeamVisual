@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:teamvisual/di/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:teamvisual/presentation/screen/login_screen.dart';
@@ -7,7 +10,16 @@ import 'package:teamvisual/presentation/utils/navigation_service.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDI();
+  HttpOverrides.global = new MyHttpOverrides();
   runApp(const MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -23,8 +35,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        // '/': (context) => LoginScreen(),
-        // '/main': (context) => MainScreen(),
+        //'/': (context) => LoginScreen(),
+        //'/main': (context) => MainScreen(),
          '/': (context) => MainScreen(),
       },
     );

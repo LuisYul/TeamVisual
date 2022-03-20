@@ -3,11 +3,13 @@ import 'package:teamvisual/data/mapper/entity_mapper.dart';
 import 'package:teamvisual/data/model/sync_response.dart';
 import 'package:teamvisual/data/model/user_response.dart';
 import 'package:teamvisual/data/model/val_version_response.dart';
+import 'package:teamvisual/domain/model/alternative_entity.dart';
 import 'package:teamvisual/domain/model/assist_type_entity.dart';
 import 'package:teamvisual/domain/model/course_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
 import 'package:teamvisual/domain/model/file_entity.dart';
 import 'package:teamvisual/domain/model/module_entity.dart';
+import 'package:teamvisual/domain/model/question_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
 import 'package:teamvisual/domain/model/video_entity.dart';
 import 'package:teamvisual/presentation/utils/string_extension.dart';
@@ -23,6 +25,7 @@ class EntityMapperImpl extends EntityMapper{
       idUserType: userResponse?.idUserType ?? "",
       userType: userResponse?.userType ?? "",
       idAssistType: userResponse?.idAssistType ?? "",
+      photoUrl: userResponse?.photoUrl ?? "",
       error: userResponse?.error ?? "",
       loginStatus: userResponse?.loginStatus ?? "",
     );
@@ -45,6 +48,7 @@ class EntityMapperImpl extends EntityMapper{
               order: e?.order ?? 0
           ))
       ));
+      list.add(AssistTypeEntity(id: 99, name: "finished", order: 99));
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -104,20 +108,11 @@ class EntityMapperImpl extends EntityMapper{
           list.add(EvaluationEntity(
             id: e?.id ?? 0,
             userId: e?.userId ?? 0,
+            userCourseId: e?.userCourseId ?? 0,
             courseId: e?.courseId ?? 0,
             name: e?.name ?? "",
             maxNote: e?.maxNote ?? 0,
             minNote: e?.minNote ?? 0,
-            questionId: e?.questionId ?? 0,
-            question: e?.question ?? "",
-            note: e?.note ?? 0,
-            questionTypeId: e?.questionTypeId ?? 0,
-            questionOrder: e?.questionOrder ?? 0,
-            type: e?.type ?? "",
-            alternativeId: e?.alternativeId ?? 0,
-            alternative: e?.alternative ?? "",
-            correct: e?.correct ?? 0,
-            alternativeOrder: e?.alternativeOrder ?? 0,
           ))
       ));
     } catch (e) {
@@ -152,6 +147,46 @@ class EntityMapperImpl extends EntityMapper{
             courseId: e?.courseId ?? 0,
             videoFile: e?.videoFile ?? "",
             name: e?.name ?? "",
+          ))
+      ));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return list;
+  }
+
+  @override
+  List<QuestionEntity> toQuestionEntity(SyncResponse? syncResponse) {
+    final List<QuestionEntity> list = [];
+    try {
+      (syncResponse?.questions?.data.forEach((e) =>
+          list.add(QuestionEntity(
+            id: e?.id ?? 0,
+            question: e?.question ?? "",
+            evaluationId: e?.evaluationId ?? 0,
+            note: e?.note ?? 0,
+            questionTypeId: e?.questionTypeId ?? 0,
+            questionOrder: e?.questionOrder ?? 0,
+            type: e?.type ?? "",
+          ))
+      ));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return list;
+  }
+
+  @override
+  List<AlternativeEntity> toAlternativeEntity(SyncResponse? syncResponse) {
+    final List<AlternativeEntity> list = [];
+    try {
+      (syncResponse?.alternatives?.data.forEach((e) =>
+          list.add(AlternativeEntity(
+            id: e?.id ?? 0,
+            questionId: e?.questionId ?? 0,
+            alternative: e?.alternative ?? "",
+            correct: e?.correct ?? 0,
+            order: e?.order ?? 0,
           ))
       ));
     } catch (e) {

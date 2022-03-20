@@ -25,6 +25,7 @@ class MainScreen extends RootWidget<MainViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
+    print("build vm main");
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -82,22 +83,42 @@ class MainScreen extends RootWidget<MainViewModel> {
                 Navigator.of(context).pop();
               },
             ),
-            if(viewModel.assistModuleOn)ItemDrawerMenu(
-              title: "Asistencia",
-              icon: Icons.quiz_rounded,
-              onClick: () {
-                viewModel.setCurrentTab(1, "Asistencia");
-                Navigator.of(context).pop();
-              },
-            ),
-            if(viewModel.quizModuleOn)ItemDrawerMenu(
-              title: "Encuestas",
-              icon: Icons.cloud_upload,
-              onClick: () {
-                viewModel.setCurrentTab(2, "Encuestas");
-                Navigator.of(context).pop();
-              },
-            ),
+            if (viewModel.assistModuleOn)
+              ItemDrawerMenu(
+                title: "Asistencia",
+                icon: Icons.quiz_rounded,
+                onClick: () {
+                  viewModel.setCurrentTab(1, "Asistencia");
+                  Navigator.of(context).pop();
+                },
+              ),
+            if (viewModel.quizModuleOn)
+              ItemDrawerMenu(
+                title: "Encuestas",
+                icon: Icons.cloud_upload,
+                onClick: () {
+                  viewModel.setCurrentTab(2, "Encuestas");
+                  Navigator.of(context).pop();
+                },
+              ),
+            if (viewModel.thirdModuleOn)
+              ItemDrawerMenu(
+                title: "Módulo 3",
+                icon: Icons.quiz_rounded,
+                onClick: () {
+                  viewModel.setCurrentTab(1, "Módulo 3");
+                  Navigator.of(context).pop();
+                },
+              ),
+            if (viewModel.fourthModuleOn)
+              ItemDrawerMenu(
+                title: "Módulo 4",
+                icon: Icons.cloud_upload,
+                onClick: () {
+                  viewModel.setCurrentTab(2, "Módulo 4");
+                  Navigator.of(context).pop();
+                },
+              ),
             const Divider(
               thickness: 1.0,
             ),
@@ -111,6 +132,7 @@ class MainScreen extends RootWidget<MainViewModel> {
   }
 
   Widget getViewForIndex(int index) {
+    print("get view from index $index");
     if (!_viewCache.containsKey(index)) {
       switch (index) {
         case 0:
@@ -124,6 +146,7 @@ class MainScreen extends RootWidget<MainViewModel> {
           break;
       }
     }
+    print("view cache ${_viewCache[index]}");
     return _viewCache[index]!;
   }
 }

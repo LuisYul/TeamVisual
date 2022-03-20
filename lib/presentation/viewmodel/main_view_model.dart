@@ -22,6 +22,9 @@ class MainViewModel extends RootViewModel {
   String _userType = "";
   String get userType => _userType;
 
+  String _userPhoto = "";
+  String get userPhoto => _userPhoto;
+
   int _currentTabIndex = 0;
   int get currentTabIndex => _currentTabIndex;
 
@@ -48,6 +51,7 @@ class MainViewModel extends RootViewModel {
     _getModules();
     _userName = prefs.getString(AppConstants.prefsUserName) ?? "";
     _userType = prefs.getString(AppConstants.prefsUserType) ?? "";
+    _userPhoto = prefs.getString(AppConstants.prefsUserPhoto) ?? "";
     notify();
     pt("init main viewmodel");
   }
@@ -63,12 +67,11 @@ class MainViewModel extends RootViewModel {
   }
 
   void _checkModulePermissions(List<ModuleEntity> modules) {
-    bool assistModule = true;
+    bool assistModule = false;
     bool quizModule = false;
     bool thirdModule = false;
     bool fourthModule = false;
     for(final i in modules) {
-      print("module ${i.name} id ${i.id}");
       if(i.id == AppConstants.assistModuleId) assistModule = true;
       if(i.id == AppConstants.quizModuleId) quizModule = true;
       if(i.id == AppConstants.thirdModuleId) thirdModule = true;
@@ -77,8 +80,7 @@ class MainViewModel extends RootViewModel {
     _assistModuleOn = assistModule;
     _quizModuleOn = quizModule;
     _thirdModuleOn = thirdModule;
-    pt("assist $assistModule quis $quizModule third $thirdModule");
-   // _fourthModuleOn = fourthModule;
+    _fourthModuleOn = fourthModule;
     notify();
   }
 
@@ -97,6 +99,7 @@ class MainViewModel extends RootViewModel {
       _reverse = true;
     }
     _currentTabIndex = index;
+    pt("current tab index $index");
     _currentTabTitle = title;
     notify();
   }

@@ -41,6 +41,8 @@ class TableEntity {
         const TableEntity(name: AppConstants.tableVideo, show: "true"),
         const TableEntity(name: AppConstants.tableFile, show: "true"),
         const TableEntity(name: AppConstants.tableEvaluation, show: "true"),
+        const TableEntity(name: AppConstants.tableQuestion, show: "true"),
+        const TableEntity(name: AppConstants.tableAlternative, show: "true"),
       ];
 }
 

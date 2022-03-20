@@ -75,6 +75,10 @@ class _$AppDatabase extends AppDatabase {
 
   FileDao? _fileDaoInstance;
 
+  QuestionDao? _questionDaoInstance;
+
+  AlternativeDao? _alternativeDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -102,11 +106,15 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` INTEGER NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_evaluaciones` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `maxNote` INTEGER NOT NULL, `minNote` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `question` TEXT NOT NULL, `note` INTEGER NOT NULL, `questionTypeId` INTEGER NOT NULL, `questionOrder` INTEGER NOT NULL, `type` TEXT NOT NULL, `alternativeId` INTEGER NOT NULL, `alternative` TEXT NOT NULL, `correct` INTEGER NOT NULL, `alternativeOrder` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_evaluaciones` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `userCourseId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `maxNote` INTEGER NOT NULL, `minNote` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_videos` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `videoFile` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_archivos` (`id` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `lista_preguntas` (`id` INTEGER NOT NULL, `question` TEXT NOT NULL, `evaluationId` INTEGER NOT NULL, `note` INTEGER NOT NULL, `questionTypeId` INTEGER NOT NULL, `questionOrder` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `lista_alternativas` (`id` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternative` TEXT NOT NULL, `correct` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -147,6 +155,17 @@ class _$AppDatabase extends AppDatabase {
   @override
   FileDao get fileDao {
     return _fileDaoInstance ??= _$FileDao(database, changeListener);
+  }
+
+  @override
+  QuestionDao get questionDao {
+    return _questionDaoInstance ??= _$QuestionDao(database, changeListener);
+  }
+
+  @override
+  AlternativeDao get alternativeDao {
+    return _alternativeDaoInstance ??=
+        _$AlternativeDao(database, changeListener);
   }
 }
 
@@ -566,20 +585,11 @@ class _$EvaluationDao extends EvaluationDao {
             (EvaluationEntity item) => <String, Object?>{
                   'id': item.id,
                   'userId': item.userId,
+                  'userCourseId': item.userCourseId,
                   'courseId': item.courseId,
                   'name': item.name,
                   'maxNote': item.maxNote,
-                  'minNote': item.minNote,
-                  'questionId': item.questionId,
-                  'question': item.question,
-                  'note': item.note,
-                  'questionTypeId': item.questionTypeId,
-                  'questionOrder': item.questionOrder,
-                  'type': item.type,
-                  'alternativeId': item.alternativeId,
-                  'alternative': item.alternative,
-                  'correct': item.correct,
-                  'alternativeOrder': item.alternativeOrder
+                  'minNote': item.minNote
                 }),
         _evaluationEntityUpdateAdapter = UpdateAdapter(
             database,
@@ -588,20 +598,11 @@ class _$EvaluationDao extends EvaluationDao {
             (EvaluationEntity item) => <String, Object?>{
                   'id': item.id,
                   'userId': item.userId,
+                  'userCourseId': item.userCourseId,
                   'courseId': item.courseId,
                   'name': item.name,
                   'maxNote': item.maxNote,
-                  'minNote': item.minNote,
-                  'questionId': item.questionId,
-                  'question': item.question,
-                  'note': item.note,
-                  'questionTypeId': item.questionTypeId,
-                  'questionOrder': item.questionOrder,
-                  'type': item.type,
-                  'alternativeId': item.alternativeId,
-                  'alternative': item.alternative,
-                  'correct': item.correct,
-                  'alternativeOrder': item.alternativeOrder
+                  'minNote': item.minNote
                 }),
         _evaluationEntityDeletionAdapter = DeletionAdapter(
             database,
@@ -610,20 +611,11 @@ class _$EvaluationDao extends EvaluationDao {
             (EvaluationEntity item) => <String, Object?>{
                   'id': item.id,
                   'userId': item.userId,
+                  'userCourseId': item.userCourseId,
                   'courseId': item.courseId,
                   'name': item.name,
                   'maxNote': item.maxNote,
-                  'minNote': item.minNote,
-                  'questionId': item.questionId,
-                  'question': item.question,
-                  'note': item.note,
-                  'questionTypeId': item.questionTypeId,
-                  'questionOrder': item.questionOrder,
-                  'type': item.type,
-                  'alternativeId': item.alternativeId,
-                  'alternative': item.alternative,
-                  'correct': item.correct,
-                  'alternativeOrder': item.alternativeOrder
+                  'minNote': item.minNote
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -644,20 +636,11 @@ class _$EvaluationDao extends EvaluationDao {
         mapper: (Map<String, Object?> row) => EvaluationEntity(
             id: row['id'] as int,
             userId: row['userId'] as int,
+            userCourseId: row['userCourseId'] as int,
             courseId: row['courseId'] as int,
             name: row['name'] as String,
             maxNote: row['maxNote'] as int,
-            minNote: row['minNote'] as int,
-            questionId: row['questionId'] as int,
-            question: row['question'] as String,
-            note: row['note'] as int,
-            questionTypeId: row['questionTypeId'] as int,
-            questionOrder: row['questionOrder'] as int,
-            type: row['type'] as String,
-            alternativeId: row['alternativeId'] as int,
-            alternative: row['alternative'] as String,
-            correct: row['correct'] as int,
-            alternativeOrder: row['alternativeOrder'] as int));
+            minNote: row['minNote'] as int));
   }
 
   @override
@@ -833,5 +816,189 @@ class _$FileDao extends FileDao {
   @override
   Future<int> deleteEntity(FileEntity entity) {
     return _fileEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
+  }
+}
+
+class _$QuestionDao extends QuestionDao {
+  _$QuestionDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _questionEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'lista_preguntas',
+            (QuestionEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'question': item.question,
+                  'evaluationId': item.evaluationId,
+                  'note': item.note,
+                  'questionTypeId': item.questionTypeId,
+                  'questionOrder': item.questionOrder,
+                  'type': item.type
+                }),
+        _questionEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'lista_preguntas',
+            ['id'],
+            (QuestionEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'question': item.question,
+                  'evaluationId': item.evaluationId,
+                  'note': item.note,
+                  'questionTypeId': item.questionTypeId,
+                  'questionOrder': item.questionOrder,
+                  'type': item.type
+                }),
+        _questionEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'lista_preguntas',
+            ['id'],
+            (QuestionEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'question': item.question,
+                  'evaluationId': item.evaluationId,
+                  'note': item.note,
+                  'questionTypeId': item.questionTypeId,
+                  'questionOrder': item.questionOrder,
+                  'type': item.type
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<QuestionEntity> _questionEntityInsertionAdapter;
+
+  final UpdateAdapter<QuestionEntity> _questionEntityUpdateAdapter;
+
+  final DeletionAdapter<QuestionEntity> _questionEntityDeletionAdapter;
+
+  @override
+  Future<List<QuestionEntity>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM lista_preguntas',
+        mapper: (Map<String, Object?> row) => QuestionEntity(
+            id: row['id'] as int,
+            question: row['question'] as String,
+            evaluationId: row['evaluationId'] as int,
+            note: row['note'] as int,
+            questionTypeId: row['questionTypeId'] as int,
+            questionOrder: row['questionOrder'] as int,
+            type: row['type'] as String));
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM lista_preguntas');
+  }
+
+  @override
+  Future<int> insertEntity(QuestionEntity entity) {
+    return _questionEntityInsertionAdapter.insertAndReturnId(
+        entity, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<List<int>> insertList(List<QuestionEntity> entities) {
+    return _questionEntityInsertionAdapter.insertListAndReturnIds(
+        entities, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateEntity(QuestionEntity entity) {
+    return _questionEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteEntity(QuestionEntity entity) {
+    return _questionEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
+  }
+}
+
+class _$AlternativeDao extends AlternativeDao {
+  _$AlternativeDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _alternativeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'lista_alternativas',
+            (AlternativeEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'questionId': item.questionId,
+                  'alternative': item.alternative,
+                  'correct': item.correct,
+                  'order': item.order
+                }),
+        _alternativeEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'lista_alternativas',
+            ['id'],
+            (AlternativeEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'questionId': item.questionId,
+                  'alternative': item.alternative,
+                  'correct': item.correct,
+                  'order': item.order
+                }),
+        _alternativeEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'lista_alternativas',
+            ['id'],
+            (AlternativeEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'questionId': item.questionId,
+                  'alternative': item.alternative,
+                  'correct': item.correct,
+                  'order': item.order
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<AlternativeEntity> _alternativeEntityInsertionAdapter;
+
+  final UpdateAdapter<AlternativeEntity> _alternativeEntityUpdateAdapter;
+
+  final DeletionAdapter<AlternativeEntity> _alternativeEntityDeletionAdapter;
+
+  @override
+  Future<List<AlternativeEntity>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM lista_alternativas',
+        mapper: (Map<String, Object?> row) => AlternativeEntity(
+            id: row['id'] as int,
+            questionId: row['questionId'] as int,
+            alternative: row['alternative'] as String,
+            correct: row['correct'] as int,
+            order: row['order'] as int));
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM lista_alternativas');
+  }
+
+  @override
+  Future<int> insertEntity(AlternativeEntity entity) {
+    return _alternativeEntityInsertionAdapter.insertAndReturnId(
+        entity, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<List<int>> insertList(List<AlternativeEntity> entities) {
+    return _alternativeEntityInsertionAdapter.insertListAndReturnIds(
+        entities, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateEntity(AlternativeEntity entity) {
+    return _alternativeEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteEntity(AlternativeEntity entity) {
+    return _alternativeEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
 }

@@ -18,13 +18,16 @@ class AppConstants {
   static const tableVideo = "lista_videos";
   static const tableFile = "lista_archivos";
   static const tableEvaluation = "lista_evaluaciones";
+  static const tableQuestion = "lista_preguntas";
+  static const tableAlternative = "lista_alternativas";
 
   static const prefsIdAssist = "id_asistencia";
   static const prefsUserId = "id_usuario";
   static const prefsUserName = "nombre_usuario";
   static const prefsUserDocNumber = "numero_doc_ususario";
-  static const prefsUserTypeId = "tipo_usuario";
-  static const prefsUserType = "id_tipo_usuario";
+  static const prefsUserTypeId = "id_tipo_usuario";
+  static const prefsUserType = "tipo_usuario";
+  static const prefsUserPhoto = "foto_usuario";
 
   static const upVersion = "Necesita actualizar la versión "
       "del aplicativo para ingresar.";

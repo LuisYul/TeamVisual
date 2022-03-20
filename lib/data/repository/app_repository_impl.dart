@@ -13,6 +13,7 @@ import 'package:teamvisual/presentation/utils/app_constants.dart';
 import 'package:teamvisual/presentation/utils/string_extension.dart';
 import '../../domain/model/assist_entity.dart';
 import '../../domain/model/assist_list_entity.dart';
+import 'package:collection/collection.dart';
 
 class AppRepositoryImpl extends AppRepository {
 
@@ -32,7 +33,8 @@ class AppRepositoryImpl extends AppRepository {
     _prefs.setString(AppConstants.prefsUserDocNumber, userEntity.docNumber);
     _prefs.setString(AppConstants.prefsUserTypeId, userEntity.idUserType);
     _prefs.setString(AppConstants.prefsUserType, userEntity.userType);
-    _prefs.setInt(AppConstants.prefsIdAssist, int.parse(userEntity.idAssistType));
+    _prefs.setString(AppConstants.prefsUserPhoto, userEntity.photoUrl);
+   // _prefs.setInt(AppConstants.prefsIdAssist, int.parse(userEntity.idAssistType));
     return userEntity;
   }
 
@@ -51,27 +53,41 @@ class AppRepositoryImpl extends AppRepository {
     final videosEntity = _mapper.toVideoEntity(response);
     final filesEntity = _mapper.toFileEntity(response);
     final evaluationsEntity = _mapper.toEvaluationEntity(response);
+    final questionEntity = _mapper.toQuestionEntity(response);
+    final alternativeEntity = _mapper.toAlternativeEntity(response);
     await _database.assistTypeDao.deleteAll();
     await _database.moduleDao.deleteAll();
     await _database.courseDao.deleteAll();
     await _database.evaluationDao.deleteAll();
     await _database.videoDao.deleteAll();
     await _database.fileDao.deleteAll();
+    await _database.questionDao.deleteAll();
+    await _database.alternativeDao.deleteAll();
     await _database.assistTypeDao.insertList(assistTypesEntity);
     await _database.moduleDao.insertList(modulesEntity);
     await _database.courseDao.insertList(coursesEntity);
     await _database.videoDao.insertList(videosEntity);
     await _database.fileDao.insertList(filesEntity);
     await _database.evaluationDao.insertList(evaluationsEntity);
+    await _database.questionDao.insertList(questionEntity);
+    await _database.alternativeDao.insertList(alternativeEntity);
     return Future.value(response?.status?.equalsIgnoreCase("true"));
   }
 
   @override
   Future<List<AssistTypeEntity>> getAssistTypes() async {
-    final int idAssist = _prefs.getInt(AppConstants.prefsIdAssist) ?? 1;
+    final int idAssist = _prefs.getInt(AppConstants.prefsIdAssist) ?? 0;
     final assistTypes = await _database.assistTypeDao.getAll();
-    return List<AssistTypeEntity>.from(assistTypes.map((e) => AssistTypeEntity
-      (id: e.id, name: e.name, order: e.order, current: e.id == idAssist + 1)));
+    int indexOk = -1;
+    assistTypes.forEachIndexed((index, element) {
+      element.index = index;
+      element.current = false;
+      if(element.id == idAssist){
+        indexOk = index;
+      }
+    });
+    assistTypes[indexOk +1].current =  true;
+    return assistTypes;
   }
 
   @override
@@ -88,6 +104,8 @@ class AppRepositoryImpl extends AppRepository {
 
   @override
   Future<bool> sendAssists(AssistListEntity assists) async {
+    _prefs.setInt(AppConstants.prefsIdAssist,
+        int.parse(assists.assists.first.idAssistType));
     final response = await _remote.sendAssist(assists);
     return Future.value(response?.status?.equalsIgnoreCase("true"));
   }

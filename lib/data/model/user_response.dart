@@ -6,6 +6,7 @@ class UserResponse {
   String? idUserType;
   String? userType;
   String? idAssistType;
+  String? photoUrl;
   String? error;
   String? loginStatus;
 
@@ -16,6 +17,7 @@ class UserResponse {
     required this.idUserType,
     required this.userType,
     required this.idAssistType,
+    required this.photoUrl,
     required this.error,
     required this.loginStatus,
   });
@@ -28,6 +30,7 @@ class UserResponse {
       idUserType: json['idTipoUsuario'],
       userType: json['tipoUsuario'],
       idAssistType: json['idTipoAsistencia'],
+      photoUrl: json['foto'],
       error: json['error'],
       loginStatus: json['estadoLogin'],
     );

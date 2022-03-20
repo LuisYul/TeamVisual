@@ -6,8 +6,11 @@ import 'package:teamvisual/domain/model/course_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
 import 'package:teamvisual/domain/model/file_entity.dart';
 import 'package:teamvisual/domain/model/module_entity.dart';
+import 'package:teamvisual/domain/model/question_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
 import 'package:teamvisual/domain/model/video_entity.dart';
+
+import '../../domain/model/alternative_entity.dart';
 
 abstract class EntityMapper {
   UserEntity toUserEntity(UserResponse? userResponse);
@@ -18,4 +21,6 @@ abstract class EntityMapper {
   List<VideoEntity> toVideoEntity(SyncResponse? syncResponse);
   List<FileEntity> toFileEntity(SyncResponse? syncResponse);
   List<EvaluationEntity> toEvaluationEntity(SyncResponse? syncResponse);
+  List<QuestionEntity> toQuestionEntity(SyncResponse? syncResponse);
+  List<AlternativeEntity> toAlternativeEntity(SyncResponse? syncResponse);
 }

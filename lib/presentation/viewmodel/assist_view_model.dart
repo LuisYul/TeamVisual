@@ -30,8 +30,11 @@ class AssistViewModel extends RootViewModel {
   List<String> _assistNames = [''];
   List<String> get assistNames => _assistNames;
 
-  int _assistTypeId = 1;
+  int _assistTypeId = 0;
   int get assistTypeId => _assistTypeId;
+
+  int _toggleIndex = 0;
+  int get toggleIndex => _toggleIndex;
 
   XFile? _imageFile;
   XFile? get imageFile => _imageFile;
@@ -39,26 +42,29 @@ class AssistViewModel extends RootViewModel {
   bool _screenDisabled = false;
   bool get screenDisabled => _screenDisabled;
 
+
   @override
   initialize() {
     _getAssistTypes();
   }
 
   void _getCurrentIdAssistType() {
+    List<String> names = [];
     for(final i in _assistTypes) {
+      if(i.id != 99) names.add(i.name);
       if(true == i.current) {
         _assistTypeId = i.id;
-        debugPrint("id in bucle ${i.id}");
-        notify();
-        break;
+        _toggleIndex = i.index!;
       }
     }
 
-    if(_assistTypeId == 5) {
-      _screenDisabled = true;
-      notify();
-    }
+    _assistNames = names;
 
+    if(_assistTypeId == 99) {
+      _screenDisabled = true;
+    }
+    notify();
+    hideProgress();
   }
 
   void _getAssistTypes() async {
@@ -67,16 +73,9 @@ class AssistViewModel extends RootViewModel {
         busyObject: "error_get_assist_types");
     if(result.isNotEmpty) {
       _assistTypes = result;
-      debugPrint("result assyst type $result");
-      List<String> names = [];
-      result.forEach((e) {
-        names.add(e.name);
-        _getCurrentIdAssistType();
-      });
-      _assistNames = names;
-      notify();
+      _getCurrentIdAssistType();
     }
-    hideProgress();
+
   }
 
   void submitSave(String obs) {
@@ -99,7 +98,7 @@ class AssistViewModel extends RootViewModel {
         lat: "-12.3232111001",
         lng: "-71.3423423423",
         photoPath: _imageFile?.path,
-        idAssistType: _assistTypeId.toString(),
+        idAssistType: (_assistTypeId).toString(),
         obs: obs,
         idUserType: prefs.getString(AppConstants.prefsUserTypeId),
         userType: prefs.getString(AppConstants.prefsUserType),

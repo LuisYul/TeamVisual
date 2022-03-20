@@ -6,6 +6,7 @@ class UserEntity {
   final String idUserType;
   final String userType;
   final String idAssistType;
+  final String photoUrl;
   final String? error;
   final String? loginStatus;
 
@@ -16,6 +17,7 @@ class UserEntity {
     required this.idUserType,
     required this.userType,
     required this.idAssistType,
+    required this.photoUrl,
     this.error,
     this.loginStatus,
   });
@@ -28,6 +30,7 @@ class UserEntity {
         idUserType: json['idUserType'],
         userType: json['userType'],
         idAssistType: json['idAssistType'],
+        photoUrl: json['photoUrl'],
     );
   }
 
@@ -38,6 +41,7 @@ class UserEntity {
     'idUserType': idUserType,
     'userType': userType,
     'idAssistType': idAssistType,
+    'photoUrl': photoUrl,
   };
 
 }

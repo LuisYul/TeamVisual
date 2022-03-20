@@ -72,7 +72,7 @@ class TabAssist extends RootWidget<AssistViewModel> {
         minWidth: ScreenUtil().screenWidth,
         initialLabelIndex: viewModel.screenDisabled
             ? null
-            : viewModel.assistTypeId - 1,
+            : viewModel.toggleIndex,
         totalSwitches: viewModel.assistNames.length,
         labels: viewModel.assistNames,
         changeOnTap: false,
