@@ -1,24 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:stacked/stacked.dart';
+import 'package:teamvisual/di/locator.dart';
+import 'package:teamvisual/presentation/base/root_widget.dart';
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
+import 'package:teamvisual/presentation/viewmodel/module_view_model.dart';
 import 'package:teamvisual/presentation/widgets/card_module.dart';
 
-class TabModules extends StatelessWidget {
-  const TabModules({
-    Key? key,
-    required this.viewModel,
-  }) : super(key: key);
+class TabModules extends RootWidget<ModuleViewModel> {
+   TabModules({
+     required this.mainViewModel,
+   }) : super(getIt());
 
-  final MainViewModel viewModel;
+  final MainViewModel mainViewModel;
 
   @override
-  Widget build(BuildContext context) {
-    return ViewModelBuilder<MainViewModel>.reactive(
-      viewModelBuilder: () => viewModel,
-      builder: (ctx, viewModel, child) {
+  Widget buildViewModelWidget(BuildContext context, viewModel) {
+
         return ScreenUtilInit(
           minTextAdapt: true,
           splitScreenMode: true,
@@ -64,8 +62,7 @@ class TabModules extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
+
 
   }
 
@@ -102,20 +99,22 @@ class TabModules extends StatelessWidget {
           crossAxisSpacing: 5.h,
           mainAxisSpacing: 5.h,
           children: [
-            if (viewModel.quizModuleOn)
-              CardModule(
-                imageName: 'img_test.png',
-                title: 'Encuestas',
-                color: const Color(0x464C8FEC),
-                onClick: () {},
-              ),
             if (viewModel.assistModuleOn)
               CardModule(
                 imageName: 'img_camera_green.png',
                 title: 'Asistencia',
                 color: const Color(0x3B39EC6A),
                 onClick: () {
-                  viewModel.setCurrentTab(1, "Asistencia");
+                  mainViewModel.setCurrentTab(1, "Asistencia");
+                },
+              ),
+            if (viewModel.quizModuleOn)
+              CardModule(
+                imageName: 'img_test.png',
+                title: 'Encuestas',
+                color: const Color(0x464C8FEC),
+                onClick: () {
+                  mainViewModel.setCurrentTab(2, "Encuestas");
                 },
               ),
             if (viewModel.thirdModuleOn)
@@ -203,6 +202,5 @@ class TabModules extends StatelessWidget {
       ),
     );
   }
-
 
 }

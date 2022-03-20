@@ -111,8 +111,10 @@ class AssistViewModel extends RootViewModel {
   void _sendAssists(AssistEntity assistEntity) async {
 
     Uint8List? bytes =  await _imageFile?.readAsBytes();
-    String base64Image = base64Encode(bytes!);
-    assistEntity.photo = base64Image;
+    if(bytes != null) {
+      String base64Image = base64Encode(bytes);
+      assistEntity.photo = base64Image;
+    }
     final assists = AssistListEntity(assists: [assistEntity]);
     final result = await runBusyFuture(_sendAssistsUseCase.call(assists),
         busyObject: "error_send_assists").catchError((error) {

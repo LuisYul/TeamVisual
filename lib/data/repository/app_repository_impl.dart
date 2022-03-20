@@ -34,7 +34,7 @@ class AppRepositoryImpl extends AppRepository {
     _prefs.setString(AppConstants.prefsUserTypeId, userEntity.idUserType);
     _prefs.setString(AppConstants.prefsUserType, userEntity.userType);
     _prefs.setString(AppConstants.prefsUserPhoto, userEntity.photoUrl);
-   // _prefs.setInt(AppConstants.prefsIdAssist, int.parse(userEntity.idAssistType));
+    _prefs.setInt(AppConstants.prefsIdAssist, int.parse(userEntity.idAssistType));
     return userEntity;
   }
 

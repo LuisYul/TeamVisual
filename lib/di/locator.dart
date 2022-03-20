@@ -17,6 +17,7 @@ import 'package:teamvisual/presentation/viewmodel/assist_view_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
+import 'package:teamvisual/presentation/viewmodel/module_view_model.dart';
 import '../data/datasource/local/app_database.dart';
 import '../domain/usecase/sync_use_case.dart';
 import '../presentation/utils/navigation_service.dart';
@@ -71,10 +72,10 @@ Future<void> _presentation() async {
   /// ViewModels
   getIt.registerFactory<LoginViewModel>(() => LoginViewModel(getIt.get(),
       getIt.get(), getIt.get(), getIt.get()));
-  getIt.registerFactory<MainViewModel>(() => MainViewModel(getIt.get(),
-      getIt.get()));
+  getIt.registerFactory<MainViewModel>(() => MainViewModel(getIt.get()));
   getIt.registerFactory<AssistViewModel>(() => AssistViewModel(getIt.get(),
     getIt.get(), getIt.get()));
+  getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt.get()));
 
   ///Navigator
   getIt.registerLazySingleton(() => NavigationService());

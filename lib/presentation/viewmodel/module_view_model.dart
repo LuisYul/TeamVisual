@@ -1,30 +1,21 @@
-import 'package:teamvisual/domain/model/module_entity.dart';
-import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
-import 'package:teamvisual/presentation/base/root_view_model.dart';
-import 'package:teamvisual/presentation/utils/app_constants.dart';
+import '../../domain/model/module_entity.dart';
+import '../../domain/usecase/get_modules_use_case.dart';
+import '../base/root_view_model.dart';
+import '../utils/app_constants.dart';
 
-class MainViewModel extends RootViewModel {
+class ModuleViewModel extends RootViewModel {
 
   final GetModulesUseCase _getModulesUseCase;
 
-  MainViewModel(
+  ModuleViewModel(
       this._getModulesUseCase,
-  );
+      );
 
   String _userName = "";
   String get userName => _userName;
 
-  String _userType = "";
-  String get userType => _userType;
-
-  int _currentTabIndex = 0;
-  int get currentTabIndex => _currentTabIndex;
-
-  String _currentTabTitle = "Módulos";
-  String get currentTabTile => _currentTabTitle;
-
-  bool _reverse = false;
-  bool get reverse => _reverse;
+  String _userPhoto = "";
+  String get userPhoto => _userPhoto;
 
   bool _assistModuleOn = false;
   bool get assistModuleOn => _assistModuleOn;
@@ -42,7 +33,7 @@ class MainViewModel extends RootViewModel {
   initialize() {
     _getModules();
     _userName = prefs.getString(AppConstants.prefsUserName) ?? "";
-    _userType = prefs.getString(AppConstants.prefsUserType) ?? "";
+    _userPhoto = prefs.getString(AppConstants.prefsUserPhoto) ?? "";
     notify();
   }
 
@@ -71,15 +62,6 @@ class MainViewModel extends RootViewModel {
     _quizModuleOn = quizModule;
     _thirdModuleOn = thirdModule;
     _fourthModuleOn = fourthModule;
-    notify();
-  }
-
-  void setCurrentTab(int index, String title) {
-    if (index < _currentTabIndex) {
-      _reverse = true;
-    }
-    _currentTabIndex = index;
-    _currentTabTitle = title;
     notify();
   }
 
