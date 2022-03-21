@@ -68,4 +68,11 @@ class CourseDetailViewModel extends RootViewModel {
     notify();
   }
 
+  @override
+  void dispose() {
+    _isPlayingVideo = true;
+    super.dispose();
+    pt("dispose video");
+  }
+
 }

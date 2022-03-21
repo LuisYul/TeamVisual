@@ -7,11 +7,11 @@ import 'package:teamvisual/presentation/base/root_widget.dart';
 import 'package:teamvisual/presentation/viewmodel/course_detail_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-
+import 'dart:math' as math;
 import '../../di/locator.dart';
 
 class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
-  CourseDetailScreen() : super(getIt());
+  CourseDetailScreen() : super(getIt(), true);
 
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -21,8 +21,8 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
   @override
   void init(BuildContext context) {
     super.init(context);
-    final arguments = ModalRoute.of(context)!.settings
-        .arguments as Map<String, dynamic>;
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     course = arguments['course'];
     video = arguments['video'];
     viewModel.getCourseData(course);
@@ -33,34 +33,42 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-     if (viewModel.isPlayingVideo) {
-       _controller.pause();
-     } else {
-       _controller.play();
-     }
+    if (viewModel.isPlayingVideo) {
+      _controller.pause();
+    } else {
+      _controller.play();
+    }
     return Scaffold(
-      appBar: AppBar(title: Text(
-          course.course,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.montserrat(
-            fontSize: 18,
-            color: Colors.black87,
-            fontWeight: FontWeight.w400
-          ),
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                expandedHeight: 200.0,
+                pinned: true,
+                backgroundColor: Colors.white,
+                iconTheme: const IconThemeData(color: Colors.black87),
+                flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: Container(
+                    color: Colors.blue,
+                    child: Text(
+                      innerBoxIsScrolled ? course.course : "",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 18,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                  ),
+                  background: _videoContainer(),
+                ),
+              ),
+            ];
+          },
+          body: _listEvaluations(),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black87),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _videoContainer(),
-            _listEvaluations(),
-          ],
-        ),
-      ),
-   //   body: _listEvaluations(),
     );
   }
 
@@ -71,28 +79,26 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
         if (snapshot.connectionState == ConnectionState.done) {
           return AspectRatio(
             aspectRatio: _controller.value.aspectRatio,
-            child:  Stack(
-                children: <Widget>[
-                  VideoPlayer(_controller),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FloatingActionButton.small(
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            _controller.value.isPlaying
-                                ? Icons.pause
-                                : Icons.play_arrow,
-                            color: Colors.black87,
-                          ),
-                          onPressed: (){
-                            viewModel.setIsPlaying(!viewModel.isPlayingVideo);
-                          }
+            child: Stack(children: <Widget>[
+              VideoPlayer(_controller),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FloatingActionButton.small(
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.black87,
                       ),
-                    ),
+                      onPressed: () {
+                        viewModel.setIsPlaying(!viewModel.isPlayingVideo);
+                      }),
                   ),
-                ]
+               ),
+             ]
             ),
           );
         } else {
@@ -105,58 +111,82 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
   }
 
   Widget _listEvaluations() {
-    return PrimaryScrollController(
-      controller: ScrollController(),
-      child: ListView.separated(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(8),
-        itemCount: viewModel.evaluations.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildExpandableTile(viewModel.evaluations[index]);
-        },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-      ),
+    return CustomScrollView(
+      slivers: <Widget>[for (final i in viewModel.evaluations) ...sections(i)],
     );
   }
 
-  Widget _buildExpandableTile(EvaluationEntity evaluation) {
-    return ExpansionTile(
-      title: Text(
-        evaluation.name,
-        style: GoogleFonts.montserrat(
-            fontSize: 18,
-            color: Colors.black87,
-            fontWeight: FontWeight.w400
+  List<Widget> sections(EvaluationEntity evaluation) {
+    return [
+      makeHeader(evaluation.name),
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => ListTile(
+            title: Text(
+              viewModel.questions[evaluation.id][index].question,
+              style: GoogleFonts.montserrat(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300),
+            ),
+          ),
+          childCount: viewModel.questions[evaluation.id]?.length ?? 0,
         ),
       ),
-      children: <Widget>[
-        ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          primary: true,
-          physics:  AlwaysScrollableScrollPhysics(),
-          itemCount: viewModel.questions[evaluation.id].length,
-          itemBuilder: (BuildContext context, int index) {
-            return _buildQuestionTile(viewModel.questions[evaluation.id][index]);
-          },
-        ),
-      ],
-    );
+    ];
   }
 
-  Widget _buildQuestionTile(QuestionEntity question) {
-    return ListTile(
-        title: Text(
-        question.question,
-        style: GoogleFonts.montserrat(
-        fontSize: 14,
-        color: Colors.black,
-        fontWeight: FontWeight.w300
-         ),
+  SliverPersistentHeader makeHeader(String evaluationName) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: _SliverAppBarDelegate(
+        minHeight: 30.0,
+        maxHeight: 60.0,
+        child: Container(
+          color: Colors.lightBlue.shade200,
+          child: Center(
+            child: Text(
+              evaluationName,
+              style: GoogleFonts.montserrat(
+                  fontSize: 18,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+        ),
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 
 }

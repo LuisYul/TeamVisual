@@ -27,109 +27,112 @@ class MainScreen extends RootWidget<MainViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            viewModel.currentTabTile,
-            style: GoogleFonts.montserrat(
-                fontSize: 18,
-                color: Colors.white,
-                letterSpacing: 0.2,
-                fontWeight: FontWeight.w500),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              viewModel.currentTabTile,
+              style: GoogleFonts.montserrat(
+                  fontSize: 18,
+                  color: Colors.white,
+                  letterSpacing: 0.2,
+                  fontWeight: FontWeight.w500),
+            ),
+            elevation: 0,
           ),
-          elevation: 0,
-        ),
-        body: getViewForIndex(viewModel.currentTabIndex),
-        drawer: Drawer(
-            child: ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                viewModel.userName,
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Colors.white,
-                    letterSpacing: 0.2,
-                    fontWeight: FontWeight.w500),
-              ),
-              accountEmail: Text(
-                viewModel.userType,
-                style: GoogleFonts.montserrat(
-                    fontSize: 14,
-                    color: Colors.white,
-                    letterSpacing: 0.2,
-                    fontWeight: FontWeight.w500),
-              ),
-              currentAccountPicture: GestureDetector(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Image.asset(
-                      'assets/images/img_logo.png',
-                      height: 30,
+          body: getViewForIndex(viewModel.currentTabIndex),
+          drawer: Drawer(
+              child: ListView(
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  viewModel.userName,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                      fontWeight: FontWeight.w500),
+                ),
+                accountEmail: Text(
+                  viewModel.userType,
+                  style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                      color: Colors.white,
+                      letterSpacing: 0.2,
+                      fontWeight: FontWeight.w500),
+                ),
+                currentAccountPicture: GestureDetector(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Image.asset(
+                        'assets/images/img_logo.png',
+                        height: 30,
+                      ),
                     ),
+                    onTap: () => {}),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('assets/images/background_nav_drawer.jpeg'),
                   ),
-                  onTap: () => {}),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage('assets/images/background_nav_drawer.jpeg'),
                 ),
               ),
-            ),
-            ItemDrawerMenu(
-              title: "Módulos",
-              icon: Icons.more_time,
-              onClick: () {
-                viewModel.setCurrentTab(0, "Módulos");
-                Navigator.of(context).pop();
-              },
-            ),
-            if (viewModel.assistModuleOn)
               ItemDrawerMenu(
-                title: "Asistencia",
-                icon: Icons.quiz_rounded,
+                title: "Módulos",
+                icon: Icons.more_time,
                 onClick: () {
-                  viewModel.setCurrentTab(1, "Asistencia");
+                  viewModel.setCurrentTab(0, "Módulos");
                   Navigator.of(context).pop();
                 },
               ),
-            if (viewModel.quizModuleOn)
-              ItemDrawerMenu(
-                title: "Encuestas",
-                icon: Icons.cloud_upload,
-                onClick: () {
-                  viewModel.setCurrentTab(2, "Encuestas");
-                  Navigator.of(context).pop();
-                },
+              if (viewModel.assistModuleOn)
+                ItemDrawerMenu(
+                  title: "Asistencia",
+                  icon: Icons.quiz_rounded,
+                  onClick: () {
+                    viewModel.setCurrentTab(1, "Asistencia");
+                    Navigator.of(context).pop();
+                  },
+                ),
+              if (viewModel.quizModuleOn)
+                ItemDrawerMenu(
+                  title: "Encuestas",
+                  icon: Icons.cloud_upload,
+                  onClick: () {
+                    viewModel.setCurrentTab(2, "Encuestas");
+                    Navigator.of(context).pop();
+                  },
+                ),
+              if (viewModel.thirdModuleOn)
+                ItemDrawerMenu(
+                  title: "Módulo 3",
+                  icon: Icons.quiz_rounded,
+                  onClick: () {
+                    viewModel.setCurrentTab(1, "Módulo 3");
+                    Navigator.of(context).pop();
+                  },
+                ),
+              if (viewModel.fourthModuleOn)
+                ItemDrawerMenu(
+                  title: "Módulo 4",
+                  icon: Icons.cloud_upload,
+                  onClick: () {
+                    viewModel.setCurrentTab(2, "Módulo 4");
+                    Navigator.of(context).pop();
+                  },
+                ),
+              const Divider(
+                thickness: 1.0,
               ),
-            if (viewModel.thirdModuleOn)
-              ItemDrawerMenu(
-                title: "Módulo 3",
-                icon: Icons.quiz_rounded,
-                onClick: () {
-                  viewModel.setCurrentTab(1, "Módulo 3");
-                  Navigator.of(context).pop();
-                },
+              ListTile(
+                title: const Text("Close"),
+                trailing: const Icon(Icons.cancel),
+                onTap: () => Navigator.of(context).pop(),
               ),
-            if (viewModel.fourthModuleOn)
-              ItemDrawerMenu(
-                title: "Módulo 4",
-                icon: Icons.cloud_upload,
-                onClick: () {
-                  viewModel.setCurrentTab(2, "Módulo 4");
-                  Navigator.of(context).pop();
-                },
-              ),
-            const Divider(
-              thickness: 1.0,
-            ),
-            ListTile(
-              title: const Text("Close"),
-              trailing: const Icon(Icons.cancel),
-              onTap: () => Navigator.of(context).pop(),
-            ),
-          ],
-        )));
+            ],
+          ))),
+    );
   }
 
   Widget getViewForIndex(int index) {
