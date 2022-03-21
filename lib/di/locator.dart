@@ -6,8 +6,13 @@ import 'package:teamvisual/data/mapper/entity_mapper_impl.dart';
 import 'package:teamvisual/data/repository/app_repository_impl.dart';
 import 'package:teamvisual/domain/repository/app_repository.dart';
 import 'package:teamvisual/domain/usecase/delete_tables_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_alternatives_by_question_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_assist_types_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_courses_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_evaluations_by_course_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_files_by_course_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_question_by_evaluation_use_case.dart';
 import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_assists_use_case.dart';
 import 'package:teamvisual/domain/usecase/sign_in_use_case.dart';
@@ -16,9 +21,12 @@ import 'package:teamvisual/presentation/utils/app_constants.dart';
 import 'package:teamvisual/presentation/viewmodel/assist_view_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:teamvisual/presentation/viewmodel/course_detail_view_model.dart';
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
 import 'package:teamvisual/presentation/viewmodel/module_view_model.dart';
+import 'package:teamvisual/presentation/viewmodel/course_view_model.dart';
 import '../data/datasource/local/app_database.dart';
+import '../domain/usecase/get_videos_by_course_use_case.dart';
 import '../domain/usecase/sync_use_case.dart';
 import '../presentation/utils/navigation_service.dart';
 import '../presentation/viewmodel/login_view_model.dart';
@@ -49,33 +57,43 @@ Future<void> _data() async {
 
   ///Repositories
   getIt.registerLazySingleton<AppRepository>(() =>
-      AppRepositoryImpl(getIt.get(), getIt.get(), getIt.get(), getIt.get()));
+      AppRepositoryImpl(getIt(), getIt(), getIt(), getIt()));
 
 }
 
 Future<void> _domain() async {
 
   ///Use Cases
-  getIt.registerSingleton(SignInUseCase(getIt.get()));
-  getIt.registerSingleton(ValVersionUseCase(getIt.get()));
-  getIt.registerSingleton(SyncUseCase(getIt.get()));
-  getIt.registerSingleton(GetModulesUseCase(getIt.get()));
-  getIt.registerSingleton(GetAssistTypesUseCase(getIt.get()));
-  getIt.registerSingleton(SaveAssistUseCase(getIt.get()));
-  getIt.registerSingleton(SendAssistsUseCase(getIt.get()));
-  getIt.registerSingleton(DeleteTablesUseCase(getIt.get()));
+  getIt.registerSingleton(SignInUseCase(getIt()));
+  getIt.registerSingleton(ValVersionUseCase(getIt()));
+  getIt.registerSingleton(SyncUseCase(getIt()));
+  getIt.registerSingleton(GetModulesUseCase(getIt()));
+  getIt.registerSingleton(GetAssistTypesUseCase(getIt()));
+  getIt.registerSingleton(SaveAssistUseCase(getIt()));
+  getIt.registerSingleton(SendAssistsUseCase(getIt()));
+  getIt.registerSingleton(DeleteTablesUseCase(getIt()));
+  getIt.registerSingleton(GetCoursesUseCase(getIt()));
+  getIt.registerSingleton(GetVideosByCourseUseCase(getIt()));
+  getIt.registerSingleton(GetFilesByCourseUseCase(getIt()));
+  getIt.registerSingleton(GetEvaluationByCourseUseCase(getIt()));
+  getIt.registerSingleton(GetQuestionByEvaluationUseCase(getIt()));
+  getIt.registerSingleton(GetAlternativesByQuestionUseCase(getIt()));
 
 }
 
 Future<void> _presentation() async {
 
   /// ViewModels
-  getIt.registerFactory<LoginViewModel>(() => LoginViewModel(getIt.get(),
-      getIt.get(), getIt.get(), getIt.get()));
-  getIt.registerFactory<MainViewModel>(() => MainViewModel(getIt.get()));
-  getIt.registerFactory<AssistViewModel>(() => AssistViewModel(getIt.get(),
-    getIt.get(), getIt.get()));
-  getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt.get()));
+  getIt.registerFactory<LoginViewModel>(() => LoginViewModel(getIt(),
+      getIt(), getIt(), getIt()));
+  getIt.registerFactory<MainViewModel>(() => MainViewModel(getIt()));
+  getIt.registerFactory<AssistViewModel>(() => AssistViewModel(getIt(),
+    getIt(), getIt()));
+  getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt()));
+  getIt.registerFactory<CourseViewModel>(() => CourseViewModel(getIt(),
+    getIt()));
+  getIt.registerFactory<CourseDetailViewModel>(() => CourseDetailViewModel(
+      getIt(), getIt(), getIt(), getIt()));
 
   ///Navigator
   getIt.registerLazySingleton(() => NavigationService());

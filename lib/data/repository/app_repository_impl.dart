@@ -2,12 +2,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teamvisual/data/datasource/local/app_database.dart';
 import 'package:teamvisual/data/datasource/remote/remote.dart';
 import 'package:teamvisual/data/mapper/entity_mapper.dart';
+import 'package:teamvisual/domain/model/alternative_entity.dart';
 import 'package:teamvisual/domain/model/assist_type_entity.dart';
+import 'package:teamvisual/domain/model/course_entity.dart';
+import 'package:teamvisual/domain/model/evaluation_entity.dart';
+import 'package:teamvisual/domain/model/file_entity.dart';
 import 'package:teamvisual/domain/model/module_entity.dart';
+import 'package:teamvisual/domain/model/question_entity.dart';
 import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
 import 'package:teamvisual/domain/model/val_version_entity.dart';
+import 'package:teamvisual/domain/model/video_entity.dart';
 import 'package:teamvisual/domain/repository/app_repository.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 import 'package:teamvisual/presentation/utils/string_extension.dart';
@@ -78,6 +84,7 @@ class AppRepositoryImpl extends AppRepository {
   Future<List<AssistTypeEntity>> getAssistTypes() async {
     final int idAssist = _prefs.getInt(AppConstants.prefsIdAssist) ?? 0;
     final assistTypes = await _database.assistTypeDao.getAll();
+    print("assist tipes $assistTypes");
     int indexOk = -1;
     assistTypes.forEachIndexed((index, element) {
       element.index = index;
@@ -119,6 +126,37 @@ class AppRepositoryImpl extends AppRepository {
     await _database.evaluationDao.deleteAll();
     await _database.videoDao.deleteAll();
     await _database.fileDao.deleteAll();
+  }
+
+  @override
+  Future<List<CourseEntity>> getCourses() async {
+    final userId = _prefs.getString(AppConstants.prefsUserId) ?? "0";
+    return await _database.courseDao.getByUserId(int.parse(userId));
+  }
+
+  @override
+  Future<List<VideoEntity>> getVideosByCourse(int courseId) async {
+    return await _database.videoDao.getByCourseId(courseId);
+  }
+
+  @override
+  Future<List<FileEntity>> getFilesByCourse(int courseId) async {
+    return await _database.fileDao.getByCourseId(courseId);
+  }
+
+  @override
+  Future<List<EvaluationEntity>> getEvaluationsByCourse(int courseId) async {
+    return await _database.evaluationDao.getByCourseId(courseId);
+  }
+
+  @override
+  Future<List<QuestionEntity>> getQuestionsByEvaluation(int evaluationId) async {
+    return await _database.questionDao.getByEvaluationId(evaluationId);
+  }
+
+  @override
+  Future<List<AlternativeEntity>> getAlternativesByQuestion(int questionId) async {
+    return await _database.alternativeDao.getByQuestionId(questionId);
   }
 
 }

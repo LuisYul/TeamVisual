@@ -9,6 +9,9 @@ abstract class CourseDao implements BaseDao<CourseEntity> {
   @Query('SELECT * FROM ${AppConstants.tableCourse}')
   Future<List<CourseEntity>> getAll();
 
+  @Query('SELECT * FROM ${AppConstants.tableCourse} WHERE userId = :userId')
+  Future<List<CourseEntity>> getByUserId(int userId);
+
   @Query('DELETE FROM ${AppConstants.tableCourse}')
   Future<void> deleteAll();
 

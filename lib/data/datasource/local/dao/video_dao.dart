@@ -9,6 +9,9 @@ abstract class VideoDao implements BaseDao<VideoEntity> {
   @Query('SELECT * FROM ${AppConstants.tableVideo}')
   Future<List<VideoEntity>> getAll();
 
+  @Query('SELECT * FROM ${AppConstants.tableVideo} WHERE courseId = :courseId')
+  Future<List<VideoEntity>> getByCourseId(int courseId);
+
   @Query('DELETE FROM ${AppConstants.tableVideo}')
   Future<void> deleteAll();
 

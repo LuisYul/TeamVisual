@@ -548,6 +548,27 @@ class _$CourseDao extends CourseDao {
   }
 
   @override
+  Future<List<CourseEntity>> getByUserId(int userId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM lista_curso WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => CourseEntity(
+            id: row['id'] as int,
+            course: row['course'] as String,
+            author: row['author'] as String,
+            resume: row['resume'] as String,
+            userId: row['userId'] as int,
+            startDate: row['startDate'] as String,
+            endDate: row['endDate'] as String,
+            note: row['note'] as int,
+            advPercent: row['advPercent'] as int,
+            specAreaId: row['specAreaId'] as int,
+            specArea: row['specArea'] as String,
+            learningGroupId: row['learningGroupId'] as int,
+            learningGroup: row['learningGroup'] as String),
+        arguments: [userId]);
+  }
+
+  @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM lista_curso');
   }
@@ -644,6 +665,21 @@ class _$EvaluationDao extends EvaluationDao {
   }
 
   @override
+  Future<List<EvaluationEntity>> getByCourseId(int courseId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM lista_evaluaciones WHERE courseId = ?1',
+        mapper: (Map<String, Object?> row) => EvaluationEntity(
+            id: row['id'] as int,
+            userId: row['userId'] as int,
+            userCourseId: row['userCourseId'] as int,
+            courseId: row['courseId'] as int,
+            name: row['name'] as String,
+            maxNote: row['maxNote'] as int,
+            minNote: row['minNote'] as int),
+        arguments: [courseId]);
+  }
+
+  @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM lista_evaluaciones');
   }
@@ -732,6 +768,19 @@ class _$VideoDao extends VideoDao {
   }
 
   @override
+  Future<List<VideoEntity>> getByCourseId(int courseId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM lista_videos WHERE courseId = ?1',
+        mapper: (Map<String, Object?> row) => VideoEntity(
+            id: row['id'] as int,
+            userId: row['userId'] as int,
+            courseId: row['courseId'] as int,
+            videoFile: row['videoFile'] as String,
+            name: row['name'] as String),
+        arguments: [courseId]);
+  }
+
+  @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM lista_videos');
   }
@@ -788,6 +837,14 @@ class _$FileDao extends FileDao {
   Future<List<FileEntity>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM lista_archivos',
         mapper: (Map<String, Object?> row) => FileEntity(id: row['id'] as int));
+  }
+
+  @override
+  Future<List<FileEntity>> getByCourseId(int courseId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM lista_archivos WHERE courseId = ?1',
+        mapper: (Map<String, Object?> row) => FileEntity(id: row['id'] as int),
+        arguments: [courseId]);
   }
 
   @override
@@ -887,6 +944,21 @@ class _$QuestionDao extends QuestionDao {
   }
 
   @override
+  Future<List<QuestionEntity>> getByEvaluationId(int evaluationId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM lista_preguntas WHERE evaluationId = ?1',
+        mapper: (Map<String, Object?> row) => QuestionEntity(
+            id: row['id'] as int,
+            question: row['question'] as String,
+            evaluationId: row['evaluationId'] as int,
+            note: row['note'] as int,
+            questionTypeId: row['questionTypeId'] as int,
+            questionOrder: row['questionOrder'] as int,
+            type: row['type'] as String),
+        arguments: [evaluationId]);
+  }
+
+  @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM lista_preguntas');
   }
@@ -972,6 +1044,19 @@ class _$AlternativeDao extends AlternativeDao {
             alternative: row['alternative'] as String,
             correct: row['correct'] as int,
             order: row['order'] as int));
+  }
+
+  @override
+  Future<List<AlternativeEntity>> getByQuestionId(int questionId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM lista_alternativas WHERE questionId = ?1',
+        mapper: (Map<String, Object?> row) => AlternativeEntity(
+            id: row['id'] as int,
+            questionId: row['questionId'] as int,
+            alternative: row['alternative'] as String,
+            correct: row['correct'] as int,
+            order: row['order'] as int),
+        arguments: [questionId]);
   }
 
   @override

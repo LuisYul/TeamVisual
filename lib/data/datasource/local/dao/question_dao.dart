@@ -9,6 +9,10 @@ abstract class QuestionDao implements BaseDao<QuestionEntity> {
   @Query('SELECT * FROM ${AppConstants.tableQuestion}')
   Future<List<QuestionEntity>> getAll();
 
+  @Query('SELECT * FROM ${AppConstants.tableQuestion} '
+      'WHERE evaluationId = :evaluationId')
+  Future<List<QuestionEntity>> getByEvaluationId(int evaluationId);
+
   @Query('DELETE FROM ${AppConstants.tableQuestion}')
   Future<void> deleteAll();
 

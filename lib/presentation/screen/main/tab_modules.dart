@@ -71,9 +71,9 @@ class TabModules extends RootWidget<ModuleViewModel> {
       radius: 45.sp,
       backgroundColor: Colors.white,
       child: CircleAvatar(
-        backgroundImage: NetworkImage(
-          viewModel.userPhoto,
-        ),
+        backgroundImage: viewModel.userPhoto == ""
+            ? const AssetImage('assets/images/img_profile.png') as ImageProvider
+            : NetworkImage(viewModel.userPhoto,),
         radius: 40.sp,
       ),
     );
@@ -83,9 +83,11 @@ class TabModules extends RootWidget<ModuleViewModel> {
     return Text(
       viewModel.userName,
       style: GoogleFonts.montserrat(
-          fontSize: 20.sp,
+          fontSize: 18.sp,
           color: Colors.white
       ),
+      textAlign: TextAlign.center,
+      maxLines: 1,
     );
   }
 

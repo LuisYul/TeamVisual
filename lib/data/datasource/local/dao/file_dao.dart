@@ -9,6 +9,9 @@ abstract class FileDao implements BaseDao<FileEntity> {
   @Query('SELECT * FROM ${AppConstants.tableFile}')
   Future<List<FileEntity>> getAll();
 
+  @Query('SELECT * FROM ${AppConstants.tableFile} WHERE courseId = :courseId')
+  Future<List<FileEntity>> getByCourseId(int courseId);
+
   @Query('DELETE FROM ${AppConstants.tableFile}')
   Future<void> deleteAll();
 

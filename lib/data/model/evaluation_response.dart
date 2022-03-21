@@ -41,8 +41,8 @@ class Data {
 
   factory Data.fromMap(Map<String?, dynamic> json) {
     return Data(
-      id: json['idUsuario'],
-      userId: json['idEvaluacion'],
+      id: json['idEvaluacion'],
+      userId: json['idUsuario'],
       userCourseId: json['idUsuarioCurso'],
       courseId: json['idCurso'],
       name: json['nombre'],

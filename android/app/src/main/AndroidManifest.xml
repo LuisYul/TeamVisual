@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.visualimpact.teamvisual">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="teamvisual"
         android:name="${applicationName}"

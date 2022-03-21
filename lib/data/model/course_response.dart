@@ -58,7 +58,7 @@ class Data {
       endDate: json['fecFin'],
       note: json['nota'],
       advPercent: json['porcentajeAvance'],
-      specAreaId: json['idAreaEspecializacion'],
+      specAreaId: json['idAreaEspecializacion '],
       specArea: json['areaEspecializacion'],
       learningGroupId: json['idGrupoAprendizaje'],
       learningGroup: json['grupoAprendizaje'],

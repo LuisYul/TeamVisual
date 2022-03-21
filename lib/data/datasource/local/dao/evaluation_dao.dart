@@ -9,6 +9,9 @@ abstract class EvaluationDao implements BaseDao<EvaluationEntity> {
   @Query('SELECT * FROM ${AppConstants.tableEvaluation}')
   Future<List<EvaluationEntity>> getAll();
 
+  @Query('SELECT * FROM ${AppConstants.tableEvaluation} WHERE courseId = :courseId')
+  Future<List<EvaluationEntity>> getByCourseId(int courseId);
+
   @Query('DELETE FROM ${AppConstants.tableEvaluation}')
   Future<void> deleteAll();
 

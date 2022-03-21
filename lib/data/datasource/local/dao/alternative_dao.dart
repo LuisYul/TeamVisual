@@ -9,6 +9,10 @@ abstract class AlternativeDao implements BaseDao<AlternativeEntity> {
   @Query('SELECT * FROM ${AppConstants.tableAlternative}')
   Future<List<AlternativeEntity>> getAll();
 
+  @Query('SELECT * FROM ${AppConstants.tableAlternative} '
+      'WHERE questionId = :questionId')
+  Future<List<AlternativeEntity>> getByQuestionId(int questionId);
+
   @Query('DELETE FROM ${AppConstants.tableAlternative}')
   Future<void> deleteAll();
 

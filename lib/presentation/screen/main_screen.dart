@@ -4,7 +4,7 @@ import 'package:teamvisual/di/locator.dart';
 import 'package:teamvisual/presentation/base/root_widget.dart';
 import 'package:teamvisual/presentation/screen/main/tab_assist.dart';
 import 'package:teamvisual/presentation/screen/main/tab_modules.dart';
-import 'package:teamvisual/presentation/screen/other_page.dart';
+import 'package:teamvisual/presentation/screen/main/tab_courses.dart';
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
 import 'package:teamvisual/presentation/widgets/item_drawer_menu.dart';
 
@@ -15,13 +15,14 @@ class MainScreen extends RootWidget<MainViewModel> {
 
   late TabModules _tabModules;
   late TabAssist _tabAssist;
-  final _listScreen = OtherPage("hi");
+  late TabCourses _tabQuiz;
 
   @override
-  void init() {
-    super.init();
+  void init(BuildContext context) {
+    super.init(context);
     _tabModules = TabModules(mainViewModel: viewModel);
     _tabAssist = TabAssist();
+    _tabQuiz = TabCourses();
   }
 
   @override
@@ -132,7 +133,6 @@ class MainScreen extends RootWidget<MainViewModel> {
   }
 
   Widget getViewForIndex(int index) {
-    print("get view from index $index");
     if (!_viewCache.containsKey(index)) {
       switch (index) {
         case 0:
@@ -142,11 +142,10 @@ class MainScreen extends RootWidget<MainViewModel> {
           _viewCache[index] = _tabAssist;
           break;
         case 2:
-          _viewCache[index] = _listScreen;
+          _viewCache[index] = _tabQuiz;
           break;
       }
     }
-    print("view cache ${_viewCache[index]}");
     return _viewCache[index]!;
   }
 }

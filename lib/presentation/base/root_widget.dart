@@ -15,7 +15,7 @@ abstract class RootWidget<T extends RootViewModel>
 
   @override
   Widget build(BuildContext context) {
-    init();
+    init(context);
     return ViewModelBuilder<T>.reactive(
         viewModelBuilder: () => _viewModel,
         builder: (ctx, T viewModel, child) {
@@ -38,7 +38,7 @@ abstract class RootWidget<T extends RootViewModel>
     );
   }
 
-  void init() async {}
+  void init(BuildContext context) async {}
 
   Widget withProgress({required Widget body}) {
     return WillPopScope(

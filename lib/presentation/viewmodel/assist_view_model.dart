@@ -64,7 +64,7 @@ class AssistViewModel extends RootViewModel {
       _screenDisabled = true;
     }
     notify();
-    hideProgress();
+
   }
 
   void _getAssistTypes() async {
@@ -75,7 +75,7 @@ class AssistViewModel extends RootViewModel {
       _assistTypes = result;
       _getCurrentIdAssistType();
     }
-
+    hideProgress();
   }
 
   void submitSave(String obs) {
