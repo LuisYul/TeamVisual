@@ -24,6 +24,7 @@ class Data {
   final int id;
   final String question;
   final int evaluationId;
+  final int userCourseId;
   final int note;
   final int questionTypeId;
   final int questionOrder;
@@ -32,7 +33,8 @@ class Data {
   const Data({
     required this.id,
     required this.question,
-    required this. evaluationId,
+    required this.evaluationId,
+    required this.userCourseId,
     required this.note,
     required this.questionTypeId,
     required this.questionOrder,
@@ -44,6 +46,7 @@ class Data {
       id: json['idPregunta'],
       question: json['pregunta'],
       evaluationId: json['idEvaluacion'],
+      userCourseId: json['idUsuarioCurso'],
       note: json['nota'],
       questionTypeId: json['idTipoPregunta'],
       questionOrder: json['ordenPregunta'],

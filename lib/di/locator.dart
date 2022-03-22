@@ -15,6 +15,7 @@ import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_question_by_evaluation_use_case.dart';
 import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_assists_use_case.dart';
+import 'package:teamvisual/domain/usecase/send_evaluations_use_case.dart';
 import 'package:teamvisual/domain/usecase/sign_in_use_case.dart';
 import 'package:teamvisual/domain/usecase/val_version_use_case.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
@@ -78,6 +79,7 @@ Future<void> _domain() async {
   getIt.registerSingleton(GetEvaluationByCourseUseCase(getIt()));
   getIt.registerSingleton(GetQuestionByEvaluationUseCase(getIt()));
   getIt.registerSingleton(GetAlternativesByQuestionUseCase(getIt()));
+  getIt.registerSingleton(SendEvaluationsUseCase(getIt()));
 
 }
 
@@ -91,7 +93,7 @@ Future<void> _presentation() async {
     getIt(), getIt()));
   getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt()));
   getIt.registerFactory<CourseViewModel>(() => CourseViewModel(getIt(),
-    getIt()));
+    getIt(), getIt()));
   getIt.registerFactory<CourseDetailViewModel>(() => CourseDetailViewModel(
       getIt(), getIt(), getIt(), getIt()));
 

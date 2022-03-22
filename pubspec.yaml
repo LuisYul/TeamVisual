@@ -27,7 +27,7 @@ dependencies:
   floor: ^1.2.0
   intl: ^0.17.0
   video_player: ^2.3.0
-
+  visibility_detector: ^0.2.2
 
 dev_dependencies:
   flutter_test:

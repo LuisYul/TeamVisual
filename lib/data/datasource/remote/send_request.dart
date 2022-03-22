@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
@@ -20,7 +19,7 @@ Future<Response> sendRequest({
       },
       encoding: Encoding.getByName('utf-8'),
       body: body,
-    );
+    ).timeout(const Duration(seconds: 30));
 
     debugPrint('RESPONSE: '+response.body);
     debugPrint(' ================================ '* 4);

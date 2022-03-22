@@ -9,6 +9,7 @@ import 'package:teamvisual/domain/model/evaluation_entity.dart';
 import 'package:teamvisual/domain/model/file_entity.dart';
 import 'package:teamvisual/domain/model/module_entity.dart';
 import 'package:teamvisual/domain/model/question_entity.dart';
+import 'package:teamvisual/domain/model/save_evaluation_entity.dart';
 import 'package:teamvisual/domain/model/sign_in_entity.dart';
 import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
@@ -157,6 +158,12 @@ class AppRepositoryImpl extends AppRepository {
   @override
   Future<List<AlternativeEntity>> getAlternativesByQuestion(int questionId) async {
     return await _database.alternativeDao.getByQuestionId(questionId);
+  }
+
+  @override
+  Future<bool> sendEvaluations(SaveEvaluationListEntity evaluations) async {
+    final response = await _remote.sendEvaluations(evaluations);
+    return Future.value(response?.status?.equalsIgnoreCase("true"));
   }
 
 }

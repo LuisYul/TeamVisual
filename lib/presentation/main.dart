@@ -9,7 +9,7 @@ import 'package:teamvisual/presentation/utils/navigation_service.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDI();
-  HttpOverrides.global = new MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -35,10 +35,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(),
-       '/main': (context) => MainScreen(),
+       // '/': (context) => LoginScreen(),
+       //'/main': (context) => MainScreen(),
         '/course_detail': (context) => CourseDetailScreen(),
-        //'/': (context) => MainScreen(),
+        '/': (context) => MainScreen(),
       },
     );
   }

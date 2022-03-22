@@ -113,10 +113,10 @@ class TabModules extends RootWidget<ModuleViewModel> {
             if (viewModel.quizModuleOn)
               CardModule(
                 imageName: 'img_test.png',
-                title: 'Encuestas',
+                title: 'Cursos',
                 color: const Color(0x464C8FEC),
                 onClick: () {
-                  mainViewModel.setCurrentTab(2, "Encuestas");
+                  mainViewModel.setCurrentTab(2, "Cursos");
                 },
               ),
             if (viewModel.thirdModuleOn)

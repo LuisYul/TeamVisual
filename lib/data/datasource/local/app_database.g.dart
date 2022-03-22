@@ -110,9 +110,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_videos` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `videoFile` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_archivos` (`id` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_archivos` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `path` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_preguntas` (`id` INTEGER NOT NULL, `question` TEXT NOT NULL, `evaluationId` INTEGER NOT NULL, `note` INTEGER NOT NULL, `questionTypeId` INTEGER NOT NULL, `questionOrder` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_preguntas` (`id` INTEGER NOT NULL, `question` TEXT NOT NULL, `evaluationId` INTEGER NOT NULL, `userCourseId` INTEGER NOT NULL, `note` INTEGER NOT NULL, `questionTypeId` INTEGER NOT NULL, `questionOrder` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_alternativas` (`id` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternative` TEXT NOT NULL, `correct` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
@@ -815,11 +815,35 @@ class _$FileDao extends FileDao {
         _fileEntityInsertionAdapter = InsertionAdapter(
             database,
             'lista_archivos',
-            (FileEntity item) => <String, Object?>{'id': item.id}),
-        _fileEntityUpdateAdapter = UpdateAdapter(database, 'lista_archivos',
-            ['id'], (FileEntity item) => <String, Object?>{'id': item.id}),
-        _fileEntityDeletionAdapter = DeletionAdapter(database, 'lista_archivos',
-            ['id'], (FileEntity item) => <String, Object?>{'id': item.id});
+            (FileEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userId': item.userId,
+                  'courseId': item.courseId,
+                  'path': item.path,
+                  'name': item.name
+                }),
+        _fileEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'lista_archivos',
+            ['id'],
+            (FileEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userId': item.userId,
+                  'courseId': item.courseId,
+                  'path': item.path,
+                  'name': item.name
+                }),
+        _fileEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'lista_archivos',
+            ['id'],
+            (FileEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userId': item.userId,
+                  'courseId': item.courseId,
+                  'path': item.path,
+                  'name': item.name
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -836,14 +860,24 @@ class _$FileDao extends FileDao {
   @override
   Future<List<FileEntity>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM lista_archivos',
-        mapper: (Map<String, Object?> row) => FileEntity(id: row['id'] as int));
+        mapper: (Map<String, Object?> row) => FileEntity(
+            id: row['id'] as int,
+            userId: row['userId'] as int,
+            courseId: row['courseId'] as int,
+            path: row['path'] as String,
+            name: row['name'] as String));
   }
 
   @override
   Future<List<FileEntity>> getByCourseId(int courseId) async {
     return _queryAdapter.queryList(
         'SELECT * FROM lista_archivos WHERE courseId = ?1',
-        mapper: (Map<String, Object?> row) => FileEntity(id: row['id'] as int),
+        mapper: (Map<String, Object?> row) => FileEntity(
+            id: row['id'] as int,
+            userId: row['userId'] as int,
+            courseId: row['courseId'] as int,
+            path: row['path'] as String,
+            name: row['name'] as String),
         arguments: [courseId]);
   }
 
@@ -886,6 +920,7 @@ class _$QuestionDao extends QuestionDao {
                   'id': item.id,
                   'question': item.question,
                   'evaluationId': item.evaluationId,
+                  'userCourseId': item.userCourseId,
                   'note': item.note,
                   'questionTypeId': item.questionTypeId,
                   'questionOrder': item.questionOrder,
@@ -899,6 +934,7 @@ class _$QuestionDao extends QuestionDao {
                   'id': item.id,
                   'question': item.question,
                   'evaluationId': item.evaluationId,
+                  'userCourseId': item.userCourseId,
                   'note': item.note,
                   'questionTypeId': item.questionTypeId,
                   'questionOrder': item.questionOrder,
@@ -912,6 +948,7 @@ class _$QuestionDao extends QuestionDao {
                   'id': item.id,
                   'question': item.question,
                   'evaluationId': item.evaluationId,
+                  'userCourseId': item.userCourseId,
                   'note': item.note,
                   'questionTypeId': item.questionTypeId,
                   'questionOrder': item.questionOrder,
@@ -937,6 +974,7 @@ class _$QuestionDao extends QuestionDao {
             id: row['id'] as int,
             question: row['question'] as String,
             evaluationId: row['evaluationId'] as int,
+            userCourseId: row['userCourseId'] as int,
             note: row['note'] as int,
             questionTypeId: row['questionTypeId'] as int,
             questionOrder: row['questionOrder'] as int,
@@ -951,6 +989,7 @@ class _$QuestionDao extends QuestionDao {
             id: row['id'] as int,
             question: row['question'] as String,
             evaluationId: row['evaluationId'] as int,
+            userCourseId: row['userCourseId'] as int,
             note: row['note'] as int,
             questionTypeId: row['questionTypeId'] as int,
             questionOrder: row['questionOrder'] as int,

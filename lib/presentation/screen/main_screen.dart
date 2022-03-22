@@ -97,10 +97,10 @@ class MainScreen extends RootWidget<MainViewModel> {
                 ),
               if (viewModel.quizModuleOn)
                 ItemDrawerMenu(
-                  title: "Encuestas",
+                  title: "Cursos",
                   icon: Icons.cloud_upload,
                   onClick: () {
-                    viewModel.setCurrentTab(2, "Encuestas");
+                    viewModel.setCurrentTab(2, "Cursos");
                     Navigator.of(context).pop();
                   },
                 ),

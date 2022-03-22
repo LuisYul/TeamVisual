@@ -125,9 +125,13 @@ class EntityMapperImpl extends EntityMapper{
   List<FileEntity> toFileEntity(SyncResponse? syncResponse) {
     final List<FileEntity> list = [];
     try {
-      (syncResponse?.evaluations?.data.forEach((e) =>
+      (syncResponse?.files?.data.forEach((e) =>
           list.add(FileEntity(
             id: e?.id ?? 0,
+            userId: e?.userId ?? 0,
+            courseId: e?.courseId ?? 0,
+            path: e?.path ?? "",
+            name: e?.name ?? "",
           ))
       ));
     } catch (e) {
@@ -164,6 +168,7 @@ class EntityMapperImpl extends EntityMapper{
             id: e?.id ?? 0,
             question: e?.question ?? "",
             evaluationId: e?.evaluationId ?? 0,
+            userCourseId: e?.userCourseId ?? 0,
             note: e?.note ?? 0,
             questionTypeId: e?.questionTypeId ?? 0,
             questionOrder: e?.questionOrder ?? 0,

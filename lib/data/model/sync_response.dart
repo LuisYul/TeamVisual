@@ -1,9 +1,10 @@
 import 'package:teamvisual/data/model/alternative_response.dart';
 import 'package:teamvisual/data/model/assist_type_response.dart' ;
 import 'package:teamvisual/data/model/evaluation_response.dart';
+import 'package:teamvisual/data/model/file_response.dart';
 import 'package:teamvisual/data/model/module_response.dart';
 import 'package:teamvisual/data/model/question_response.dart';
-import 'package:teamvisual/data/model/video_responde.dart';
+import 'package:teamvisual/data/model/video_response.dart';
 import 'course_response.dart';
 
 class SyncResponse {
@@ -16,6 +17,7 @@ class SyncResponse {
   EvaluationResponse? evaluations;
   QuestionResponse? questions;
   AlternativeResponse? alternatives;
+  FileResponse? files;
 
   SyncResponse({
     required this.status,
@@ -26,6 +28,7 @@ class SyncResponse {
     required this.evaluations,
     required this.questions,
     required this.alternatives,
+    required this.files
   });
 
   factory SyncResponse.fromMap(Map<String, dynamic> json) {
@@ -36,9 +39,9 @@ class SyncResponse {
       courses: CourseResponse.fromMap(json['lista_curso']),
       videos: VideoResponse.fromMap(json['lista_videos']),
       evaluations: EvaluationResponse.fromMap(json['lista_evaluaciones']),
-     // evaluations: null,
       questions: QuestionResponse.fromMap(json['lista_preguntas']),
       alternatives: AlternativeResponse.fromMap(json['lista_alternativas']),
+      files: FileResponse.fromMap(json['lista_archivos']),
     );
   }
 
