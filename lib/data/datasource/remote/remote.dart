@@ -15,5 +15,6 @@ abstract class Remote {
   Future<SyncResponse?> sync(SyncEntity syncEntity);
   Future<GenericResponse?> sendAssist(AssistListEntity assists);
   Future<GenericResponse?> sendEvaluations(SaveEvaluationListEntity evaluations);
+  Future<String> downloadFile(List<String> data);
 
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/di/locator.dart';
@@ -7,6 +8,8 @@ import 'package:teamvisual/presentation/screen/main/tab_modules.dart';
 import 'package:teamvisual/presentation/screen/main/tab_courses.dart';
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
 import 'package:teamvisual/presentation/widgets/item_drawer_menu.dart';
+
+import '../widgets/custom_dialog.dart';
 
 class MainScreen extends RootWidget<MainViewModel> {
   MainScreen() : super(getIt());
@@ -30,20 +33,20 @@ class MainScreen extends RootWidget<MainViewModel> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              viewModel.currentTabTile,
-              style: GoogleFonts.montserrat(
-                  fontSize: 18,
-                  color: Colors.white,
-                  letterSpacing: 0.2,
-                  fontWeight: FontWeight.w500),
-            ),
-            elevation: 0,
+        appBar: AppBar(
+          title: Text(
+            viewModel.currentTabTile,
+            style: GoogleFonts.montserrat(
+                fontSize: 18,
+                color: Colors.white,
+                letterSpacing: 0.2,
+                fontWeight: FontWeight.w500),
           ),
-          body: getViewForIndex(viewModel.currentTabIndex),
-          drawer: Drawer(
-              child: ListView(
+          elevation: 0,
+        ),
+        body: getViewForIndex(viewModel.currentTabIndex),
+        drawer: Drawer(
+          child: ListView(
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(
@@ -80,7 +83,7 @@ class MainScreen extends RootWidget<MainViewModel> {
               ),
               ItemDrawerMenu(
                 title: "Módulos",
-                icon: Icons.more_time,
+                icon: Icons.list_alt,
                 onClick: () {
                   viewModel.setCurrentTab(0, "Módulos");
                   Navigator.of(context).pop();
@@ -89,7 +92,7 @@ class MainScreen extends RootWidget<MainViewModel> {
               if (viewModel.assistModuleOn)
                 ItemDrawerMenu(
                   title: "Asistencia",
-                  icon: Icons.quiz_rounded,
+                  icon: Icons.camera_alt,
                   onClick: () {
                     viewModel.setCurrentTab(1, "Asistencia");
                     Navigator.of(context).pop();
@@ -98,7 +101,7 @@ class MainScreen extends RootWidget<MainViewModel> {
               if (viewModel.quizModuleOn)
                 ItemDrawerMenu(
                   title: "Cursos",
-                  icon: Icons.cloud_upload,
+                  icon: Icons.playlist_add_check_outlined,
                   onClick: () {
                     viewModel.setCurrentTab(2, "Cursos");
                     Navigator.of(context).pop();
@@ -109,8 +112,6 @@ class MainScreen extends RootWidget<MainViewModel> {
                   title: "Módulo 3",
                   icon: Icons.quiz_rounded,
                   onClick: () {
-                    viewModel.setCurrentTab(1, "Módulo 3");
-                    Navigator.of(context).pop();
                   },
                 ),
               if (viewModel.fourthModuleOn)
@@ -118,20 +119,37 @@ class MainScreen extends RootWidget<MainViewModel> {
                   title: "Módulo 4",
                   icon: Icons.cloud_upload,
                   onClick: () {
-                    viewModel.setCurrentTab(2, "Módulo 4");
-                    Navigator.of(context).pop();
                   },
                 ),
+              ItemDrawerMenu(
+                title: "Pendientes",
+                icon: Icons.cloud_upload,
+                onClick: () {
+                  viewModel.setCurrentTab(5, "Pendientes");
+                  Navigator.of(context).pop();
+                },
+              ),
               const Divider(
                 thickness: 1.0,
               ),
               ListTile(
-                title: const Text("Close"),
-                trailing: const Icon(Icons.cancel),
-                onTap: () => Navigator.of(context).pop(),
+                title: Text(
+                  "Cerrar sesión",
+                  style: GoogleFonts.montserrat(
+                      fontSize: 18,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w500),
+                ),
+                trailing: const Icon(
+                  Icons.logout,
+                  color: Colors.black87,
+                ),
+                onTap: () => _showDialogLogOut(context),
               ),
             ],
-          ))),
+          ),
+        ),
+      ),
     );
   }
 
@@ -150,5 +168,23 @@ class MainScreen extends RootWidget<MainViewModel> {
       }
     }
     return _viewCache[index]!;
+  }
+
+  void _showDialogLogOut(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Atención",
+        description: "¿Desea cerrar sesión?",
+        firstButtonText: "No",
+        secondButtonText: "Si",
+        color: Colors.blueAccent,
+        icon: CupertinoIcons.checkmark_alt,
+        secondClick: () => {
+          Navigator.of(context).pop(),
+          Navigator.of(context).pop(),
+        },
+      ),
+    );
   }
 }

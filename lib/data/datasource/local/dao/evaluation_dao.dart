@@ -15,4 +15,7 @@ abstract class EvaluationDao implements BaseDao<EvaluationEntity> {
   @Query('DELETE FROM ${AppConstants.tableEvaluation}')
   Future<void> deleteAll();
 
+  @Query('SELECT COUNT(*) FROM ${AppConstants.tableEvaluation}')
+  Future<int?> getTotalRows();
+
 }

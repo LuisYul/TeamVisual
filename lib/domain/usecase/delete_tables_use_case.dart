@@ -8,8 +8,8 @@ class DeleteTablesUseCase implements BaseUseCase<void, dynamic>{
   const DeleteTablesUseCase(this._repository);
 
   @override
-  Future<void> call(params) {
-    return _repository.deleteTables();
+  Future<void> call(params) async {
+    return await  _repository.deleteTables();
   }
 
 }

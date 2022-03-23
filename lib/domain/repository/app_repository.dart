@@ -31,5 +31,7 @@ abstract class AppRepository {
     Future<List<QuestionEntity>> getQuestionsByEvaluation(int evaluationId);
     Future<List<AlternativeEntity>> getAlternativesByQuestion(int questionId);
     Future<bool> sendEvaluations(SaveEvaluationListEntity evaluations);
+    Future<String> downloadFile(List<String> data);
+    Future<List<int>> getAllPending();
 
 }

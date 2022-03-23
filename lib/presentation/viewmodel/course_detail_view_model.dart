@@ -10,7 +10,6 @@ import 'package:teamvisual/presentation/base/root_view_model.dart';
 import '../../domain/model/course_entity.dart';
 import '../../domain/usecase/get_alternatives_by_question_use_case.dart';
 import '../../domain/usecase/get_evaluations_by_course_use_case.dart';
-import '../../domain/usecase/get_files_by_course_use_case.dart';
 import '../../domain/usecase/get_question_by_evaluation_use_case.dart';
 import '../widgets/custom_dialog.dart';
 
@@ -26,7 +25,7 @@ class CourseDetailViewModel extends RootViewModel {
       this._getQuestionByEvaluationUseCase,
       this._getAlternativesByQuestionUseCase,
       this._sendEvaluationsUseCase,
-    );
+  );
 
   bool _isPlayingVideo = false;
   bool get isPlayingVideo => _isPlayingVideo;

@@ -9,7 +9,7 @@ class SignInUseCase implements BaseUseCase<UserEntity, dynamic> {
   const SignInUseCase(this._repository);
 
   @override
-  Future<UserEntity> call(params) async{
+  Future<UserEntity> call(params) async {
     return await _repository.signIn(params);
   }
 

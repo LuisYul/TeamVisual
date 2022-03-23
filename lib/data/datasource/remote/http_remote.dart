@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:teamvisual/data/datasource/remote/remote.dart';
 import 'package:teamvisual/data/datasource/remote/send_request.dart';
 import 'package:teamvisual/data/model/generic_response.dart';
@@ -73,4 +75,29 @@ class HttpRemote extends Remote {
     final Map<String, dynamic> json = jsonDecode(response.body);
     return GenericResponse.fromMap(json);
   }
+
+  @override
+  Future<String> downloadFile(List<String> data) async {
+    HttpClient httpClient = HttpClient();
+    File file;
+    String filePath = '';
+    try {
+      var request = await httpClient.getUrl(Uri.parse(data[0]));
+      var response = await request.close();
+      if(response.statusCode == 200) {
+        var bytes = await consolidateHttpClientResponseBytes(response);
+        filePath = '${data[2]}/${data[1]}';
+        file = File(filePath);
+        await file.writeAsBytes(bytes);
+      }
+      else {
+        filePath = "";
+      }
+    }
+    catch(ex){
+      filePath = "";
+    }
+    return filePath;
+  }
+
 }

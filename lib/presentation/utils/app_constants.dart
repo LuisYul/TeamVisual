@@ -4,6 +4,7 @@ class AppConstants {
       "api_teamVisual.php/c_control_v1";
   static const idApp = 2;
   static const versionApp = "0.0.1";
+  static const downloadPath = "/storage/emulated/0/Download/";
 
   static const assistModuleId = 1;
   static const quizModuleId = 2;

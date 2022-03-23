@@ -104,7 +104,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `asistencia` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` TEXT, `userName` TEXT, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `lat` TEXT NOT NULL, `lng` TEXT NOT NULL, `photoPath` TEXT, `idAssistType` TEXT NOT NULL, `obs` TEXT NOT NULL, `idUserType` TEXT, `userType` TEXT, `numDoc` TEXT, `demo` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` INTEGER NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` INTEGER NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, `totalFiles` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_evaluaciones` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `userCourseId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `maxNote` INTEGER NOT NULL, `minNote` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -433,6 +433,11 @@ class _$AssistDao extends AssistDao {
   }
 
   @override
+  Future<int?> getTotalRows() async {
+    await _queryAdapter.queryNoReturn('SELECT COUNT(*) FROM asistencia');
+  }
+
+  @override
   Future<int> insertEntity(AssistEntity entity) {
     return _assistEntityInsertionAdapter.insertAndReturnId(
         entity, OnConflictStrategy.replace);
@@ -475,7 +480,8 @@ class _$CourseDao extends CourseDao {
                   'specAreaId': item.specAreaId,
                   'specArea': item.specArea,
                   'learningGroupId': item.learningGroupId,
-                  'learningGroup': item.learningGroup
+                  'learningGroup': item.learningGroup,
+                  'totalFiles': item.totalFiles
                 }),
         _courseEntityUpdateAdapter = UpdateAdapter(
             database,
@@ -494,7 +500,8 @@ class _$CourseDao extends CourseDao {
                   'specAreaId': item.specAreaId,
                   'specArea': item.specArea,
                   'learningGroupId': item.learningGroupId,
-                  'learningGroup': item.learningGroup
+                  'learningGroup': item.learningGroup,
+                  'totalFiles': item.totalFiles
                 }),
         _courseEntityDeletionAdapter = DeletionAdapter(
             database,
@@ -513,7 +520,8 @@ class _$CourseDao extends CourseDao {
                   'specAreaId': item.specAreaId,
                   'specArea': item.specArea,
                   'learningGroupId': item.learningGroupId,
-                  'learningGroup': item.learningGroup
+                  'learningGroup': item.learningGroup,
+                  'totalFiles': item.totalFiles
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -544,7 +552,8 @@ class _$CourseDao extends CourseDao {
             specAreaId: row['specAreaId'] as int,
             specArea: row['specArea'] as String,
             learningGroupId: row['learningGroupId'] as int,
-            learningGroup: row['learningGroup'] as String));
+            learningGroup: row['learningGroup'] as String,
+            totalFiles: row['totalFiles'] as int));
   }
 
   @override
@@ -564,7 +573,8 @@ class _$CourseDao extends CourseDao {
             specAreaId: row['specAreaId'] as int,
             specArea: row['specArea'] as String,
             learningGroupId: row['learningGroupId'] as int,
-            learningGroup: row['learningGroup'] as String),
+            learningGroup: row['learningGroup'] as String,
+            totalFiles: row['totalFiles'] as int),
         arguments: [userId]);
   }
 
@@ -682,6 +692,12 @@ class _$EvaluationDao extends EvaluationDao {
   @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM lista_evaluaciones');
+  }
+
+  @override
+  Future<int?> getTotalRows() async {
+    await _queryAdapter
+        .queryNoReturn('SELECT COUNT(*) FROM lista_evaluaciones');
   }
 
   @override

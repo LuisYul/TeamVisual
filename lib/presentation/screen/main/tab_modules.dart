@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,54 +17,51 @@ class TabModules extends RootWidget<ModuleViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-
-        return ScreenUtilInit(
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: () => Scaffold(
-            backgroundColor: const Color(0xD2EBEBEF),
-            body: Column(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage(
-                            "assets/images/background_modules.png",
-                          )
+    return ScreenUtilInit(
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: () => Scaffold(
+        backgroundColor: const Color(0xD2EBEBEF),
+        body: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(
+                        "assets/images/background_modules.png",
                       )
+                  )
+              ),
+              height: MediaQuery.of(context).size.height / 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                  height: MediaQuery.of(context).size.height / 3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  _imgProfilePic(),
+                  _labelName(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      _imgProfilePic(),
-                      _labelName(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _progressContainer(),
-                          _quizContainer(),
-                          _pendingContainer(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      _progressContainer(),
+                      _quizContainer(),
+                      _pendingContainer(),
                     ],
                   ),
-                ),
-                _gridModules(),
-              ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-
-
+            _gridModules(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _imgProfilePic() {
@@ -73,7 +71,7 @@ class TabModules extends RootWidget<ModuleViewModel> {
       child: CircleAvatar(
         backgroundImage: viewModel.userPhoto == ""
             ? const AssetImage('assets/images/img_profile.png') as ImageProvider
-            : NetworkImage(viewModel.userPhoto,),
+            : CachedNetworkImageProvider(viewModel.userPhoto,),
         radius: 40.sp,
       ),
     );

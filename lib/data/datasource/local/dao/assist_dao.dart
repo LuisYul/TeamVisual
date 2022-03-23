@@ -12,4 +12,7 @@ abstract class AssistDao implements BaseDao<AssistEntity> {
   @Query('DELETE FROM ${AppConstants.tableAssist}')
   Future<void> deleteAll();
 
+  @Query('SELECT COUNT(*) FROM ${AppConstants.tableAssist}')
+  Future<int?> getTotalRows();
+
 }

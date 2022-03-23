@@ -10,13 +10,16 @@ class FileEntity {
   final int courseId;
   final String path;
   final String name;
+  @ignore
+  bool? success;
 
-  const FileEntity({
+  FileEntity({
     required this.id,
     required this.userId,
     required this.courseId,
     required this.path,
     required this.name,
+    this.success,
   });
 
 }

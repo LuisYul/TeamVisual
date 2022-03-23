@@ -85,7 +85,6 @@ class AppRepositoryImpl extends AppRepository {
   Future<List<AssistTypeEntity>> getAssistTypes() async {
     final int idAssist = _prefs.getInt(AppConstants.prefsIdAssist) ?? 0;
     final assistTypes = await _database.assistTypeDao.getAll();
-    print("assist tipes $assistTypes");
     int indexOk = -1;
     assistTypes.forEachIndexed((index, element) {
       element.index = index;
@@ -164,6 +163,18 @@ class AppRepositoryImpl extends AppRepository {
   Future<bool> sendEvaluations(SaveEvaluationListEntity evaluations) async {
     final response = await _remote.sendEvaluations(evaluations);
     return Future.value(response?.status?.equalsIgnoreCase("true"));
+  }
+
+  @override
+  Future<String> downloadFile(List<String> data) async {
+    return await _remote.downloadFile(data);
+  }
+
+  @override
+  Future<List<int>> getAllPending() async {
+    final assistsPending = await _database.assistDao.getTotalRows();
+    final evaluationsPending = await _database.evaluationDao.getTotalRows();
+    return [assistsPending ?? 0, evaluationsPending ?? 0];
   }
 
 }

@@ -150,7 +150,7 @@ class TabAssist extends RootWidget<AssistViewModel> {
     return PrimaryButton(
       title: "Enviar",
       icon: CupertinoIcons.arrow_up_circle_fill,
-      onClick: () => viewModel.submitSave(_obsController.text),
+      onClick: () => viewModel.submitSave(_obsController.text, context),
       disabled: viewModel.screenDisabled,
     );
   }

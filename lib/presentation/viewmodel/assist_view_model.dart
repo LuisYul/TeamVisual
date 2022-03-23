@@ -1,5 +1,6 @@
 import 'dart:typed_data';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
@@ -11,6 +12,7 @@ import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_assists_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
+import '../widgets/custom_dialog.dart';
 
 class AssistViewModel extends RootViewModel {
 
@@ -78,7 +80,7 @@ class AssistViewModel extends RootViewModel {
     hideProgress();
   }
 
-  void submitSave(String obs) {
+  void submitSave(String obs, BuildContext context) {
     if(_imageFile == null) {
       setErrorMsg(AppConstants.forceTakePhoto);
       return;
@@ -104,11 +106,10 @@ class AssistViewModel extends RootViewModel {
         userType: prefs.getString(AppConstants.prefsUserType),
         numDoc: prefs.getString(AppConstants.prefsUserDocNumber),
     );
-    //_saveAssist(assistEntity);
-    _sendAssists(assistEntity);
+    _sendAssists(assistEntity, context);
   }
 
-  void _sendAssists(AssistEntity assistEntity) async {
+  void _sendAssists(AssistEntity assistEntity, BuildContext context) async {
 
     Uint8List? bytes =  await _imageFile?.readAsBytes();
     if(bytes != null) {
@@ -118,13 +119,14 @@ class AssistViewModel extends RootViewModel {
     final assists = AssistListEntity(assists: [assistEntity]);
     final result = await runBusyFuture(_sendAssistsUseCase.call(assists),
         busyObject: "error_send_assists").catchError((error) {
-         setError(AppConstants.infoNotSent);
+          _saveAssist(assistEntity);
+          _showDialogError(context);
     });
-    pt("result send photo $result");
     if(result) {
-      setError(AppConstants.infoSent);
+      _showDialogSuccess(context);
     } else {
-      setError(AppConstants.infoNotSent);
+      _saveAssist(assistEntity);
+      _showDialogError(context);
     }
 
     hideProgress();
@@ -132,14 +134,47 @@ class AssistViewModel extends RootViewModel {
   }
 
   void _saveAssist(AssistEntity assistEntity) async {
-    final result = await runBusyFuture(_saveAssistUseCase.call(assistEntity),
+    await runBusyFuture(_saveAssistUseCase.call(assistEntity),
         busyObject: "error_get_assist_types");
-    debugPrint("result save assist $result");
   }
 
   void setImageFile(XFile imageFile) {
     _imageFile = imageFile;
     debugPrint("set image path "+_imageFile!.path);
     notify();
+  }
+
+  void _showDialogError(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Atención",
+        description: "No se pudo enviar la información, intente nuevamente",
+        firstButtonText: "OK",
+        color: Colors.red,
+        icon: CupertinoIcons.exclamationmark,
+        firstClick: () => {
+          navigationService.back()
+        },
+      ),
+    );
+  }
+
+  void _showDialogSuccess(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Atención",
+        description: "Se envió la información correctamente",
+        firstButtonText: "OK",
+        color: Colors.green,
+        icon: CupertinoIcons.checkmark_alt,
+        firstClick: () => {
+          navigationService.back()
+        },
+      ),
+    );
   }
 }

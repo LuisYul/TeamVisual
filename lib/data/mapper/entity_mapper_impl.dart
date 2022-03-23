@@ -92,6 +92,7 @@ class EntityMapperImpl extends EntityMapper{
             specArea: e?.specArea ?? "",
             learningGroupId: e?.learningGroupId ?? 0,
             learningGroup: e?.learningGroup ?? "",
+            totalFiles: e?.totalFiles ?? 0,
           ))
       ));
     } catch (e) {

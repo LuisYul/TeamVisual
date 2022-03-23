@@ -6,6 +6,8 @@ import 'package:teamvisual/data/mapper/entity_mapper_impl.dart';
 import 'package:teamvisual/data/repository/app_repository_impl.dart';
 import 'package:teamvisual/domain/repository/app_repository.dart';
 import 'package:teamvisual/domain/usecase/delete_tables_use_case.dart';
+import 'package:teamvisual/domain/usecase/download_file_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_all_pending_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_alternatives_by_question_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_assist_types_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_courses_use_case.dart';
@@ -80,6 +82,8 @@ Future<void> _domain() async {
   getIt.registerSingleton(GetQuestionByEvaluationUseCase(getIt()));
   getIt.registerSingleton(GetAlternativesByQuestionUseCase(getIt()));
   getIt.registerSingleton(SendEvaluationsUseCase(getIt()));
+  getIt.registerSingleton(DownloadFileUseCase(getIt()));
+  getIt.registerSingleton(GetAllPendingUseCase(getIt()));
 
 }
 
@@ -93,7 +97,7 @@ Future<void> _presentation() async {
     getIt(), getIt()));
   getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt()));
   getIt.registerFactory<CourseViewModel>(() => CourseViewModel(getIt(),
-    getIt(), getIt()));
+    getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<CourseDetailViewModel>(() => CourseDetailViewModel(
       getIt(), getIt(), getIt(), getIt()));
 

@@ -35,10 +35,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-       // '/': (context) => LoginScreen(),
-       //'/main': (context) => MainScreen(),
+        '/': (context) => LoginScreen(),
+       '/main': (context) => MainScreen(),
         '/course_detail': (context) => CourseDetailScreen(),
-        '/': (context) => MainScreen(),
+      //  '/': (context) => MainScreen(),
       },
     );
   }
