@@ -23,59 +23,62 @@ class LoginScreen extends RootWidget<LoginViewModel> {
     return ScreenUtilInit(
       minTextAdapt: true,
       builder: () => SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: Column(
-            children: <Widget>[
-              Column(
-                children: [
-                  Image.asset(
-                    'assets/images/background_red.jpeg',
-                    fit: BoxFit.fitHeight,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white12,
-                    boxShadow: [
-                      BoxShadow(color: Colors.white24, spreadRadius: 3),
-                    ],
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.sp),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          _logoTeamVisual(),
-                          SizedBox(height: 30.sp),
-                          _userField(),
-                          SizedBox(height: 15.sp),
-                          _passwordField(),
-                          SizedBox(height: 15.sp),
-                          SizedBox(
-                            width: double.infinity,
-                            child: _loginButton(context)
-                          ),
-                          SizedBox(height: 15.sp),
-                          SizedBox(
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/background_red.jpeg',
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white12,
+                      boxShadow: [
+                        BoxShadow(color: Colors.white24, spreadRadius: 3),
+                      ],
+                    ),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.sp),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            _logoTeamVisual(),
+                            SizedBox(height: 30.sp),
+                            _userField(),
+                            SizedBox(height: 15.sp),
+                            _passwordField(),
+                            SizedBox(height: 15.sp),
+                            SizedBox(
                               width: double.infinity,
-                              child: _clearDataButton(context)
-                          ),
-                          SizedBox(height: 25.sp),
-                          _versionLabel(),
-                        ],
+                              child: _loginButton(context)
+                            ),
+                            SizedBox(height: 15.sp),
+                            SizedBox(
+                                width: double.infinity,
+                                child: _clearDataButton(context)
+                            ),
+                            SizedBox(height: 25.sp),
+                            _versionLabel(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -141,6 +144,7 @@ class LoginScreen extends RootWidget<LoginViewModel> {
       title: "Iniciar sesión",
       icon: CupertinoIcons.arrow_right_circle_fill,
       onClick: () {
+        FocusScope.of(context).unfocus();
         viewModel.submitLogin(
             _userController.text,
             _passwordController.text,

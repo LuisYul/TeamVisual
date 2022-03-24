@@ -18,9 +18,10 @@ import 'package:teamvisual/domain/model/video_entity.dart';
 import 'package:teamvisual/domain/repository/app_repository.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 import 'package:teamvisual/presentation/utils/string_extension.dart';
-import '../../domain/model/assist_entity.dart';
-import '../../domain/model/assist_list_entity.dart';
+import 'package:teamvisual/domain/model/assist_entity.dart';
+import 'package:teamvisual/domain/model/assist_list_entity.dart';
 import 'package:collection/collection.dart';
+import 'package:teamvisual/presentation/utils/string_extension.dart';
 
 class AppRepositoryImpl extends AppRepository {
 
@@ -35,13 +36,17 @@ class AppRepositoryImpl extends AppRepository {
   Future<UserEntity> signIn(SignInEntity signInEntity) async {
     final response = await _remote.signIn(signInEntity);
     final userEntity = _mapper.toUserEntity(response);
-    _prefs.setString(AppConstants.prefsUserId, userEntity.idUser);
-    _prefs.setString(AppConstants.prefsUserName, userEntity.name);
-    _prefs.setString(AppConstants.prefsUserDocNumber, userEntity.docNumber);
-    _prefs.setString(AppConstants.prefsUserTypeId, userEntity.idUserType);
-    _prefs.setString(AppConstants.prefsUserType, userEntity.userType);
-    _prefs.setString(AppConstants.prefsUserPhoto, userEntity.photoUrl);
-    _prefs.setInt(AppConstants.prefsIdAssist, int.parse(userEntity.idAssistType));
+
+    if(userEntity.loginStatus.equalsIgnoreCase("true")) {
+      _prefs.setString(AppConstants.prefsUserId, userEntity.idUser);
+      _prefs.setString(AppConstants.prefsUserName, userEntity.name);
+      _prefs.setString(AppConstants.prefsUserDocNumber, userEntity.docNumber);
+      _prefs.setString(AppConstants.prefsUserTypeId, userEntity.idUserType);
+      _prefs.setString(AppConstants.prefsUserType, userEntity.userType);
+      _prefs.setString(AppConstants.prefsUserPhoto, userEntity.photoUrl);
+      _prefs.setInt(AppConstants.prefsIdAssist, int.parse(userEntity.idAssistType));
+    }
+
     return userEntity;
   }
 

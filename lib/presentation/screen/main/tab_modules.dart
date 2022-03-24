@@ -37,10 +37,9 @@ class TabModules extends RootWidget<ModuleViewModel> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  SizedBox(height: 15.h,),
                   _imgProfilePic(),
+                  SizedBox(height: 5.h),
                   _labelName(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +80,7 @@ class TabModules extends RootWidget<ModuleViewModel> {
     return Text(
       viewModel.userName,
       style: GoogleFonts.montserrat(
-          fontSize: 18.sp,
+          fontSize: 17.sp,
           color: Colors.white
       ),
       textAlign: TextAlign.center,
@@ -145,14 +144,14 @@ class TabModules extends RootWidget<ModuleViewModel> {
           Text(
             "0/8",
             style: GoogleFonts.montserrat(
-                fontSize: 20.sp,
+                fontSize: 18.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w500),
           ),
           Text(
             "Progreso",
             style: GoogleFonts.montserrat(
-                fontSize: 15.sp, color: Colors.white),
+                fontSize: 14.sp, color: Colors.white),
           ),
         ],
       ),
@@ -167,14 +166,14 @@ class TabModules extends RootWidget<ModuleViewModel> {
           Text(
             "7",
             style: GoogleFonts.montserrat(
-                fontSize: 20.sp,
+                fontSize: 18.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w500),
           ),
           Text(
             "Encuestas",
             style: GoogleFonts.montserrat(
-                fontSize: 15.sp, color: Colors.white),
+                fontSize: 14.sp, color: Colors.white),
           ),
         ],
       ),
@@ -183,7 +182,7 @@ class TabModules extends RootWidget<ModuleViewModel> {
 
   Widget _pendingContainer() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(15.sp, 10.sp, 15.sp, 0),
+      padding: EdgeInsets.fromLTRB(18.sp, 10.sp, 15.sp, 0),
       child: Column(
         children: [
           Text(
@@ -196,7 +195,7 @@ class TabModules extends RootWidget<ModuleViewModel> {
           Text(
             "Pendientes",
             style: GoogleFonts.montserrat(
-                fontSize: 15.sp, color: Colors.white),
+                fontSize: 14.sp, color: Colors.white),
           ),
         ],
       ),

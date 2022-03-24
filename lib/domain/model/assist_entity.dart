@@ -9,8 +9,8 @@ class AssistEntity {
   final String? userName;
   final String date;
   final String hour;
-  final String lat;
-  final String lng;
+  String lat;
+  String lng;
   final String? photoPath;
   final String idAssistType;
   final String obs;

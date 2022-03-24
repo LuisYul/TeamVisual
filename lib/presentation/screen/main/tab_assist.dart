@@ -18,13 +18,6 @@ class TabAssist extends RootWidget<AssistViewModel> {
 
   final String path = "/data/user/0/com.visualimpact.teamvisual/cache/417095e1-1152-460f-9c19-beabb18a3e798130362856397493148.jpg";
 
-  // @override
-  // void init() async {
-  //
-  //   // var img = File(path);
-  //   // var decodedImage = await decodeImageFromList(img.readAsBytesSync());
-  // }
-
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
     return ScreenUtilInit(

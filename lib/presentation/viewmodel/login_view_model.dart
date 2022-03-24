@@ -33,7 +33,7 @@ class LoginViewModel extends RootViewModel {
     showProgress();
     final result = await runBusyFuture(_valVersionUseCase
         .call(ValVersionEntity.currentVersion),
-        busyObject: "error_sign_in");
+        busyObject: "error_val_version");
     if(result) {
       _signIn(signInEntity);
     } else {
@@ -45,11 +45,11 @@ class LoginViewModel extends RootViewModel {
   void _signIn(SignInEntity signInEntity) async {
     final result = await runBusyFuture(_signInUseCase.call(signInEntity),
         busyObject: "error_sign_in");
-    final status = result.loginStatus ?? "";
+    final status = result.loginStatus;
     if(status.equalsIgnoreCase("true")) {
       _sync(result);
     } else {
-      setErrorMsg(result.error ?? AppConstants.genericError);
+      setErrorMsg(result.error);
       hideProgress();
     }
   }
@@ -80,12 +80,13 @@ class LoginViewModel extends RootViewModel {
 
   void submitClearData() async {
     await runBusyFuture(_deleteTablesUseCase.call(""));
-    pt("tables cleared");
     setErrorMsg(AppConstants.dataCleared);
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void onFutureError(error, Object? key) {
+    super.onFutureError(error, key);
+    setErrorMsg(AppConstants.genericError);
   }
+
 }

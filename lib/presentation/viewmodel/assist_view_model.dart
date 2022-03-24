@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
@@ -48,6 +49,7 @@ class AssistViewModel extends RootViewModel {
   @override
   initialize() {
     _getAssistTypes();
+    _determinePosition();
   }
 
   void _getCurrentIdAssistType() {
@@ -97,8 +99,8 @@ class AssistViewModel extends RootViewModel {
         userName: prefs.getString(AppConstants.prefsUserName),
         date: actualDate,
         hour: actualTime,
-        lat: "-12.3232111001",
-        lng: "-71.3423423423",
+        lat: "",
+        lng: "",
         photoPath: _imageFile?.path,
         idAssistType: (_assistTypeId).toString(),
         obs: obs,
@@ -110,6 +112,10 @@ class AssistViewModel extends RootViewModel {
   }
 
   void _sendAssists(AssistEntity assistEntity, BuildContext context) async {
+
+    final position = await  _determinePosition();
+    assistEntity.lat = position.latitude.toString();
+    assistEntity.lng = position.longitude.toString();
 
     Uint8List? bytes =  await _imageFile?.readAsBytes();
     if(bytes != null) {
@@ -135,7 +141,7 @@ class AssistViewModel extends RootViewModel {
 
   void _saveAssist(AssistEntity assistEntity) async {
     await runBusyFuture(_saveAssistUseCase.call(assistEntity),
-        busyObject: "error_get_assist_types");
+        busyObject: "error_save_assist");
   }
 
   void setImageFile(XFile imageFile) {
@@ -155,7 +161,7 @@ class AssistViewModel extends RootViewModel {
         color: Colors.red,
         icon: CupertinoIcons.exclamationmark,
         firstClick: () => {
-          navigationService.back()
+          navigationService.replaceTo("/main")
         },
       ),
     );
@@ -172,9 +178,35 @@ class AssistViewModel extends RootViewModel {
         color: Colors.green,
         icon: CupertinoIcons.checkmark_alt,
         firstClick: () => {
-          navigationService.back()
+          navigationService.replaceTo("/main")
         },
       ),
     );
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    pt("position ${Geolocator.getCurrentPosition()}");
+    return await Geolocator.getCurrentPosition();
   }
 }

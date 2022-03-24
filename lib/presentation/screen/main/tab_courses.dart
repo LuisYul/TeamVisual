@@ -42,8 +42,8 @@ class TabCourses extends RootWidget<CourseViewModel> {
       ),
     );
 
-  ExpansionTile makeListTile(CourseEntity course, BuildContext context) => ExpansionTile(
-      tilePadding: const EdgeInsets.symmetric(
+  ListTile makeListTile(CourseEntity course, BuildContext context) => ListTile(
+      contentPadding: const EdgeInsets.symmetric(
         horizontal: 20.0,
         vertical: 10.0,
       ),
@@ -73,41 +73,41 @@ class TabCourses extends RootWidget<CourseViewModel> {
               ],
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "(${course.totalFiles})",
-                  style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700
-                  ),
-                ),
-                Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: SizedBox(
-                    width: 35,
-                    height: 35,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.attach_file_outlined,
-                        size: 20.0,
-                      ),
-                      onPressed: course.totalFiles > 0
-                          ? () => viewModel.onClickFiles(course, context)
-                          : null,
-                      color: Colors.indigoAccent, ),
-                  ),
-                ),
-              ],
-            ),
-          )
+          // Expanded(
+          //   flex: 1,
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       Text(
+          //         "(${course.totalFiles})",
+          //         style: GoogleFonts.montserrat(
+          //             fontSize: 16,
+          //             color: Colors.black,
+          //             fontWeight: FontWeight.w700
+          //         ),
+          //       ),
+          //       Card(
+          //         elevation: 3,
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(5),
+          //         ),
+          //         child: SizedBox(
+          //           width: 35,
+          //           height: 35,
+          //           child: IconButton(
+          //             icon: const Icon(
+          //               Icons.attach_file_outlined,
+          //               size: 20.0,
+          //             ),
+          //             onPressed: course.totalFiles > 0
+          //                 ? () => viewModel.onClickFiles(course, context)
+          //                 : null,
+          //             color: Colors.indigoAccent, ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // )
         ],
       ),
       subtitle: Row(
@@ -135,64 +135,64 @@ class TabCourses extends RootWidget<CourseViewModel> {
           )
         ],
       ),
-      // trailing: Wrap(
-      //   spacing: 12,
-      //   children: <Widget>[
-      //     Column(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       children: [
-      //         Text(
-      //           "(${course.totalFiles})",
-      //           style: GoogleFonts.montserrat(
-      //               fontSize: 16,
-      //               color: Colors.black,
-      //               fontWeight: FontWeight.w700
-      //           ),
-      //         ),
-      //         const SizedBox(
-      //           height: 5,
-      //         ),
-      //         Card(
-      //           elevation: 3,
-      //           shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(5),
-      //           ),
-      //           child: SizedBox(
-      //             width: 35,
-      //             height: 35,
-      //             child: IconButton(
-      //               icon: const Icon(
-      //                 Icons.attach_file_outlined,
-      //                 size: 20.0,
-      //               ),
-      //               onPressed: course.totalFiles > 0
-      //                   ? () => viewModel.onClickFiles(course, context)
-      //                   : null,
-      //               color: Colors.indigoAccent, ),
-      //           ),
-      //         )
-      //       ],
-      //     ),
-      //     const Padding(
-      //       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-      //       child: Icon(Icons.keyboard_arrow_right,
-      //           color: Colors.black, size: 30.0),
-      //     ),
-      //   ],
-      // ),
-      children: <Widget>[
-        ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          primary: true,
-          physics:  AlwaysScrollableScrollPhysics(),
-          itemCount: viewModel.evaluations[course.id]?.length ?? 0,
-          itemBuilder: (BuildContext context, int index) {
-            return _buildEvaluationsTile(viewModel.evaluations[course.id][index]);
-          },
-        ),
-      ],
-    //  onTap: () => viewModel.onClickCourse(course)
+      trailing: Wrap(
+        spacing: 12,
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "(${course.totalFiles})",
+                style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: SizedBox(
+                  width: 35,
+                  height: 35,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.attach_file_outlined,
+                      size: 20.0,
+                    ),
+                    onPressed: course.totalFiles > 0
+                        ? () => viewModel.onClickFiles(course, context)
+                        : null,
+                    color: Colors.indigoAccent, ),
+                ),
+              )
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Icon(Icons.keyboard_arrow_right,
+                color: Colors.black, size: 30.0),
+          ),
+        ],
+      ),
+      // children: <Widget>[
+      //   ListView.builder(
+      //     scrollDirection: Axis.vertical,
+      //     shrinkWrap: true,
+      //     primary: true,
+      //     physics:  AlwaysScrollableScrollPhysics(),
+      //     itemCount: viewModel.evaluations[course.id]?.length ?? 0,
+      //     itemBuilder: (BuildContext context, int index) {
+      //       return _buildEvaluationsTile(viewModel.evaluations[course.id][index]);
+      //     },
+      //   ),
+      // ],
+      onTap: () => viewModel.onClickCourse(course)
   );
 
   Widget _buildEvaluationsTile(EvaluationEntity evaluationEntity) {

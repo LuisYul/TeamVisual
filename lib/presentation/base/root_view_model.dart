@@ -51,6 +51,6 @@ abstract class RootViewModel extends BaseViewModel{
   void onFutureError(error, Object? key) {
     super.onFutureError(error, key);
     hideProgress();
-    debugPrint("ERROR ${error.toString()}");
+    pt("Error ${error.toString()} in ${key.toString()}");
   }
 }

@@ -30,6 +30,7 @@ dependencies:
   visibility_detector: ^0.2.2
   permission_handler: ^9.2.0
   cached_network_image: ^3.2.0
+  geolocator: ^8.2.0
 
 dev_dependencies:
   flutter_test:
