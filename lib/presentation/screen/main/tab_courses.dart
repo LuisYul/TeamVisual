@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/di/locator.dart';
 import 'package:teamvisual/domain/model/course_entity.dart';
-import 'package:teamvisual/domain/model/evaluation_entity.dart';
 import 'package:teamvisual/presentation/base/root_widget.dart';
 import 'package:teamvisual/presentation/viewmodel/course_view_model.dart';
 
@@ -73,41 +72,6 @@ class TabCourses extends RootWidget<CourseViewModel> {
               ],
             ),
           ),
-          // Expanded(
-          //   flex: 1,
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       Text(
-          //         "(${course.totalFiles})",
-          //         style: GoogleFonts.montserrat(
-          //             fontSize: 16,
-          //             color: Colors.black,
-          //             fontWeight: FontWeight.w700
-          //         ),
-          //       ),
-          //       Card(
-          //         elevation: 3,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(5),
-          //         ),
-          //         child: SizedBox(
-          //           width: 35,
-          //           height: 35,
-          //           child: IconButton(
-          //             icon: const Icon(
-          //               Icons.attach_file_outlined,
-          //               size: 20.0,
-          //             ),
-          //             onPressed: course.totalFiles > 0
-          //                 ? () => viewModel.onClickFiles(course, context)
-          //                 : null,
-          //             color: Colors.indigoAccent, ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // )
         ],
       ),
       subtitle: Row(
@@ -180,32 +144,7 @@ class TabCourses extends RootWidget<CourseViewModel> {
           ),
         ],
       ),
-      // children: <Widget>[
-      //   ListView.builder(
-      //     scrollDirection: Axis.vertical,
-      //     shrinkWrap: true,
-      //     primary: true,
-      //     physics:  AlwaysScrollableScrollPhysics(),
-      //     itemCount: viewModel.evaluations[course.id]?.length ?? 0,
-      //     itemBuilder: (BuildContext context, int index) {
-      //       return _buildEvaluationsTile(viewModel.evaluations[course.id][index]);
-      //     },
-      //   ),
-      // ],
       onTap: () => viewModel.onClickCourse(course)
   );
-
-  Widget _buildEvaluationsTile(EvaluationEntity evaluationEntity) {
-    return ListTile(
-      title: Text(
-        evaluationEntity.name,
-        style: GoogleFonts.montserrat(
-            fontSize: 14,
-            color: Colors.black,
-            fontWeight: FontWeight.w300
-        ),
-      ),
-    );
-  }
 
 }

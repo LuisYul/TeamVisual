@@ -11,6 +11,9 @@ abstract class BaseDao<T> {
   @update
   Future<int> updateEntity(T entity);
 
+  @update
+  Future<int> updateList(List<T> entity);
+
   @delete
   Future<int> deleteEntity(T entity);
 

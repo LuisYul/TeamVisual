@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teamvisual/data/datasource/remote/http_remote.dart';
 import 'package:teamvisual/data/datasource/remote/remote.dart';
@@ -19,6 +20,7 @@ import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_assists_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_evaluations_use_case.dart';
 import 'package:teamvisual/domain/usecase/sign_in_use_case.dart';
+import 'package:teamvisual/domain/usecase/update_videos_use_case.dart';
 import 'package:teamvisual/domain/usecase/val_version_use_case.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 import 'package:teamvisual/presentation/viewmodel/assist_view_model.dart';
@@ -45,7 +47,7 @@ Future<void> initializeDI() async {
 Future<void> _data() async {
 
   ///Remote
-  getIt.registerSingleton<Remote>(HttpRemote(http.Client()));
+  getIt.registerSingleton<Remote>(HttpRemote(http.Client(), Dio()));
 
   ///Mapper to entities
   getIt.registerSingleton<EntityMapper>(EntityMapperImpl());
@@ -84,6 +86,7 @@ Future<void> _domain() async {
   getIt.registerSingleton(SendEvaluationsUseCase(getIt()));
   getIt.registerSingleton(DownloadFileUseCase(getIt()));
   getIt.registerSingleton(GetAllPendingUseCase(getIt()));
+  getIt.registerSingleton(UpdateVideosUseCase(getIt()));
 
 }
 

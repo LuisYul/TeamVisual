@@ -10,13 +10,18 @@ class VideoEntity {
   final int courseId;
   final String videoFile;
   final String name;
+  String localPath;
+  @ignore
+  bool? success;
 
-  const VideoEntity({
+  VideoEntity({
     required this.id,
     required this.userId,
     required this.courseId,
     required this.videoFile,
     required this.name,
+    required this.localPath,
+    this.success,
   });
 
 }

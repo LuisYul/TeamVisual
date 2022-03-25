@@ -145,6 +145,11 @@ class AppRepositoryImpl extends AppRepository {
   }
 
   @override
+  Future<int> updateVideos(List<VideoEntity> videos) async {
+    return await _database.videoDao.updateList(videos);
+  }
+
+  @override
   Future<List<FileEntity>> getFilesByCourse(int courseId) async {
     return await _database.fileDao.getByCourseId(courseId);
   }
@@ -181,5 +186,7 @@ class AppRepositoryImpl extends AppRepository {
     final evaluationsPending = await _database.evaluationDao.getTotalRows();
     return [assistsPending ?? 0, evaluationsPending ?? 0];
   }
+
+
 
 }

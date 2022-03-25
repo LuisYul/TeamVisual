@@ -108,7 +108,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_evaluaciones` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `userCourseId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `maxNote` INTEGER NOT NULL, `minNote` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_videos` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `videoFile` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_videos` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `videoFile` TEXT NOT NULL, `name` TEXT NOT NULL, `localPath` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_archivos` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `path` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -244,6 +244,12 @@ class _$AssistTypeDao extends AssistTypeDao {
   }
 
   @override
+  Future<int> updateList(List<AssistTypeEntity> entity) {
+    return _assistTypeEntityUpdateAdapter.updateListAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
   Future<int> deleteEntity(AssistTypeEntity entity) {
     return _assistTypeEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
@@ -324,6 +330,12 @@ class _$ModuleDao extends ModuleDao {
   @override
   Future<int> updateEntity(ModuleEntity entity) {
     return _moduleEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateList(List<ModuleEntity> entity) {
+    return _moduleEntityUpdateAdapter.updateListAndReturnChangedRows(
         entity, OnConflictStrategy.abort);
   }
 
@@ -452,6 +464,12 @@ class _$AssistDao extends AssistDao {
   @override
   Future<int> updateEntity(AssistEntity entity) {
     return _assistEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateList(List<AssistEntity> entity) {
+    return _assistEntityUpdateAdapter.updateListAndReturnChangedRows(
         entity, OnConflictStrategy.abort);
   }
 
@@ -602,6 +620,12 @@ class _$CourseDao extends CourseDao {
   }
 
   @override
+  Future<int> updateList(List<CourseEntity> entity) {
+    return _courseEntityUpdateAdapter.updateListAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
   Future<int> deleteEntity(CourseEntity entity) {
     return _courseEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
@@ -719,6 +743,12 @@ class _$EvaluationDao extends EvaluationDao {
   }
 
   @override
+  Future<int> updateList(List<EvaluationEntity> entity) {
+    return _evaluationEntityUpdateAdapter.updateListAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
   Future<int> deleteEntity(EvaluationEntity entity) {
     return _evaluationEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
@@ -735,7 +765,8 @@ class _$VideoDao extends VideoDao {
                   'userId': item.userId,
                   'courseId': item.courseId,
                   'videoFile': item.videoFile,
-                  'name': item.name
+                  'name': item.name,
+                  'localPath': item.localPath
                 }),
         _videoEntityUpdateAdapter = UpdateAdapter(
             database,
@@ -746,7 +777,8 @@ class _$VideoDao extends VideoDao {
                   'userId': item.userId,
                   'courseId': item.courseId,
                   'videoFile': item.videoFile,
-                  'name': item.name
+                  'name': item.name,
+                  'localPath': item.localPath
                 }),
         _videoEntityDeletionAdapter = DeletionAdapter(
             database,
@@ -757,7 +789,8 @@ class _$VideoDao extends VideoDao {
                   'userId': item.userId,
                   'courseId': item.courseId,
                   'videoFile': item.videoFile,
-                  'name': item.name
+                  'name': item.name,
+                  'localPath': item.localPath
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -780,7 +813,8 @@ class _$VideoDao extends VideoDao {
             userId: row['userId'] as int,
             courseId: row['courseId'] as int,
             videoFile: row['videoFile'] as String,
-            name: row['name'] as String));
+            name: row['name'] as String,
+            localPath: row['localPath'] as String));
   }
 
   @override
@@ -792,7 +826,8 @@ class _$VideoDao extends VideoDao {
             userId: row['userId'] as int,
             courseId: row['courseId'] as int,
             videoFile: row['videoFile'] as String,
-            name: row['name'] as String),
+            name: row['name'] as String,
+            localPath: row['localPath'] as String),
         arguments: [courseId]);
   }
 
@@ -816,6 +851,12 @@ class _$VideoDao extends VideoDao {
   @override
   Future<int> updateEntity(VideoEntity entity) {
     return _videoEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateList(List<VideoEntity> entity) {
+    return _videoEntityUpdateAdapter.updateListAndReturnChangedRows(
         entity, OnConflictStrategy.abort);
   }
 
@@ -917,6 +958,12 @@ class _$FileDao extends FileDao {
   @override
   Future<int> updateEntity(FileEntity entity) {
     return _fileEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateList(List<FileEntity> entity) {
+    return _fileEntityUpdateAdapter.updateListAndReturnChangedRows(
         entity, OnConflictStrategy.abort);
   }
 
@@ -1037,6 +1084,12 @@ class _$QuestionDao extends QuestionDao {
   }
 
   @override
+  Future<int> updateList(List<QuestionEntity> entity) {
+    return _questionEntityUpdateAdapter.updateListAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
   Future<int> deleteEntity(QuestionEntity entity) {
     return _questionEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
   }
@@ -1134,6 +1187,12 @@ class _$AlternativeDao extends AlternativeDao {
   @override
   Future<int> updateEntity(AlternativeEntity entity) {
     return _alternativeEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateList(List<AlternativeEntity> entity) {
+    return _alternativeEntityUpdateAdapter.updateListAndReturnChangedRows(
         entity, OnConflictStrategy.abort);
   }
 

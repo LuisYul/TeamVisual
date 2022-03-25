@@ -26,6 +26,7 @@ abstract class AppRepository {
     Future<void> deleteTables();
     Future<List<CourseEntity>> getCourses();
     Future<List<VideoEntity>> getVideosByCourse(int courseId);
+    Future<int> updateVideos(List<VideoEntity> videos);
     Future<List<FileEntity>> getFilesByCourse(int courseId);
     Future<List<EvaluationEntity>> getEvaluationsByCourse(int courseId);
     Future<List<QuestionEntity>> getQuestionsByEvaluation(int evaluationId);

@@ -152,6 +152,7 @@ class EntityMapperImpl extends EntityMapper{
             courseId: e?.courseId ?? 0,
             videoFile: e?.videoFile ?? "",
             name: e?.name ?? "",
+            localPath: "",
           ))
       ));
     } catch (e) {

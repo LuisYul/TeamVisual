@@ -45,6 +45,8 @@ class CourseDetailViewModel extends RootViewModel {
   final LinkedHashMap alternativeSelected =
       LinkedHashMap<QuestionEntity, AlternativeEntity?>();
 
+  int _current = 0;
+  int get current => _current;
 
   @override
   initialize() {
@@ -96,6 +98,11 @@ class CourseDetailViewModel extends RootViewModel {
 
   void setIsPlaying(bool isPlaying) {
     _isPlayingVideo = isPlaying;
+    notify();
+  }
+
+  void setCurrentVideo(int current) {
+    _current = current;
     notify();
   }
 

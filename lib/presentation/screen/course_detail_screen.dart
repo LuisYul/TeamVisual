@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/domain/model/course_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
@@ -11,14 +12,14 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../../di/locator.dart';
 import '../../domain/model/alternative_entity.dart';
 import '../utils/sliver_app_bar_delegate.dart';
+import 'package:collection/collection.dart';
 
 class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
   CourseDetailScreen() : super(getIt(), true);
 
-  late VideoPlayerController _controller;
-  late Future<void> _initializeVideoPlayerFuture;
   late CourseEntity course;
-  late VideoEntity video;
+  late List<VideoEntity> video;
+  final List<VideoPlayerController> _controllers = [];
 
   @override
   void init(BuildContext context) {
@@ -29,25 +30,40 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
     video = arguments['video'];
     viewModel.getCourseData(course);
 
-    _controller = VideoPlayerController.network(video.videoFile);
-    _initializeVideoPlayerFuture = _controller.initialize();
+    video.forEachIndexed((index, element) {
+      final file = File(element.localPath);
+      _controllers.add(VideoPlayerController.file(file));
+      _controllers[index].initialize();
+    });
   }
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
+
+    _controllers[viewModel.current].addListener(() {
+      if( _controllers[viewModel.current].value.isInitialized &&
+          _controllers[viewModel.current].value.position
+              == _controllers[viewModel.current].value.duration) {
+        if(viewModel.current < _controllers.length - 1) {
+          viewModel.setCurrentVideo(viewModel.current +1);
+        }
+        return;
+      }
+    });
+
     if (viewModel.isPlayingVideo) {
-      _controller.pause();
+      _controllers[viewModel.current].pause();
     } else {
-      _controller.play();
+      _controllers[viewModel.current].play();
     }
     return VisibilityDetector(
       key: const Key("unique key"),
       onVisibilityChanged: (VisibilityInfo info) {
         if(info.visibleFraction == 0){
-          _controller.pause();
+          _controllers[viewModel.current].pause();
         }
         else{
-          _controller.play();
+          _controllers[viewModel.current].play();
         }
       },
       child: Scaffold(
@@ -91,42 +107,31 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
   }
 
   Widget _videoContainer() {
-    return FutureBuilder(
-      future: _initializeVideoPlayerFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: Stack(children: <Widget>[
-              VideoPlayer(_controller),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FloatingActionButton.small(
-                      heroTag: "fab_video",
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        _controller.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
-                        color: Colors.black87,
-                      ),
-                      onPressed: () {
-                        viewModel.setIsPlaying(!viewModel.isPlayingVideo);
-                      }
-                    ),
-                  ),
+    return AspectRatio(
+      aspectRatio: _controllers[viewModel.current].value.aspectRatio,
+      child: Stack(children: <Widget>[
+        VideoPlayer(_controllers[viewModel.current]),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton.small(
+                heroTag: "fab_video",
+                backgroundColor: Colors.white,
+                child: Icon(
+                  _controllers[viewModel.current].value.isPlaying
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                  color: Colors.black87,
                 ),
-             ]
+                onPressed: () {
+                  viewModel.setIsPlaying(!viewModel.isPlayingVideo);
+                }
+              ),
             ),
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+          ),
+       ]
+      ),
     );
   }
 
