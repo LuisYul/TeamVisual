@@ -79,6 +79,8 @@ class _$AppDatabase extends AppDatabase {
 
   AlternativeDao? _alternativeDaoInstance;
 
+  SaveEvaluationDao? _saveEvaluationDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -104,7 +106,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `asistencia` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userId` TEXT, `userName` TEXT, `date` TEXT NOT NULL, `hour` TEXT NOT NULL, `lat` TEXT NOT NULL, `lng` TEXT NOT NULL, `photoPath` TEXT, `idAssistType` TEXT NOT NULL, `obs` TEXT NOT NULL, `idUserType` TEXT, `userType` TEXT, `numDoc` TEXT, `demo` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` INTEGER NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, `totalFiles` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `lista_curso` (`id` INTEGER NOT NULL, `course` TEXT NOT NULL, `author` TEXT NOT NULL, `resume` TEXT NOT NULL, `userId` INTEGER NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `note` INTEGER NOT NULL, `advPercent` INTEGER NOT NULL, `specAreaId` INTEGER NOT NULL, `specArea` TEXT NOT NULL, `learningGroupId` INTEGER NOT NULL, `learningGroup` TEXT NOT NULL, `totalFiles` INTEGER NOT NULL, `finished` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_evaluaciones` (`id` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `userCourseId` INTEGER NOT NULL, `courseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `maxNote` INTEGER NOT NULL, `minNote` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
@@ -115,6 +117,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `lista_preguntas` (`id` INTEGER NOT NULL, `question` TEXT NOT NULL, `evaluationId` INTEGER NOT NULL, `userCourseId` INTEGER NOT NULL, `note` INTEGER NOT NULL, `questionTypeId` INTEGER NOT NULL, `questionOrder` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_alternativas` (`id` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternative` TEXT NOT NULL, `correct` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `evaluaciones` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userCourseId` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternativeId` INTEGER, `score` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -166,6 +170,12 @@ class _$AppDatabase extends AppDatabase {
   AlternativeDao get alternativeDao {
     return _alternativeDaoInstance ??=
         _$AlternativeDao(database, changeListener);
+  }
+
+  @override
+  SaveEvaluationDao get saveEvaluationDao {
+    return _saveEvaluationDaoInstance ??=
+        _$SaveEvaluationDao(database, changeListener);
   }
 }
 
@@ -499,7 +509,8 @@ class _$CourseDao extends CourseDao {
                   'specArea': item.specArea,
                   'learningGroupId': item.learningGroupId,
                   'learningGroup': item.learningGroup,
-                  'totalFiles': item.totalFiles
+                  'totalFiles': item.totalFiles,
+                  'finished': item.finished ? 1 : 0
                 }),
         _courseEntityUpdateAdapter = UpdateAdapter(
             database,
@@ -519,7 +530,8 @@ class _$CourseDao extends CourseDao {
                   'specArea': item.specArea,
                   'learningGroupId': item.learningGroupId,
                   'learningGroup': item.learningGroup,
-                  'totalFiles': item.totalFiles
+                  'totalFiles': item.totalFiles,
+                  'finished': item.finished ? 1 : 0
                 }),
         _courseEntityDeletionAdapter = DeletionAdapter(
             database,
@@ -539,7 +551,8 @@ class _$CourseDao extends CourseDao {
                   'specArea': item.specArea,
                   'learningGroupId': item.learningGroupId,
                   'learningGroup': item.learningGroup,
-                  'totalFiles': item.totalFiles
+                  'totalFiles': item.totalFiles,
+                  'finished': item.finished ? 1 : 0
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -571,7 +584,8 @@ class _$CourseDao extends CourseDao {
             specArea: row['specArea'] as String,
             learningGroupId: row['learningGroupId'] as int,
             learningGroup: row['learningGroup'] as String,
-            totalFiles: row['totalFiles'] as int));
+            totalFiles: row['totalFiles'] as int,
+            finished: (row['finished'] as int) != 0));
   }
 
   @override
@@ -592,7 +606,8 @@ class _$CourseDao extends CourseDao {
             specArea: row['specArea'] as String,
             learningGroupId: row['learningGroupId'] as int,
             learningGroup: row['learningGroup'] as String,
-            totalFiles: row['totalFiles'] as int),
+            totalFiles: row['totalFiles'] as int,
+            finished: (row['finished'] as int) != 0),
         arguments: [userId]);
   }
 
@@ -1199,5 +1214,107 @@ class _$AlternativeDao extends AlternativeDao {
   @override
   Future<int> deleteEntity(AlternativeEntity entity) {
     return _alternativeEntityDeletionAdapter.deleteAndReturnChangedRows(entity);
+  }
+}
+
+class _$SaveEvaluationDao extends SaveEvaluationDao {
+  _$SaveEvaluationDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _saveEvaluationEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'evaluaciones',
+            (SaveEvaluationEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userCourseId': item.userCourseId,
+                  'questionId': item.questionId,
+                  'alternativeId': item.alternativeId,
+                  'score': item.score
+                }),
+        _saveEvaluationEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'evaluaciones',
+            ['id'],
+            (SaveEvaluationEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userCourseId': item.userCourseId,
+                  'questionId': item.questionId,
+                  'alternativeId': item.alternativeId,
+                  'score': item.score
+                }),
+        _saveEvaluationEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'evaluaciones',
+            ['id'],
+            (SaveEvaluationEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'userCourseId': item.userCourseId,
+                  'questionId': item.questionId,
+                  'alternativeId': item.alternativeId,
+                  'score': item.score
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<SaveEvaluationEntity>
+      _saveEvaluationEntityInsertionAdapter;
+
+  final UpdateAdapter<SaveEvaluationEntity> _saveEvaluationEntityUpdateAdapter;
+
+  final DeletionAdapter<SaveEvaluationEntity>
+      _saveEvaluationEntityDeletionAdapter;
+
+  @override
+  Future<List<SaveEvaluationEntity>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM evaluaciones',
+        mapper: (Map<String, Object?> row) => SaveEvaluationEntity(
+            id: row['id'] as int,
+            userCourseId: row['userCourseId'] as int,
+            questionId: row['questionId'] as int,
+            alternativeId: row['alternativeId'] as int?,
+            score: row['score'] as int));
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM evaluaciones');
+  }
+
+  @override
+  Future<int?> getTotalRows() async {
+    await _queryAdapter.queryNoReturn('SELECT COUNT(*) FROM evaluaciones');
+  }
+
+  @override
+  Future<int> insertEntity(SaveEvaluationEntity entity) {
+    return _saveEvaluationEntityInsertionAdapter.insertAndReturnId(
+        entity, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<List<int>> insertList(List<SaveEvaluationEntity> entities) {
+    return _saveEvaluationEntityInsertionAdapter.insertListAndReturnIds(
+        entities, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<int> updateEntity(SaveEvaluationEntity entity) {
+    return _saveEvaluationEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> updateList(List<SaveEvaluationEntity> entity) {
+    return _saveEvaluationEntityUpdateAdapter.updateListAndReturnChangedRows(
+        entity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<int> deleteEntity(SaveEvaluationEntity entity) {
+    return _saveEvaluationEntityDeletionAdapter
+        .deleteAndReturnChangedRows(entity);
   }
 }

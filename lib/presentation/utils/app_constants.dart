@@ -21,6 +21,7 @@ class AppConstants {
   static const tableEvaluation = "lista_evaluaciones";
   static const tableQuestion = "lista_preguntas";
   static const tableAlternative = "lista_alternativas";
+  static const tableSaveEvaluation = "evaluaciones";
 
   static const prefsIdAssist = "id_asistencia";
   static const prefsUserId = "id_usuario";
@@ -42,5 +43,7 @@ class AppConstants {
   static const dataCleared = "Se borraron todos los datos del sistema.";
   static const needWatchAllVideos = "Es necesario visualizar los videos "
       "completos para comenzar la evaluación";
+  static const savedInPending = "No se pudo enviar la información, "
+      "se guardó en pendientes";
 
 }

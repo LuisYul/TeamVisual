@@ -12,9 +12,9 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../di/locator.dart';
 import '../../domain/model/alternative_entity.dart';
+import '../utils/app_constants.dart';
 import '../utils/sliver_app_bar_delegate.dart';
 import 'package:collection/collection.dart';
-
 import '../widgets/custom_dialog.dart';
 
 class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
@@ -114,7 +114,9 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
           backgroundColor: Colors.redAccent,
           heroTag: "fab_save",
           child: const Icon(Icons.save, color: Colors.white,),
-          onPressed: () => _showDialogConfirm(context),
+          onPressed: () => viewModel.allVideosWatched
+              ?  _showDialogConfirm(context)
+              : viewModel.setErrorMsg(AppConstants.needWatchAllVideos),
         ),
       ),
     );
@@ -243,9 +245,9 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
     return widgets;
   }
 
-  void _showDialogConfirm(BuildContext context) {
+  void _showDialogConfirm(BuildContext buildContext) {
     showDialog(
-      context: context,
+      context: buildContext,
       builder: (BuildContext context) => CustomDialog(
         title: "Atención",
         description: "¿Desea enviar las respuestas?",
@@ -253,7 +255,7 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
         secondButtonText: "Si",
         color: Colors.blueAccent,
         icon: CupertinoIcons.question,
-        secondClick: () => viewModel.saveEvaluations(context),
+        secondClick: () => viewModel.sendEvaluations(buildContext),
       ),
     );
   }

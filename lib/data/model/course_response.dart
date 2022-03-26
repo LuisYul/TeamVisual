@@ -35,6 +35,7 @@ class Data {
   final String? author;
   final String? resume;
   final int? totalFiles;
+  final bool? finished;
 
   const Data({
     required this.userId,
@@ -51,6 +52,7 @@ class Data {
     required this.author,
     required this.resume,
     required this.totalFiles,
+    required this.finished,
   });
 
   factory Data.fromMap(Map<String?, dynamic> json) {
@@ -69,6 +71,7 @@ class Data {
       author: json['autor'],
       resume: json['resumen'],
       totalFiles: json['cantidadArchivos'],
+      finished: json['finalizado'],
     );
   }
 }

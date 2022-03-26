@@ -21,7 +21,6 @@ import 'package:teamvisual/presentation/utils/string_extension.dart';
 import 'package:teamvisual/domain/model/assist_entity.dart';
 import 'package:teamvisual/domain/model/assist_list_entity.dart';
 import 'package:collection/collection.dart';
-import 'package:teamvisual/presentation/utils/string_extension.dart';
 
 class AppRepositoryImpl extends AppRepository {
 
@@ -150,6 +149,11 @@ class AppRepositoryImpl extends AppRepository {
   }
 
   @override
+  Future<int> updateCourses(List<CourseEntity> courses) async {
+    return await _database.courseDao.updateList(courses);
+  }
+
+  @override
   Future<List<FileEntity>> getFilesByCourse(int courseId) async {
     return await _database.fileDao.getByCourseId(courseId);
   }
@@ -187,6 +191,9 @@ class AppRepositoryImpl extends AppRepository {
     return [assistsPending ?? 0, evaluationsPending ?? 0];
   }
 
-
+  @override
+  Future<List<int>> saveEvaluations(List<SaveEvaluationEntity> evaluations) async {
+    return _database.saveEvaluationDao.insertList(evaluations);
+  }
 
 }

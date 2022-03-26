@@ -27,6 +27,7 @@ abstract class AppRepository {
     Future<List<CourseEntity>> getCourses();
     Future<List<VideoEntity>> getVideosByCourse(int courseId);
     Future<int> updateVideos(List<VideoEntity> videos);
+    Future<int> updateCourses(List<CourseEntity> courses);
     Future<List<FileEntity>> getFilesByCourse(int courseId);
     Future<List<EvaluationEntity>> getEvaluationsByCourse(int courseId);
     Future<List<QuestionEntity>> getQuestionsByEvaluation(int evaluationId);
@@ -34,5 +35,6 @@ abstract class AppRepository {
     Future<bool> sendEvaluations(SaveEvaluationListEntity evaluations);
     Future<String> downloadFile(List<String> data);
     Future<List<int>> getAllPending();
+    Future<List<int>> saveEvaluations(List<SaveEvaluationEntity> evaluations);
 
 }

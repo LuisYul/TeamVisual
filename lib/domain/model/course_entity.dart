@@ -1,5 +1,4 @@
 import 'package:floor/floor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 
 @Entity(tableName: AppConstants.tableCourse)
@@ -20,8 +19,9 @@ class CourseEntity {
   final int learningGroupId;
   final String learningGroup;
   final int totalFiles;
+  bool finished;
 
-  const CourseEntity({
+   CourseEntity({
     required this.id,
     required this.course,
     required this.author,
@@ -36,6 +36,7 @@ class CourseEntity {
     required this.learningGroupId,
     required this.learningGroup,
     required this.totalFiles,
+    required this.finished,
   });
 
 }

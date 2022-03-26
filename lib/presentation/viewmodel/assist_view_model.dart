@@ -156,7 +156,7 @@ class AssistViewModel extends RootViewModel {
       barrierDismissible: false,
       builder: (BuildContext context) => CustomDialog(
         title: "Atención",
-        description: "No se pudo enviar la información, intente nuevamente",
+        description: AppConstants.savedInPending,
         firstButtonText: "OK",
         color: Colors.red,
         icon: CupertinoIcons.exclamationmark,
@@ -203,7 +203,8 @@ class AssistViewModel extends RootViewModel {
 
     if (permission == LocationPermission.deniedForever) {
       return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+          'Location permissions are permanently denied, '
+              'we cannot request permissions.');
     }
 
     pt("position ${Geolocator.getCurrentPosition()}");

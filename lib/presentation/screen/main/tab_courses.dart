@@ -12,13 +12,18 @@ class TabCourses extends RootWidget<CourseViewModel> {
   Widget buildViewModelWidget(BuildContext context, viewModel) {
     return Scaffold(
       backgroundColor: const Color(0xD2EBEBEF),
-      body: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
+      body: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: viewModel.courses.length,
         itemBuilder: (BuildContext context, int index) {
-          return makeCard(viewModel.courses[index], context);
+          return AbsorbPointer(
+            absorbing: viewModel.courses[index].finished,
+            child: Opacity(
+              opacity: viewModel.courses[index].finished ? 0.4 : 1.0,
+              child: makeCard(viewModel.courses[index], context)
+            ),
+          );
         },
       ),
     );

@@ -8,6 +8,7 @@ import 'package:teamvisual/data/datasource/local/dao/course_dao.dart';
 import 'package:teamvisual/data/datasource/local/dao/file_dao.dart';
 import 'package:teamvisual/data/datasource/local/dao/module_dao.dart';
 import 'package:teamvisual/data/datasource/local/dao/question_dao.dart';
+import 'package:teamvisual/data/datasource/local/dao/save_evaluation_dao.dart';
 import 'package:teamvisual/data/datasource/local/dao/video_dao.dart';
 import 'package:teamvisual/domain/model/alternative_entity.dart';
 import 'package:teamvisual/domain/model/assist_entity.dart';
@@ -15,6 +16,7 @@ import 'package:teamvisual/domain/model/evaluation_entity.dart';
 import 'package:teamvisual/domain/model/file_entity.dart';
 import 'package:teamvisual/domain/model/module_entity.dart';
 import 'package:teamvisual/domain/model/question_entity.dart';
+import 'package:teamvisual/domain/model/save_evaluation_entity.dart';
 import 'package:teamvisual/domain/model/video_entity.dart';
 import '../../../domain/model/assist_type_entity.dart';
 import '../../../domain/model/course_entity.dart';
@@ -33,6 +35,7 @@ part 'app_database.g.dart'; // the generated code will be there
       FileEntity,
       QuestionEntity,
       AlternativeEntity,
+      SaveEvaluationEntity,
     ],
 )
 abstract class AppDatabase extends FloorDatabase {
@@ -45,4 +48,5 @@ abstract class AppDatabase extends FloorDatabase {
   FileDao get fileDao;
   QuestionDao get questionDao;
   AlternativeDao get alternativeDao;
+  SaveEvaluationDao get saveEvaluationDao;
 }

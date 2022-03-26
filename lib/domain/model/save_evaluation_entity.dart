@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:floor/floor.dart';
+import 'package:teamvisual/presentation/utils/app_constants.dart';
+
 class SaveEvaluationListEntity {
 
   final List<SaveEvaluationEntity> evaluations;
@@ -14,13 +17,17 @@ class SaveEvaluationListEntity {
 
 }
 
+@Entity(tableName: AppConstants.tableSaveEvaluation)
 class SaveEvaluationEntity {
+  @PrimaryKey(autoGenerate: true)
+  final int id;
   final int userCourseId;
   final int questionId;
   final int? alternativeId;
   final int score;
 
   const SaveEvaluationEntity({
+    required this.id,
     required this.userCourseId,
     required this.questionId,
     required this.alternativeId,

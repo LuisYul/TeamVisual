@@ -5,7 +5,9 @@ import 'package:teamvisual/domain/model/alternative_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
 import 'package:teamvisual/domain/model/question_entity.dart';
 import 'package:teamvisual/domain/model/save_evaluation_entity.dart';
+import 'package:teamvisual/domain/usecase/save_evaluations_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_evaluations_use_case.dart';
+import 'package:teamvisual/domain/usecase/update_courses_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
 import '../../domain/model/course_entity.dart';
@@ -20,13 +22,19 @@ class CourseDetailViewModel extends RootViewModel {
   final GetQuestionByEvaluationUseCase _getQuestionByEvaluationUseCase;
   final GetAlternativesByQuestionUseCase _getAlternativesByQuestionUseCase;
   final SendEvaluationsUseCase _sendEvaluationsUseCase;
+  final SaveEvaluationsUseCase _saveEvaluationsUseCase;
+  final UpdateCoursesUseCase _updateCoursesUseCase;
 
   CourseDetailViewModel(
       this._getEvaluationByCourseUseCase,
       this._getQuestionByEvaluationUseCase,
       this._getAlternativesByQuestionUseCase,
       this._sendEvaluationsUseCase,
+      this._saveEvaluationsUseCase,
+      this._updateCoursesUseCase,
   );
+
+  late CourseEntity _course;
 
   bool _isPlayingVideo = false;
   bool get isPlayingVideo => _isPlayingVideo;
@@ -58,11 +66,11 @@ class CourseDetailViewModel extends RootViewModel {
   }
 
   void getCourseData(CourseEntity courseEntity) async {
+    _course = courseEntity;
     final result = await runBusyFuture(_getEvaluationByCourseUseCase
         .call(courseEntity.id), busyObject: "error_get_evaluations");
     if(result.isNotEmpty) {
       _evaluations = result;
-      notify();
       _getQuestions();
     }
   }
@@ -114,15 +122,12 @@ class CourseDetailViewModel extends RootViewModel {
     _allVideosWatched = isWatched;
   }
 
-  void saveEvaluations(BuildContext context) async {
-    if(!_allVideosWatched) {
-      setErrorMsg(AppConstants.needWatchAllVideos);
-      return;
-    }
+  void sendEvaluations(BuildContext context) async {
     showProgress();
     final saveEvaluation = List<SaveEvaluationEntity>.from(alternativeSelected
-        .entries.map((e) => SaveEvaluationEntity(userCourseId: e.key.userCourseId,
-        questionId: e.key.id, alternativeId: e.value?.id,
+        .entries.map((e) => SaveEvaluationEntity(id: 0,
+        userCourseId: e.key.userCourseId, questionId: e.key.id,
+        alternativeId: e.value?.id,
         score: 1 == e.value?.correct ? e.key.note : 0)));
 
     final saveEvaluations = SaveEvaluationListEntity(evaluations: saveEvaluation);
@@ -130,29 +135,49 @@ class CourseDetailViewModel extends RootViewModel {
     final result = await runBusyFuture(_sendEvaluationsUseCase.call(
         saveEvaluations), busyObject: "error_send_evs").catchError((error) {
       _showDialogError(context);
+      _saveEvaluations(saveEvaluation);
     });
+
+    _updateCourse();
 
     if(result) {
       _showDialogSuccess(context);
     } else {
       _showDialogError(context);
+      _saveEvaluations(saveEvaluation);
     }
     hideProgress();
+  }
+
+  void _saveEvaluations(List<SaveEvaluationEntity> evaluations) async {
+    final result = await runBusyFuture(_saveEvaluationsUseCase.call(
+        evaluations), busyObject: "error_save_evs");
+    pt("id evs saved locally $result");
+  }
+
+  void _updateCourse() async {
+    _course.finished = true;
+    final result = await runBusyFuture(_updateCoursesUseCase
+        .call([_course]), busyObject: "error_update_course");
+    pt("total courses updated $result");
   }
 
   void _showDialogError(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => CustomDialog(
-        title: "Atención",
-        description: "No se pudo enviar la información, intente nuevamente",
-        firstButtonText: "OK",
-        color: Colors.red,
-        icon: CupertinoIcons.exclamationmark,
-        firstClick: () => {
-          navigationService.back()
-        },
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: CustomDialog(
+          title: "Atención",
+          description: AppConstants.savedInPending,
+          firstButtonText: "OK",
+          color: Colors.red,
+          icon: CupertinoIcons.exclamationmark,
+          firstClick: () => {
+            navigationService.navigateTo("/main")
+          },
+        ),
       ),
     );
   }
@@ -161,15 +186,18 @@ class CourseDetailViewModel extends RootViewModel {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => CustomDialog(
-        title: "Atención",
-        description: "Se envió la información correctamente",
-        firstButtonText: "OK",
-        color: Colors.green,
-        icon: CupertinoIcons.checkmark_alt,
-        firstClick: () => {
-          navigationService.back()
-        },
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: CustomDialog(
+          title: "Atención",
+          description: "Se envió la información correctamente",
+          firstButtonText: "OK",
+          color: Colors.green,
+          icon: CupertinoIcons.checkmark_alt,
+          firstClick: () => {
+            navigationService.navigateTo("/main")
+          },
+        ),
       ),
     );
   }
