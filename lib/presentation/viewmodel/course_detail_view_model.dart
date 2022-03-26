@@ -7,6 +7,7 @@ import 'package:teamvisual/domain/model/question_entity.dart';
 import 'package:teamvisual/domain/model/save_evaluation_entity.dart';
 import 'package:teamvisual/domain/usecase/send_evaluations_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
+import 'package:teamvisual/presentation/utils/app_constants.dart';
 import '../../domain/model/course_entity.dart';
 import '../../domain/usecase/get_alternatives_by_question_use_case.dart';
 import '../../domain/usecase/get_evaluations_by_course_use_case.dart';
@@ -47,6 +48,9 @@ class CourseDetailViewModel extends RootViewModel {
 
   int _current = 0;
   int get current => _current;
+
+  bool _allVideosWatched = false;
+  bool get allVideosWatched => _allVideosWatched;
 
   @override
   initialize() {
@@ -106,7 +110,15 @@ class CourseDetailViewModel extends RootViewModel {
     notify();
   }
 
+  void setAllVideosWatched(bool isWatched) {
+    _allVideosWatched = isWatched;
+  }
+
   void saveEvaluations(BuildContext context) async {
+    if(!_allVideosWatched) {
+      setErrorMsg(AppConstants.needWatchAllVideos);
+      return;
+    }
     showProgress();
     final saveEvaluation = List<SaveEvaluationEntity>.from(alternativeSelected
         .entries.map((e) => SaveEvaluationEntity(userCourseId: e.key.userCourseId,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/domain/model/course_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
@@ -13,6 +14,8 @@ import '../../di/locator.dart';
 import '../../domain/model/alternative_entity.dart';
 import '../utils/sliver_app_bar_delegate.dart';
 import 'package:collection/collection.dart';
+
+import '../widgets/custom_dialog.dart';
 
 class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
   CourseDetailScreen() : super(getIt(), true);
@@ -30,32 +33,39 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
     video = arguments['video'];
     viewModel.getCourseData(course);
 
+    if(video.isEmpty) {
+      viewModel.setAllVideosWatched(true);
+    }
     video.forEachIndexed((index, element) {
       final file = File(element.localPath);
       _controllers.add(VideoPlayerController.file(file));
       _controllers[index].initialize();
     });
+    _controllers.add(VideoPlayerController.file(File("nothing")));
   }
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-
-    _controllers[viewModel.current].addListener(() {
-      if( _controllers[viewModel.current].value.isInitialized &&
-          _controllers[viewModel.current].value.position
-              == _controllers[viewModel.current].value.duration) {
-        if(viewModel.current < _controllers.length - 1) {
+    if(!viewModel.allVideosWatched) {
+      _controllers[viewModel.current].addListener(() {
+        if( _controllers[viewModel.current].value.isInitialized &&
+            _controllers[viewModel.current].value.position
+                == _controllers[viewModel.current].value.duration) {
+          if(viewModel.current == video.length -1) {
+            viewModel.setAllVideosWatched(true);
+          }
           viewModel.setCurrentVideo(viewModel.current +1);
+          return;
         }
-        return;
-      }
-    });
+      });
 
-    if (viewModel.isPlayingVideo) {
-      _controllers[viewModel.current].pause();
-    } else {
-      _controllers[viewModel.current].play();
+      if (viewModel.isPlayingVideo) {
+        _controllers[viewModel.current].pause();
+      } else {
+        _controllers[viewModel.current].play();
+      }
     }
+
     return VisibilityDetector(
       key: const Key("unique key"),
       onVisibilityChanged: (VisibilityInfo info) {
@@ -78,15 +88,12 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
                   iconTheme: const IconThemeData(color: Colors.black87),
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
-                    title: Container(
-                      color: Colors.blue,
-                      child: Text(
-                        innerBoxIsScrolled ? course.course : "",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 18,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w400
-                        ),
+                    title: Text(
+                      innerBoxIsScrolled ? course.course : "",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 18,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w400
                       ),
                     ),
                     background: _videoContainer(),
@@ -94,13 +101,20 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
                 ),
               ];
             },
-            body: _listEvaluations(),
+            body: AbsorbPointer(
+              absorbing: !viewModel.allVideosWatched,
+              child: Opacity(
+                opacity: viewModel.allVideosWatched ? 1.0: 0.4,
+                  child: _listEvaluations()
+              ),
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.redAccent,
           heroTag: "fab_save",
           child: const Icon(Icons.save, color: Colors.white,),
-          onPressed: () => viewModel.saveEvaluations(context),
+          onPressed: () => _showDialogConfirm(context),
         ),
       ),
     );
@@ -111,10 +125,11 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
       aspectRatio: _controllers[viewModel.current].value.aspectRatio,
       child: Stack(children: <Widget>[
         VideoPlayer(_controllers[viewModel.current]),
+        if(!viewModel.allVideosWatched)
         Align(
           alignment: Alignment.bottomLeft,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(5.0),
             child: FloatingActionButton.small(
                 heroTag: "fab_video",
                 backgroundColor: Colors.white,
@@ -125,7 +140,9 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
                   color: Colors.black87,
                 ),
                 onPressed: () {
-                  viewModel.setIsPlaying(!viewModel.isPlayingVideo);
+                  if(!viewModel.allVideosWatched) {
+                    viewModel.setIsPlaying(!viewModel.isPlayingVideo);
+                  }
                 }
               ),
             ),
@@ -178,13 +195,13 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
         minHeight: 30.0,
         maxHeight: 60.0,
         child: Container(
-          color: Colors.lightBlue.shade200,
+          color: Colors.black54,
           child: Center(
             child: Text(
               evaluationName,
               style: GoogleFonts.montserrat(
                   fontSize: 18,
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontWeight: FontWeight.w400),
             ),
           ),
@@ -219,12 +236,26 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
             viewModel.setAlternativeSelected(question, altSelected);
           },
           selected: viewModel.alternativeSelected[question] == i,
-          activeColor: Colors.blueAccent,
+          activeColor: Colors.red,
         ),
       );
     }
     return widgets;
   }
 
+  void _showDialogConfirm(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => CustomDialog(
+        title: "Atención",
+        description: "¿Desea enviar las respuestas?",
+        firstButtonText: "No",
+        secondButtonText: "Si",
+        color: Colors.blueAccent,
+        icon: CupertinoIcons.question,
+        secondClick: () => viewModel.saveEvaluations(context),
+      ),
+    );
+  }
 }
 

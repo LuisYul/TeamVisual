@@ -40,5 +40,7 @@ class AppConstants {
       "se guardó en pendientes.";
   static const infoSent = "No se pudo enviar la información correctamente.";
   static const dataCleared = "Se borraron todos los datos del sistema.";
+  static const needWatchAllVideos = "Es necesario visualizar los videos "
+      "completos para comenzar la evaluación";
 
 }
