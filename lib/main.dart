@@ -6,6 +6,8 @@ import 'package:teamvisual/presentation/screen/login_screen.dart';
 import 'package:teamvisual/presentation/screen/main_screen.dart';
 import 'package:teamvisual/presentation/utils/navigation_service.dart';
 
+final hideMainAppBar = ValueNotifier<bool>(true);
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDI();
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
        '/main': (context) => MainScreen(),
         '/course_detail': (context) => CourseDetailScreen(),
-        //'/': (context) => MainScreen(),
+       // '/': (context) => MainScreen(),
       },
     );
   }

@@ -32,6 +32,7 @@ import 'package:teamvisual/presentation/viewmodel/course_detail_view_model.dart'
 import 'package:teamvisual/presentation/viewmodel/main_view_model.dart';
 import 'package:teamvisual/presentation/viewmodel/module_view_model.dart';
 import 'package:teamvisual/presentation/viewmodel/course_view_model.dart';
+import 'package:teamvisual/presentation/viewmodel/pending_view_model.dart';
 import '../data/datasource/local/app_database.dart';
 import '../domain/usecase/get_videos_by_course_use_case.dart';
 import '../domain/usecase/sync_use_case.dart';
@@ -107,6 +108,7 @@ Future<void> _presentation() async {
     getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<CourseDetailViewModel>(() => CourseDetailViewModel(
       getIt(), getIt(), getIt(), getIt(), getIt(), getIt()));
+  getIt.registerFactory<PendingViewModel>(() => PendingViewModel(getIt()));
 
   ///Navigator
   getIt.registerLazySingleton(() => NavigationService());

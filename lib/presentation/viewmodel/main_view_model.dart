@@ -43,7 +43,6 @@ class MainViewModel extends RootViewModel {
     _getModules();
     _userName = prefs.getString(AppConstants.prefsUserName) ?? "";
     _userType = prefs.getString(AppConstants.prefsUserType) ?? "";
-    notify();
   }
 
   void _getModules() async {

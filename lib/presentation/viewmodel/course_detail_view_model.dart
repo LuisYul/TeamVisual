@@ -125,10 +125,13 @@ class CourseDetailViewModel extends RootViewModel {
   void sendEvaluations(BuildContext context) async {
     showProgress();
     final saveEvaluation = List<SaveEvaluationEntity>.from(alternativeSelected
-        .entries.map((e) => SaveEvaluationEntity(id: 0,
-        userCourseId: e.key.userCourseId, questionId: e.key.id,
-        alternativeId: e.value?.id,
+        .entries.map((e) => SaveEvaluationEntity(userCourseId: e.key.userCourseId,
+        questionId: e.key.id, alternativeId: e.value?.id,
         score: 1 == e.value?.correct ? e.key.note : 0)));
+
+    for(final i in saveEvaluation) {
+      pt("save evaluation ${i.toJson()}");
+    }
 
     final saveEvaluations = SaveEvaluationListEntity(evaluations: saveEvaluation);
 

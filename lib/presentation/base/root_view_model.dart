@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:teamvisual/di/locator.dart';
+import '../../main.dart';
 import '../utils/navigation_service.dart';
 
 abstract class RootViewModel extends BaseViewModel{
@@ -19,13 +20,19 @@ abstract class RootViewModel extends BaseViewModel{
   initialize();
 
   void showProgress() {
-    debugPrint("showing progress");
     _loading = true;
+    Future.delayed(Duration.zero, () async {
+      hideMainAppBar.value = false;
+    });
     notify();
   }
 
   void hideProgress() {
     _loading = false;
+    Future.delayed(Duration.zero, () async {
+      hideMainAppBar.value = true;
+    });
+
     notify();
   }
 

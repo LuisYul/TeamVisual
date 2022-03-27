@@ -12,7 +12,9 @@ abstract class SaveEvaluationDao implements BaseDao<SaveEvaluationEntity> {
   @Query('DELETE FROM ${AppConstants.tableSaveEvaluation}')
   Future<void> deleteAll();
 
-  @Query('SELECT COUNT(*) FROM ${AppConstants.tableSaveEvaluation}')
+  @Query('SELECT COUNT (distinct p.evaluationId) AS total '
+      'FROM ${AppConstants.tableQuestion} p '
+      'INNER JOIN ${AppConstants.tableSaveEvaluation} e on e.questionId = p.id')
   Future<int?> getTotalRows();
 
 }

@@ -154,15 +154,18 @@ class AssistViewModel extends RootViewModel {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => CustomDialog(
-        title: "Atención",
-        description: AppConstants.savedInPending,
-        firstButtonText: "OK",
-        color: Colors.red,
-        icon: CupertinoIcons.exclamationmark,
-        firstClick: () => {
-          navigationService.replaceTo("/main")
-        },
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: CustomDialog(
+          title: "Atención",
+          description: AppConstants.savedInPending,
+          firstButtonText: "OK",
+          color: Colors.red,
+          icon: CupertinoIcons.exclamationmark,
+          firstClick: () => {
+            navigationService.replaceTo("/main")
+          },
+        ),
       ),
     );
   }
@@ -171,15 +174,18 @@ class AssistViewModel extends RootViewModel {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => CustomDialog(
-        title: "Atención",
-        description: "Se envió la información correctamente",
-        firstButtonText: "OK",
-        color: Colors.green,
-        icon: CupertinoIcons.checkmark_alt,
-        firstClick: () => {
-          navigationService.replaceTo("/main")
-        },
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: CustomDialog(
+          title: "Atención",
+          description: "Se envió la información correctamente",
+          firstButtonText: "OK",
+          color: Colors.green,
+          icon: CupertinoIcons.checkmark_alt,
+          firstClick: () => {
+            navigationService.replaceTo("/main")
+          },
+        ),
       ),
     );
   }

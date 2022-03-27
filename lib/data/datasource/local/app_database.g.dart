@@ -118,7 +118,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `lista_alternativas` (`id` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternative` TEXT NOT NULL, `correct` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `evaluaciones` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userCourseId` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternativeId` INTEGER, `score` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `evaluaciones` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userCourseId` INTEGER NOT NULL, `questionId` INTEGER NOT NULL, `alternativeId` INTEGER, `score` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -1271,7 +1271,6 @@ class _$SaveEvaluationDao extends SaveEvaluationDao {
   Future<List<SaveEvaluationEntity>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM evaluaciones',
         mapper: (Map<String, Object?> row) => SaveEvaluationEntity(
-            id: row['id'] as int,
             userCourseId: row['userCourseId'] as int,
             questionId: row['questionId'] as int,
             alternativeId: row['alternativeId'] as int?,
