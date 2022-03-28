@@ -86,6 +86,7 @@ class HttpRemote extends Remote {
               debugPrint("Rec: $rec , Total: $total");
         });
     } catch (e) {
+      debugPrint("error download ${e.toString()}");
       filePath = "";
     }
     return filePath;

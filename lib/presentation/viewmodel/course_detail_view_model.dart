@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teamvisual/domain/model/alternative_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
@@ -10,7 +9,7 @@ import 'package:teamvisual/domain/usecase/send_evaluations_use_case.dart';
 import 'package:teamvisual/domain/usecase/update_courses_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
 import 'package:teamvisual/presentation/utils/app_constants.dart';
-import '../../domain/model/course_entity.dart';
+import 'package:teamvisual/domain/model/course_entity.dart';
 import '../../domain/usecase/get_alternatives_by_question_use_case.dart';
 import '../../domain/usecase/get_evaluations_by_course_use_case.dart';
 import '../../domain/usecase/get_question_by_evaluation_use_case.dart';
@@ -175,8 +174,6 @@ class CourseDetailViewModel extends RootViewModel {
           title: "Atención",
           description: AppConstants.savedInPending,
           firstButtonText: "OK",
-          color: Colors.red,
-          icon: CupertinoIcons.exclamationmark,
           firstClick: () => {
             navigationService.navigateTo("/main")
           },
@@ -195,8 +192,6 @@ class CourseDetailViewModel extends RootViewModel {
           title: "Atención",
           description: "Se envió la información correctamente",
           firstButtonText: "OK",
-          color: Colors.green,
-          icon: CupertinoIcons.checkmark_alt,
           firstClick: () => {
             navigationService.navigateTo("/main")
           },

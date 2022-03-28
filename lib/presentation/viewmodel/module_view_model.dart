@@ -1,3 +1,6 @@
+import 'package:teamvisual/domain/usecase/get_all_pending_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_total_evaluations_use_case.dart';
+
 import '../../domain/model/module_entity.dart';
 import '../../domain/usecase/get_modules_use_case.dart';
 import '../base/root_view_model.dart';
@@ -6,10 +9,14 @@ import '../utils/app_constants.dart';
 class ModuleViewModel extends RootViewModel {
 
   final GetModulesUseCase _getModulesUseCase;
+  final GetAllPendingUseCase _getAllPendingUseCase;
+  final GetTotalEvaluationsUseCase _getTotalEvaluationsUseCase;
 
   ModuleViewModel(
       this._getModulesUseCase,
-      );
+      this._getAllPendingUseCase, 
+      this._getTotalEvaluationsUseCase,
+  );
 
   String _userName = "";
   String get userName => _userName;
@@ -29,11 +36,19 @@ class ModuleViewModel extends RootViewModel {
   bool _fourthModuleOn = false;
   bool get fourthModuleOn => _fourthModuleOn;
 
+  int _totalPending = 0;
+  int get totalPending => _totalPending;
+
+  int _totalEvaluations = 0;
+  int get totalEvaluations => _totalEvaluations;
+
   @override
   initialize() {
     _getModules();
     _userName = prefs.getString(AppConstants.prefsUserName) ?? "";
     _userPhoto = prefs.getString(AppConstants.prefsUserPhoto) ?? "";
+    _getAlLPending();
+    _getTotalEvaluations();
     notify();
   }
 
@@ -63,6 +78,19 @@ class ModuleViewModel extends RootViewModel {
     _thirdModuleOn = thirdModule;
     _fourthModuleOn = fourthModule;
     notify();
+  }
+
+  void _getAlLPending() async {
+    final result = await runBusyFuture(_getAllPendingUseCase.call(""),
+        busyObject: "error_get_modules");
+    _totalPending = result.reduce((value, element) => value + element);
+  }
+
+  void _getTotalEvaluations() async {
+    final result = await runBusyFuture(_getTotalEvaluationsUseCase.call(""),
+        busyObject: "error_get_evaluations");
+    pt("result tot ev $result");
+    _totalEvaluations = result;
   }
 
 }

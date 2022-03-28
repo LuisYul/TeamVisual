@@ -19,7 +19,6 @@ class TabModules extends RootWidget<ModuleViewModel> {
   Widget buildViewModelWidget(BuildContext context, viewModel) {
     return ScreenUtilInit(
       minTextAdapt: true,
-      splitScreenMode: true,
       builder: () => Scaffold(
         backgroundColor: const Color(0xD2EBEBEF),
         body: Column(
@@ -42,11 +41,11 @@ class TabModules extends RootWidget<ModuleViewModel> {
                   SizedBox(height: 5.h),
                   _labelName(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      _progressContainer(),
-                      _quizContainer(),
+                   //   _progressContainer(),
+                      _evaluationsContainer(),
                       _pendingContainer(),
                     ],
                   ),
@@ -136,42 +135,42 @@ class TabModules extends RootWidget<ModuleViewModel> {
     );
   }
 
-  Widget _progressContainer() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15.sp, 10.sp, 15.sp, 0),
-      child: Column(
-        children: [
-          Text(
-            "0/8",
-            style: GoogleFonts.montserrat(
-                fontSize: 18.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.w500),
-          ),
-          Text(
-            "Progreso",
-            style: GoogleFonts.montserrat(
-                fontSize: 14.sp, color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _progressContainer() {
+  //   return Padding(
+  //     padding: EdgeInsets.fromLTRB(15.sp, 10.sp, 15.sp, 0),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           "0/8",
+  //           style: GoogleFonts.montserrat(
+  //               fontSize: 18.sp,
+  //               color: Colors.white,
+  //               fontWeight: FontWeight.w500),
+  //         ),
+  //         Text(
+  //           "Progreso",
+  //           style: GoogleFonts.montserrat(
+  //               fontSize: 14.sp, color: Colors.white),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _quizContainer() {
+  Widget _evaluationsContainer() {
     return Padding(
       padding: EdgeInsets.fromLTRB(15.sp, 10.sp, 15.sp, 0),
       child: Column(
         children: [
           Text(
-            "7",
+           viewModel.totalEvaluations.toString(),
             style: GoogleFonts.montserrat(
                 fontSize: 18.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w500),
           ),
           Text(
-            "Encuestas",
+            "Evaluaciones",
             style: GoogleFonts.montserrat(
                 fontSize: 14.sp, color: Colors.white),
           ),
@@ -186,7 +185,7 @@ class TabModules extends RootWidget<ModuleViewModel> {
       child: Column(
         children: [
           Text(
-            "2",
+            viewModel.totalPending.toString(),
             style: GoogleFonts.montserrat(
                 fontSize: 20.sp,
                 color: Colors.white,

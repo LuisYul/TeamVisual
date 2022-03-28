@@ -19,7 +19,6 @@ class LoginScreen extends RootWidget<LoginViewModel> {
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
-    debugPrint("login vm loading ${viewModel.loading}");
     return ScreenUtilInit(
       minTextAdapt: true,
       builder: () => SafeArea(
@@ -165,8 +164,6 @@ class LoginScreen extends RootWidget<LoginViewModel> {
             description: "¿Desea borrar los datos del sistema?",
             firstButtonText: "No",
             secondButtonText: "Si",
-            color: Colors.red,
-            icon: CupertinoIcons.exclamationmark,
             secondClick: () => viewModel.submitClearData(),
           ),
         );

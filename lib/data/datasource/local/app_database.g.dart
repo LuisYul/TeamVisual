@@ -456,7 +456,7 @@ class _$AssistDao extends AssistDao {
 
   @override
   Future<int?> getTotalRows() async {
-    await _queryAdapter.queryNoReturn('SELECT COUNT(*) FROM asistencia');
+    await _queryAdapter.queryNoReturn('SELECT COUNT(id) FROM asistencia');
   }
 
   @override
@@ -736,7 +736,7 @@ class _$EvaluationDao extends EvaluationDao {
   @override
   Future<int?> getTotalRows() async {
     await _queryAdapter
-        .queryNoReturn('SELECT COUNT(*) FROM lista_evaluaciones');
+        .queryNoReturn('SELECT COUNT(id) FROM lista_evaluaciones');
   }
 
   @override
@@ -1283,8 +1283,14 @@ class _$SaveEvaluationDao extends SaveEvaluationDao {
   }
 
   @override
-  Future<int?> getTotalRows() async {
-    await _queryAdapter.queryNoReturn('SELECT COUNT(*) FROM evaluaciones');
+  Future<List<SaveEvaluationEntity>> getTotalRows() async {
+    return _queryAdapter.queryList(
+        'SELECT e.* FROM lista_preguntas p INNER JOIN evaluaciones e on e.questionId = p.id GROUP BY p.evaluationId',
+        mapper: (Map<String, Object?> row) => SaveEvaluationEntity(
+            userCourseId: row['userCourseId'] as int,
+            questionId: row['questionId'] as int,
+            alternativeId: row['alternativeId'] as int?,
+            score: row['score'] as int));
   }
 
   @override

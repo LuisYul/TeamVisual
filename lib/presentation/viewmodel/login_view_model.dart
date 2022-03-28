@@ -3,6 +3,8 @@ import 'package:teamvisual/domain/model/sync_entity.dart';
 import 'package:teamvisual/domain/model/user_entity.dart';
 import 'package:teamvisual/domain/model/val_version_entity.dart';
 import 'package:teamvisual/domain/usecase/delete_tables_use_case.dart';
+import 'package:teamvisual/domain/usecase/send_assists_pending_use_case.dart';
+import 'package:teamvisual/domain/usecase/send_evaluations_pending_use_case.dart';
 import 'package:teamvisual/domain/usecase/sync_use_case.dart';
 import 'package:teamvisual/domain/usecase/val_version_use_case.dart';
 import 'package:teamvisual/presentation/base/root_view_model.dart';
@@ -16,17 +18,31 @@ class LoginViewModel extends RootViewModel {
   final ValVersionUseCase _valVersionUseCase;
   final SyncUseCase _syncUseCase;
   final DeleteTablesUseCase _deleteTablesUseCase;
+  final SendAssistsPendingUseCase _sendAssistsPendingUseCase;
+  final SendEvaluationsPendingUseCase _sendEvaluationsPendingUseCase;
 
   LoginViewModel(
       this._signInUseCase,
       this._valVersionUseCase,
       this._syncUseCase,
       this._deleteTablesUseCase,
+      this._sendAssistsPendingUseCase,
+      this._sendEvaluationsPendingUseCase,
   );
 
   @override
   initialize() {
 
+  }
+
+  void _sendAssistsPending() async {
+    await runBusyFuture(_sendAssistsPendingUseCase.call(""),
+        busyObject: "error_send_pending");
+  }
+
+  void _sendEvaluationsPending() async {
+    await runBusyFuture(_sendEvaluationsPendingUseCase.call(""),
+        busyObject: "error_send_pending");
   }
 
   void _valVersion(SignInEntity signInEntity) async {
@@ -74,6 +90,8 @@ class LoginViewModel extends RootViewModel {
   }
 
   void submitLogin(String user, String password) {
+    _sendAssistsPending();
+    _sendEvaluationsPending();
     final signInEntity = SignInEntity(user: user, password: password);
     _valVersion(signInEntity);
   }
@@ -86,7 +104,10 @@ class LoginViewModel extends RootViewModel {
   @override
   void onFutureError(error, Object? key) {
     super.onFutureError(error, key);
-    setErrorMsg(AppConstants.genericError);
+    if(key.toString() != "error_send_pending") {
+      hideProgress();
+      setErrorMsg(AppConstants.genericError);
+    }
   }
 
 }

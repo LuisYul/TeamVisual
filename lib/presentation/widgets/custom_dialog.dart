@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,8 +9,6 @@ class CustomDialog extends StatelessWidget {
     required this.description,
     required this.firstButtonText,
     this.secondButtonText,
-    this.color,
-    this.icon,
     this.firstClick,
     this.secondClick,
   }) : super(key: key);
@@ -20,8 +17,6 @@ class CustomDialog extends StatelessWidget {
   final String description;
   final String firstButtonText;
   final String? secondButtonText;
-  final Color? color;
-  final IconData? icon;
   final VoidCallback? firstClick, secondClick;
 
   @override
@@ -68,7 +63,7 @@ class CustomDialog extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.montserrat(
-                  fontSize: 26.sp,
+                  fontSize: 24.sp,
                   color: Colors.black87,
                   letterSpacing: 0.2,
                   fontWeight: FontWeight.w600,
@@ -105,12 +100,15 @@ class CustomDialog extends StatelessWidget {
           left: 16.0,
           right: 16.0,
           child: CircleAvatar(
-            backgroundColor: color ?? Colors.green.shade600,
+            backgroundColor: Colors.red,
             radius: 50.h,
-            child: Icon(
-              icon ?? CupertinoIcons.checkmark_alt,
-              color: Colors.white,
-              size: 40.h,
+            child: CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 47.h,
+              child: Image.asset(
+                'assets/images/img_logo.png',
+                height: 30,
+              ),
             ),
           ),
         ),

@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -144,9 +143,8 @@ class AssistViewModel extends RootViewModel {
         busyObject: "error_save_assist");
   }
 
-  void setImageFile(XFile imageFile) {
+  void setImageFile(XFile? imageFile) {
     _imageFile = imageFile;
-    debugPrint("set image path "+_imageFile!.path);
     notify();
   }
 
@@ -160,8 +158,6 @@ class AssistViewModel extends RootViewModel {
           title: "Atención",
           description: AppConstants.savedInPending,
           firstButtonText: "OK",
-          color: Colors.red,
-          icon: CupertinoIcons.exclamationmark,
           firstClick: () => {
             navigationService.replaceTo("/main")
           },
@@ -180,8 +176,6 @@ class AssistViewModel extends RootViewModel {
           title: "Atención",
           description: "Se envió la información correctamente",
           firstButtonText: "OK",
-          color: Colors.green,
-          icon: CupertinoIcons.checkmark_alt,
           firstClick: () => {
             navigationService.replaceTo("/main")
           },

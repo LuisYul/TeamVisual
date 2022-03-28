@@ -12,11 +12,10 @@ import '../../widgets/primary_button.dart';
 import '../../widgets/secondary_button.dart';
 
 class TabAssist extends RootWidget<AssistViewModel> {
+
   TabAssist() : super(getIt());
 
   final TextEditingController _obsController = TextEditingController();
-
-  final String path = "/data/user/0/com.visualimpact.teamvisual/cache/417095e1-1152-460f-9c19-beabb18a3e798130362856397493148.jpg";
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
@@ -69,9 +68,6 @@ class TabAssist extends RootWidget<AssistViewModel> {
         totalSwitches: viewModel.assistNames.length,
         labels: viewModel.assistNames,
         changeOnTap: false,
-        onToggle: (index) {
-          debugPrint('switched to: $index');
-        },
       ),
     );
   }
@@ -84,7 +80,6 @@ class TabAssist extends RootWidget<AssistViewModel> {
           : Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.file(
-          //  File(path),
           File(viewModel.imageFile.path),
           height: 320.h,
         ),
@@ -153,7 +148,8 @@ class TabAssist extends RootWidget<AssistViewModel> {
       title: "Limpiar",
       icon: CupertinoIcons.clear_circled,
       onClick: () {
-
+        viewModel.setImageFile(null);
+        _obsController.text = "";
       },
       disabled: viewModel.screenDisabled,
     );
@@ -166,4 +162,5 @@ class TabAssist extends RootWidget<AssistViewModel> {
     );
     viewModel.setImageFile(pickedFile);
   }
+
 }

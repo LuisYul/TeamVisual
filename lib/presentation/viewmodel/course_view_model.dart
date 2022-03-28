@@ -1,6 +1,7 @@
 import 'dart:collection';
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teamvisual/domain/model/course_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
@@ -62,11 +63,11 @@ class CourseViewModel extends RootViewModel {
 
       if (result.isNotEmpty) {
         _downloadVideos(course, result);
+      } else {
+        navigationService.navigateTo('/course_detail',
+            arguments: {'course': course, 'video': result});
       }
     }
-
-    // navigationService.navigateTo('/course_detail',
-    //     arguments: {'course': course, 'video': result});
   }
 
   void onClickFiles(CourseEntity course, BuildContext context) async {
@@ -83,13 +84,13 @@ class CourseViewModel extends RootViewModel {
   void _downloadVideos(CourseEntity course, List<VideoEntity> videos) async {
     showProgress();
     final finalVideos = videos.takeWhile((e) => e.name.isNotEmpty);
+    final localPath = await getApplicationDocumentsDirectory();
 
     for (final i in finalVideos) {
       if(i.localPath.isEmpty) {
         final result = await runBusyFuture(_downloadFileUseCase
-            .call([i.videoFile, i.name, AppConstants.downloadPath]),
+            .call([i.videoFile, i.name, localPath.path+"/"]),
             busyObject: "error_download_video");
-        pt("local path $result");
         i.localPath = result;
       }
     }
@@ -109,10 +110,13 @@ class CourseViewModel extends RootViewModel {
   void _downloadFiles(List<FileEntity> files, BuildContext context) async {
     showProgress();
     final finalFiles = files.takeWhile((e) => e.name.isNotEmpty);
+    final pathIOS = await getApplicationDocumentsDirectory();
+    final localPath = Platform.isIOS
+        ? pathIOS.path
+        : AppConstants.androidDocumentsPath;
     for(final i in finalFiles) {
       final result = await runBusyFuture(_downloadFileUseCase.call([i.path,
-        i.name, AppConstants.downloadPath]), busyObject: "error_download_file");
-
+        i.name, localPath+"/"]), busyObject: "error_download_file");
       i.success = result.isNotEmpty;
     }
 
@@ -126,7 +130,12 @@ class CourseViewModel extends RootViewModel {
 
     if(fileNames.isEmpty) {
       setErrorMsg("No se descargó ningun documento.");
+      return;
     }
+
+    final filesPath = Platform.isIOS
+        ? AppConstants.iOSFilesFolderPath
+        : AppConstants.androidFilesFolderPath;
 
     showDialog(
       context: context,
@@ -134,10 +143,8 @@ class CourseViewModel extends RootViewModel {
       builder: (BuildContext context) => CustomDialog(
         title: "Atención",
         description: 'Se descargaron los siguientes archivos en la '
-            'carpeta "Documentos" de tu móvil:\n $fileNames',
+            'carpeta "$filesPath" de tu móvil:\n $fileNames',
         firstButtonText: "OK",
-        color: Colors.green,
-        icon: CupertinoIcons.checkmark_alt,
       ),
     );
   }

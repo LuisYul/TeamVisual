@@ -4,7 +4,9 @@ class AppConstants {
       "api_teamVisual.php/c_control_v1";
   static const idApp = 2;
   static const versionApp = "0.0.1";
-  static const downloadPath = "/storage/emulated/0/Download/";
+  static const androidDocumentsPath = "/storage/emulated/0/Download";
+  static const androidFilesFolderPath = "/Almacenamiento interno/Descargas";
+  static const iOSFilesFolderPath = "/iPhone/Team Visual";
 
   static const assistModuleId = 1;
   static const quizModuleId = 2;
@@ -39,7 +41,7 @@ class AppConstants {
       "registrar la asistencia.";
   static const infoNotSent = "No se pudo enviar la información, "
       "se guardó en pendientes.";
-  static const infoSent = "No se pudo enviar la información correctamente.";
+  static const infoSent = "Se envió la información correctamente.";
   static const dataCleared = "Se borraron todos los datos del sistema.";
   static const needWatchAllVideos = "Es necesario visualizar los videos "
       "completos para comenzar la evaluación";

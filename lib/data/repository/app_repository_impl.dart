@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teamvisual/data/datasource/local/app_database.dart';
 import 'package:teamvisual/data/datasource/remote/remote.dart';
@@ -186,14 +188,57 @@ class AppRepositoryImpl extends AppRepository {
 
   @override
   Future<List<int>> getAllPending() async {
-    final assistsPending = await _database.assistDao.getTotalRows();
-    final evaluationsPending = await _database.evaluationDao.getTotalRows();
-    return [assistsPending ?? 0, evaluationsPending ?? 0];
+    final assistsPending = await _database.assistDao.getAll();
+    final evaluationsPending = await _database.saveEvaluationDao.getTotalRows();
+    return [assistsPending.length, evaluationsPending.length];
+  }
+
+  @override
+  Future<int> getTotalEvaluations() async {
+    final result = await _database.evaluationDao.getAll();
+    return result.length;
   }
 
   @override
   Future<List<int>> saveEvaluations(List<SaveEvaluationEntity> evaluations) async {
     return _database.saveEvaluationDao.insertList(evaluations);
+  }
+
+  @override
+  Future<bool> sendAssistsPending() async {
+    final assists = await _database.assistDao.getAll();
+    if(assists.isEmpty) {
+      return true;
+    }
+    for(final i in assists) {
+      if(i.photoPath != null && i.photoPath!.isNotEmpty) {
+        final file = File(i.photoPath!);
+        final bytes = await file.readAsBytes();
+        i.photo = base64Encode(bytes);
+      }
+    }
+    final resAssist = await _remote.sendAssist(
+        AssistListEntity(assists: assists));
+    final assistsSent = resAssist?.status?.equalsIgnoreCase("true");
+    if(true == assistsSent) {
+      _database.assistDao.deleteAll();
+    }
+    return true == assistsSent;
+  }
+
+  @override
+  Future<bool> sendEvaluationsPending() async {
+    final evaluations = await _database.saveEvaluationDao.getAll();
+    if(evaluations.isEmpty) {
+      return true;
+    }
+    final resEvaluations = await _remote.sendEvaluations(
+        SaveEvaluationListEntity(evaluations: evaluations));
+    final evaluationsSent = resEvaluations?.status?.equalsIgnoreCase("true");
+    if(true == evaluationsSent) {
+      _database.saveEvaluationDao.deleteAll();
+    }
+    return true == evaluationsSent;
   }
 
 }

@@ -8,7 +8,7 @@ class UpdateVideosUseCase implements BaseUseCase<int, dynamic> {
   const UpdateVideosUseCase(this._repository);
 
   @override
-  Future<int> call(params) async{
+  Future<int> call(params) async {
     return await _repository.updateVideos(params);
   }
 

@@ -16,9 +16,12 @@ import 'package:teamvisual/domain/usecase/get_evaluations_by_course_use_case.dar
 import 'package:teamvisual/domain/usecase/get_files_by_course_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_modules_use_case.dart';
 import 'package:teamvisual/domain/usecase/get_question_by_evaluation_use_case.dart';
+import 'package:teamvisual/domain/usecase/get_total_evaluations_use_case.dart';
 import 'package:teamvisual/domain/usecase/save_assist_use_case.dart';
 import 'package:teamvisual/domain/usecase/save_evaluations_use_case.dart';
+import 'package:teamvisual/domain/usecase/send_assists_pending_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_assists_use_case.dart';
+import 'package:teamvisual/domain/usecase/send_evaluations_pending_use_case.dart';
 import 'package:teamvisual/domain/usecase/send_evaluations_use_case.dart';
 import 'package:teamvisual/domain/usecase/sign_in_use_case.dart';
 import 'package:teamvisual/domain/usecase/update_courses_use_case.dart';
@@ -92,6 +95,9 @@ Future<void> _domain() async {
   getIt.registerSingleton(UpdateVideosUseCase(getIt()));
   getIt.registerSingleton(SaveEvaluationsUseCase(getIt()));
   getIt.registerSingleton(UpdateCoursesUseCase(getIt()));
+  getIt.registerSingleton(SendAssistsPendingUseCase(getIt()));
+  getIt.registerSingleton(SendEvaluationsPendingUseCase(getIt()));
+  getIt.registerSingleton(GetTotalEvaluationsUseCase(getIt()));
 
 }
 
@@ -99,16 +105,18 @@ Future<void> _presentation() async {
 
   /// ViewModels
   getIt.registerFactory<LoginViewModel>(() => LoginViewModel(getIt(),
-      getIt(), getIt(), getIt()));
+      getIt(), getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<MainViewModel>(() => MainViewModel(getIt()));
   getIt.registerFactory<AssistViewModel>(() => AssistViewModel(getIt(),
     getIt(), getIt()));
-  getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt()));
+  getIt.registerFactory<ModuleViewModel>(() => ModuleViewModel(getIt(),
+      getIt(), getIt()));
   getIt.registerFactory<CourseViewModel>(() => CourseViewModel(getIt(),
     getIt(), getIt(), getIt(), getIt()));
   getIt.registerFactory<CourseDetailViewModel>(() => CourseDetailViewModel(
       getIt(), getIt(), getIt(), getIt(), getIt(), getIt()));
-  getIt.registerFactory<PendingViewModel>(() => PendingViewModel(getIt()));
+  getIt.registerFactory<PendingViewModel>(() => PendingViewModel(getIt(),
+      getIt(), getIt()));
 
   ///Navigator
   getIt.registerLazySingleton(() => NavigationService());

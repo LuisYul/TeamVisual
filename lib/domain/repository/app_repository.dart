@@ -35,6 +35,9 @@ abstract class AppRepository {
     Future<bool> sendEvaluations(SaveEvaluationListEntity evaluations);
     Future<String> downloadFile(List<String> data);
     Future<List<int>> getAllPending();
+    Future<int> getTotalEvaluations();
     Future<List<int>> saveEvaluations(List<SaveEvaluationEntity> evaluations);
+    Future<bool> sendAssistsPending();
+    Future<bool> sendEvaluationsPending();
 
 }

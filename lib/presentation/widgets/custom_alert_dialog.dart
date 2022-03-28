@@ -19,8 +19,6 @@ class CustomAlertDialog extends StatelessWidget {
        description: description,
        firstButtonText: "OK",
        firstClick: onClick,
-       color: Colors.red,
-       icon: CupertinoIcons.exclamationmark,
      );
     }
 }

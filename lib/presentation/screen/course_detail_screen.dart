@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teamvisual/domain/model/course_entity.dart';
 import 'package:teamvisual/domain/model/evaluation_entity.dart';
@@ -37,6 +37,7 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
       viewModel.setAllVideosWatched(true);
     }
     video.forEachIndexed((index, element) {
+      print("local path video ${element.localPath}");
       final file = File(element.localPath);
       _controllers.add(VideoPlayerController.file(file));
       _controllers[index].initialize();
@@ -76,47 +77,50 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
           _controllers[viewModel.current].play();
         }
       },
-      child: Scaffold(
-        body: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  expandedHeight: 200.0,
-                  pinned: true,
-                  backgroundColor: Colors.white,
-                  iconTheme: const IconThemeData(color: Colors.black87),
-                  flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text(
-                      innerBoxIsScrolled ? course.course : "",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 18,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w400
+      child: ScreenUtilInit(
+        minTextAdapt: true,
+        builder: () => Scaffold(
+          body: SafeArea(
+            child: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    expandedHeight: 200.h,
+                    pinned: true,
+                    backgroundColor: Colors.white,
+                    iconTheme: const IconThemeData(color: Colors.black87),
+                    flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: Text(
+                        innerBoxIsScrolled ? course.course : "",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 18.sp,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w400
+                        ),
                       ),
+                      background: _videoContainer(),
                     ),
-                    background: _videoContainer(),
                   ),
+                ];
+              },
+              body: AbsorbPointer(
+                absorbing: !viewModel.allVideosWatched,
+                child: Opacity(
+                  opacity: viewModel.allVideosWatched ? 1.0: 0.4,
+                    child: _listEvaluations()
                 ),
-              ];
-            },
-            body: AbsorbPointer(
-              absorbing: !viewModel.allVideosWatched,
-              child: Opacity(
-                opacity: viewModel.allVideosWatched ? 1.0: 0.4,
-                  child: _listEvaluations()
               ),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.redAccent,
-          heroTag: "fab_save",
-          child: const Icon(Icons.save, color: Colors.white,),
-          onPressed: () => viewModel.allVideosWatched
-              ?  _showDialogConfirm(context)
-              : viewModel.setErrorMsg(AppConstants.needWatchAllVideos),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.redAccent,
+            heroTag: "fab_save",
+            child: const Icon(Icons.save, color: Colors.white,),
+            onPressed: () => viewModel.allVideosWatched
+                ?  _showDialogConfirm(context)
+                : viewModel.setErrorMsg(AppConstants.needWatchAllVideos),
+          ),
         ),
       ),
     );
@@ -173,7 +177,7 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
                   title: Text(
                     viewModel.questions[evaluation.id][index].question,
                     style: GoogleFonts.montserrat(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       color: Colors.black,
                       fontWeight: FontWeight.w300,
                       textBaseline: TextBaseline.alphabetic
@@ -194,15 +198,15 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
     return SliverPersistentHeader(
       pinned: true,
       delegate: SliverAppBarDelegate(
-        minHeight: 30.0,
-        maxHeight: 60.0,
+        minHeight: 30.h,
+        maxHeight: 60.h,
         child: Container(
           color: Colors.black54,
           child: Center(
             child: Text(
               evaluationName,
               style: GoogleFonts.montserrat(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   color: Colors.white,
                   fontWeight: FontWeight.w400),
             ),
@@ -228,7 +232,7 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
           title: Text(
             i.alternative,
             style: GoogleFonts.montserrat(
-              fontSize: 13,
+              fontSize: 13.sp,
               color: Colors.black,
               fontWeight: FontWeight.w200
             ),
@@ -253,8 +257,6 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
         description: "¿Desea enviar las respuestas?",
         firstButtonText: "No",
         secondButtonText: "Si",
-        color: Colors.blueAccent,
-        icon: CupertinoIcons.question,
         secondClick: () => viewModel.sendEvaluations(buildContext),
       ),
     );

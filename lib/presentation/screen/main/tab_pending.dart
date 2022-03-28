@@ -11,61 +11,71 @@ class TabPending extends RootWidget<PendingViewModel> {
   Widget buildViewModelWidget(BuildContext context, viewModel) {
     return Column(
       children: [
-        Card(
-          child: ListTile(
-            //leading: Icon(Icons.music_note),
-            title: Text(
-              "Asistencia",
-              style: GoogleFonts.montserrat(
-                fontSize: 18,
-                color: Colors.black,
-              ),
-            ),
-            trailing: Container(
-              color: Colors.indigo,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "1",
+        Opacity(
+          opacity: viewModel.totalAssistPending > 0 ? 1.0 : 0.4,
+          child: GestureDetector(
+            child: Card(
+              child: ListTile(
+                title: Text(
+                  "Asistencia",
                   style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      color: Colors.white,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+                trailing: Container(
+                  color: Colors.indigo,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      viewModel.totalAssistPending.toString(),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
+              elevation: 2,
+              shadowColor: Colors.indigo,
+              margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             ),
+            onTap: () => viewModel.sendAssistsPending(context),
           ),
-          elevation: 2,
-          shadowColor: Colors.red,
-          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         ),
-        Card(
-          child: ListTile(
-            //leading: Icon(Icons.music_note),
-            title: Text(
-              "Evaluaciones",
-              style: GoogleFonts.montserrat(
-                fontSize: 18,
-                color: Colors.black,
-              ),
-            ),
-            trailing: Container(
-              color: Colors.indigo,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "7",
+        Opacity(
+          opacity: viewModel.totalEvaluationsPending > 0 ? 1.0 : 0.4,
+          child: GestureDetector(
+            child: Card(
+              child: ListTile(
+                title: Text(
+                  "Evaluaciones",
                   style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Colors.white,
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+                trailing: Container(
+                  color: Colors.indigo,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      viewModel.totalEvaluationsPending.toString(),
+                      style: GoogleFonts.montserrat(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
+              elevation: 2,
+              shadowColor: Colors.indigo,
+              margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             ),
+            onTap: () => viewModel.sendEvaluationsPending(context),
           ),
-          elevation: 2,
-          shadowColor: Colors.red,
-          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         ),
       ],
     );
