@@ -74,19 +74,17 @@ class MainScreen extends RootWidget<MainViewModel> {
                             fontWeight: FontWeight.w500),
                       ),
                       currentAccountPicture: GestureDetector(
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Image.asset(
-                              'assets/images/img_logo.png',
-                              height: 30.h,
-                            ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset(
+                            'assets/images/img_logo.png',
+                            height: 30.h,
                           ),
-                          onTap: () => {}),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage('assets/images/background_nav_drawer.jpeg'),
                         ),
+                        onTap: () => {}
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
                       ),
                     ),
                     ItemDrawerMenu(

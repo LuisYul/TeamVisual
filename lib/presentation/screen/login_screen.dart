@@ -14,8 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class LoginScreen extends RootWidget<LoginViewModel> {
   LoginScreen() : super(getIt());
 
-  final TextEditingController _userController = TextEditingController(text: '46340447');
-  final TextEditingController _passwordController = TextEditingController(text: '1234');
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget buildViewModelWidget(BuildContext context, viewModel) {
