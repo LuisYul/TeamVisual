@@ -35,7 +35,7 @@ class Data {
   final String? author;
   final String? resume;
   final int? totalFiles;
-  final bool? finished;
+  final int? finished;
 
   const Data({
     required this.userId,
@@ -71,7 +71,7 @@ class Data {
       author: json['autor'],
       resume: json['resumen'],
       totalFiles: json['cantidadArchivos'],
-      finished: json['finalizado'],
+      finished: json['estadoCurso'],
     );
   }
 }

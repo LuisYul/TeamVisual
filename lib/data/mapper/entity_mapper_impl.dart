@@ -93,7 +93,7 @@ class EntityMapperImpl extends EntityMapper{
             learningGroupId: e?.learningGroupId ?? 0,
             learningGroup: e?.learningGroup ?? "",
             totalFiles: e?.totalFiles ?? 0,
-            finished: e?.finished ?? false,
+            finished: e?.finished == 1,
           ))
       ));
     } catch (e) {

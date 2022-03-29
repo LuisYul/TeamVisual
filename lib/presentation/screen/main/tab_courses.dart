@@ -69,7 +69,7 @@ class TabCourses extends RootWidget<CourseViewModel> {
                 Text(
                   course.resume,
                   style: GoogleFonts.montserrat(
-                      fontSize: 15,
+                      fontSize: 14,
                       color: Colors.black,
                       fontWeight: FontWeight.w400
                   ),

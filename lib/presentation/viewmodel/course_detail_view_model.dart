@@ -51,7 +51,7 @@ class CourseDetailViewModel extends RootViewModel {
   final List<int> _questionsId = [];
 
   final LinkedHashMap alternativeSelected =
-      LinkedHashMap<QuestionEntity, AlternativeEntity?>();
+      LinkedHashMap<QuestionEntity, List<AlternativeEntity>>();
 
   int _current = 0;
   int get current => _current;
@@ -87,7 +87,7 @@ class CourseDetailViewModel extends RootViewModel {
   void _setQuestionsId(List<QuestionEntity> questions) {
     for(final i in questions) {
       _questionsId.add(i.id);
-      alternativeSelected[i] = null;
+      alternativeSelected[i] = <AlternativeEntity>[];
     }
   }
 
@@ -100,12 +100,24 @@ class CourseDetailViewModel extends RootViewModel {
     notify();
   }
 
-  void setAlternativeSelected(QuestionEntity questionEntity,
-      AlternativeEntity alternativeEntity) {
-    alternativeSelected[questionEntity] = alternativeEntity;
+  void setAlternativeSelected(QuestionEntity question,
+      AlternativeEntity alternative, bool checked) {
+    final List<AlternativeEntity> currentValues = alternativeSelected[question];
+
+    if(checked) {
+      if(question.questionTypeId == 1) {
+        currentValues.clear();
+      }
+      currentValues.add(alternative);
+      alternativeSelected[question] = currentValues;
+    } else {
+      currentValues.remove(alternative);
+      alternativeSelected[question] = currentValues;
+    }
+    pt("question ${question.question}");
+    pt("alternatives ${alternativeSelected[question].length}");
     notify();
   }
-
 
   void setIsPlaying(bool isPlaying) {
     _isPlayingVideo = isPlaying;
@@ -123,13 +135,19 @@ class CourseDetailViewModel extends RootViewModel {
 
   void sendEvaluations(BuildContext context) async {
     showProgress();
-    final saveEvaluation = List<SaveEvaluationEntity>.from(alternativeSelected
-        .entries.map((e) => SaveEvaluationEntity(userCourseId: e.key.userCourseId,
-        questionId: e.key.id, alternativeId: e.value?.id,
-        score: 1 == e.value?.correct ? e.key.note : 0)));
 
-    for(final i in saveEvaluation) {
-      pt("save evaluation ${i.toJson()}");
+    final saveEvaluation = <SaveEvaluationEntity>[];
+    for(final q in alternativeSelected.entries) {
+      for(final a in q.value) {
+        saveEvaluation.add(
+          SaveEvaluationEntity(
+              userCourseId: q.key.userCourseId,
+              questionId: q.key.id,
+              alternativeId: a.id,
+              score: 1 == a.correct ? q.key.note : 0
+          )
+        );
+      }
     }
 
     final saveEvaluations = SaveEvaluationListEntity(evaluations: saveEvaluation);

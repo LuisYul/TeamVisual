@@ -37,7 +37,6 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
       viewModel.setAllVideosWatched(true);
     }
     video.forEachIndexed((index, element) {
-      print("local path video ${element.localPath}");
       final file = File(element.localPath);
       _controllers.add(VideoPlayerController.file(file));
       _controllers[index].initialize();
@@ -85,14 +84,16 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
               headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
-                    expandedHeight: 200.h,
+                    expandedHeight: !viewModel.allVideosWatched ? 200.h : 0.h,
                     pinned: true,
                     backgroundColor: Colors.white,
                     iconTheme: const IconThemeData(color: Colors.black87),
                     flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
                       title: Text(
-                        innerBoxIsScrolled ? course.course : "",
+                        viewModel.allVideosWatched || innerBoxIsScrolled
+                            ? course.course
+                            : "",
                         style: GoogleFonts.montserrat(
                           fontSize: 18.sp,
                           color: Colors.black87,
@@ -222,13 +223,13 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
     List<Widget> widgets = [];
     for (final i in alternatives) {
       widgets.add(
-        RadioListTile(
+        CheckboxListTile(
+          controlAffinity: ListTileControlAffinity.leading,
           visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity,
           ),
-          value: i,
-          groupValue: viewModel.alternativeSelected[question],
+          value: viewModel.alternativeSelected[question].contains(i),
           title: Text(
             i.alternative,
             style: GoogleFonts.montserrat(
@@ -238,11 +239,10 @@ class CourseDetailScreen extends RootWidget<CourseDetailViewModel> {
             ),
           ),
           onChanged: (selected) {
-            final AlternativeEntity altSelected = selected as AlternativeEntity;
-            viewModel.setAlternativeSelected(question, altSelected);
+            viewModel.setAlternativeSelected(question, i, selected);
           },
-          selected: viewModel.alternativeSelected[question] == i,
-          activeColor: Colors.red,
+          selected: viewModel.alternativeSelected[question].contains(i),
+          activeColor: Colors.black54,
         ),
       );
     }

@@ -48,7 +48,7 @@ class CardModule extends StatelessWidget {
                   Text(
                     title,
                     style: GoogleFonts.montserrat(
-                        fontSize: 18.sp,
+                        fontSize: 17.sp,
                         color: Colors.black87,
                         fontWeight: FontWeight.w500
                     ),

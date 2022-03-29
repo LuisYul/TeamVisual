@@ -33,6 +33,7 @@ class LoginScreen extends RootWidget<LoginViewModel> {
                     Image.asset(
                       'assets/images/background_red.jpeg',
                       fit: BoxFit.fitHeight,
+                      height: 180.h,
                     ),
                   ],
                 ),
@@ -48,27 +49,27 @@ class LoginScreen extends RootWidget<LoginViewModel> {
                     ),
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: EdgeInsets.all(20.sp),
+                        padding: EdgeInsets.all(20.h),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             _logoTeamVisual(),
-                            SizedBox(height: 30.sp),
+                            SizedBox(height: 30.h),
                             _userField(),
-                            SizedBox(height: 15.sp),
+                            SizedBox(height: 15.h),
                             _passwordField(),
-                            SizedBox(height: 15.sp),
+                            SizedBox(height: 15.h),
                             SizedBox(
                               width: double.infinity,
                               child: _loginButton(context)
                             ),
-                            SizedBox(height: 15.sp),
+                            SizedBox(height: 15.h),
                             SizedBox(
                                 width: double.infinity,
                                 child: _clearDataButton(context)
                             ),
-                            SizedBox(height: 25.sp),
+                            SizedBox(height: 20.h),
                             _versionLabel(),
                           ],
                         ),

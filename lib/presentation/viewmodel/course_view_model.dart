@@ -143,7 +143,7 @@ class CourseViewModel extends RootViewModel {
       builder: (BuildContext context) => CustomDialog(
         title: "Atención",
         description: 'Se descargaron los siguientes archivos en la '
-            'carpeta "$filesPath" de tu móvil:\n $fileNames',
+            'carpeta "$filesPath":\n $fileNames',
         firstButtonText: "OK",
       ),
     );
