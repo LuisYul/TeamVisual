@@ -79,30 +79,12 @@ class TabCourses extends RootWidget<CourseViewModel> {
           ),
         ],
       ),
-      subtitle: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          Expanded(
-            flex: course.advPercent,
-            child: LinearProgressIndicator(
-                backgroundColor: Colors.black87,
-                value: course.advPercent.toDouble(),
-                minHeight: 10,
-                valueColor: const AlwaysStoppedAnimation(Colors.green),
-            ),
-          ),
-          Expanded(
-            flex: 200,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text("${course.advPercent}%",
-                  style: GoogleFonts.montserrat(
-                      color: Colors.black
-                  ),
-              ),
-            ),
-          )
-        ],
+      subtitle: Text(
+        "Avance: ${course.advPercent}%",
+        style: GoogleFonts.montserrat(
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       trailing: Wrap(
         spacing: 12,
