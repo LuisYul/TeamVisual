@@ -1,16 +1,39 @@
-# teamvisual
+# Team Visual
 
-A new Flutter project.
+A Flutter project that includes courses from the users.
 
-## Getting Started
+:white_check_mark: 100% Dart.
 
-This project is a starting point for a Flutter application.
+:white_check_mark: Clean Architecture.
 
-A few resources to get you started if this is your first Flutter project:
+:white_check_mark: MVVM and Repository pattern.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+:white_check_mark: Floor as local database.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+:white_check_mark: Stacked from state management.
+
+## Main Packages
+
+This project includes several packages, the main ones are:
+
+-  [stacked](https://pub.dev/packages/stacked): A architecture based in MVVM.
+
+-  [get_it](https://pub.dev/packages/get_it): Service locator to dependency injection.
+
+-  [http](https://pub.dev/packages/http): To consume http recourses.
+
+-  [flutter_screenutil](https://pub.dev/packages/flutter_screenutil): To make responsive screens.
+
+-  [floor](https://pub.dev/packages/floor): Local database similar to Room.
+
+-  [video_player](https://pub.dev/packages/video_player): For playing videos to the users.
+
+-  [geolocator](https://pub.dev/packages/geolocator): To get users location.
+
+## Considerations
+
+- Register downloadable resources (word, excel, video) with extensions (.docx, .xls, .mp4)
+
+- When changes are made to the local db (dao, entities, etc.), run the command:
+
+    flutter packages pub run build_runner build --delete-conflicting-outputs
